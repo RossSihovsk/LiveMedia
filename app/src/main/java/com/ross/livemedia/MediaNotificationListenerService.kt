@@ -15,11 +15,13 @@ import android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import androidx.core.widget.ListViewAutoScrollHelper
+import com.ross.livemedia.R
 
 class MediaNotificationListenerService : NotificationListenerService() {
 
@@ -29,6 +31,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
     private var activeMediaController: MediaController? = null
     private var currentTrackTitle: String? = null
+
+    private var curretPackagePlaying: String? = null
 
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
@@ -86,6 +90,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
                 activeMediaController?.registerCallback(mediaControllerCallback)
                 Log.d(TAG, "Found and registered new media controller: ${newController.packageName}")
                 // Initial update
+                curretPackagePlaying = newController.packageName
                 updateNotification()
             }
         } else {
@@ -93,6 +98,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
             clearNotification()
             activeMediaController?.unregisterCallback(mediaControllerCallback)
             activeMediaController = null
+            curretPackagePlaying = null
         }
     }
 
@@ -110,13 +116,13 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
         // Build the notification that will act as our "Live Update"
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.outline_artist_24 )
             .setContentTitle(artist)
             .setContentText(title)
             .setOngoing(true) // 1. Must be ongoing
             .setCategory(Notification.CATEGORY_PROGRESS)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setShortCriticalText(title)
+            .setShortCriticalText(title.take(7))
 
             // 2. The critical step for Live Updates (Promotion Request)
             .setRequestPromotedOngoing(true)
