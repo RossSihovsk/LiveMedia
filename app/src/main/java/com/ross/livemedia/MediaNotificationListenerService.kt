@@ -1,29 +1,21 @@
 package com.ross.livemedia
 
-import android.app.Activity
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent // <--- Import is key
 import android.content.ComponentName
-import android.content.Intent
+import android.content.Intent // <--- Import is key
 import android.media.MediaMetadata
 import android.media.session.MediaController
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
 import android.os.Build
-import android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
-import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.app.NotificationCompat
-import androidx.core.net.toUri
-import androidx.core.widget.ListViewAutoScrollHelper
-import androidx.media.session.MediaButtonReceiver
-import com.ross.livemedia.R
 
 class MediaNotificationListenerService : NotificationListenerService() {
 
@@ -33,8 +25,18 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
     private var activeMediaController: MediaController? = null
     private var currentTrackTitle: String? = null
-
     private var curretPackagePlaying: String? = null
+
+    // --- NEW: Custom Action Constants for Button Presses ---
+    companion object {
+        const val ACTION_PLAY_PAUSE = "com.ross.livemedia.ACTION_PLAY_PAUSE"
+        const val ACTION_SKIP_TO_NEXT = "com.ross.livemedia.ACTION_SKIP_TO_NEXT"
+        const val ACTION_SKIP_TO_PREVIOUS = "com.ross.livemedia.ACTION_SKIP_TO_PREVIOUS"
+        const val REQUEST_CODE_PLAY_PAUSE = 100
+        const val REQUEST_CODE_NEXT = 101
+        const val REQUEST_CODE_PREVIOUS = 102
+    }
+    // --------------------------------------------------------
 
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
@@ -60,17 +62,41 @@ class MediaNotificationListenerService : NotificationListenerService() {
         Log.d(TAG, "Service Created")
     }
 
+    // --- NEW: Handle commands from notification buttons ---
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent != null) {
+            val controller = activeMediaController
+            if (controller != null) {
+                when (intent.action) {
+                    ACTION_PLAY_PAUSE -> {
+                        val playbackState = controller.playbackState
+                        if (playbackState?.state == PlaybackState.STATE_PLAYING) {
+                            controller.transportControls.pause()
+                        } else {
+                            controller.transportControls.play()
+                        }
+                    }
+                    ACTION_SKIP_TO_NEXT -> {
+                        controller.transportControls.skipToNext()
+                    }
+                    ACTION_SKIP_TO_PREVIOUS -> {
+                        controller.transportControls.skipToPrevious()
+                    }
+                }
+                updateNotification()
+            }
+        }
+        return super.onStartCommand(intent, flags, startId)
+    }
+
     override fun onListenerConnected() {
         super.onListenerConnected()
         Log.d(TAG, "Listener Connected")
-        // Find any active media sessions when the service first connects
         findActiveMediaController()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
-        // A new notification was posted. Check if it's a media session.
-        // This is a simple way to trigger a check.
         if (sbn?.notification?.category == Notification.CATEGORY_TRANSPORT) {
             Log.d(TAG, "Media notification detected from: ${sbn.packageName}")
             findActiveMediaController()
@@ -78,6 +104,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
     }
 
     private fun findActiveMediaController() {
+        // ... (findActiveMediaController implementation remains the same)
         val mediaSessionManager = getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager
         val componentName = ComponentName(this, MediaNotificationListenerService::class.java)
         val controllers = mediaSessionManager.getActiveSessions(componentName)
@@ -85,18 +112,14 @@ class MediaNotificationListenerService : NotificationListenerService() {
         if (controllers.isNotEmpty()) {
             val newController = controllers[0]
             if (newController != activeMediaController) {
-                // Unregister from old controller
                 activeMediaController?.unregisterCallback(mediaControllerCallback)
-                // Register for new one
                 activeMediaController = newController
                 activeMediaController?.registerCallback(mediaControllerCallback)
                 Log.d(TAG, "Found and registered new media controller: ${newController.packageName}")
-                // Initial update
                 curretPackagePlaying = newController.packageName
                 updateNotification()
             }
         } else {
-            // No active sessions, clear our notification
             clearNotification()
             activeMediaController?.unregisterCallback(mediaControllerCallback)
             activeMediaController = null
@@ -116,50 +139,61 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
         val isPlaying = playbackState.state == PlaybackState.STATE_PLAYING
 
-        val sessionToken = controller.sessionToken
 
-        // 1a. Previous Action
-        val prevIntent = MediaButtonReceiver.buildMediaButtonPendingIntent(
-            this,
-            PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-        )
+        // --- 1. Define Intents using the existing logic ---
+        val flags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
 
-        // 1b. Play/Pause Action
-        val playPauseAction = if (isPlaying) PlaybackState.ACTION_PAUSE else PlaybackState.ACTION_PLAY
-        val playPauseIcon = R.drawable.play_pause_svgrepo_com
+        // Previous Intent
+        val prevIntent = Intent(this, MediaNotificationListenerService::class.java).apply {
+            action = ACTION_SKIP_TO_PREVIOUS
+        }
+        val prevPendingIntent = PendingIntent.getService(this, REQUEST_CODE_PREVIOUS, prevIntent, flags)
+
+        // Play/Pause Intents
+        // NOTE: ActionType is not used here, only for clarity in the old code.
+        val playPauseIntent = Intent(this, MediaNotificationListenerService::class.java).apply {
+            action = ACTION_PLAY_PAUSE
+        }
+        val playPausePendingIntent = PendingIntent.getService(this, REQUEST_CODE_PLAY_PAUSE, playPauseIntent, flags)
+
+        // Next Intent
+        val nextIntent = Intent(this, MediaNotificationListenerService::class.java).apply {
+            action = ACTION_SKIP_TO_NEXT
+        }
+        val nextPendingIntent = PendingIntent.getService(this, REQUEST_CODE_NEXT, nextIntent, flags)
+
+
+        // --- 2. Use Android System Icons (android.R.drawable) ---
+
+        // Use the stock system icon for small icon (e.g., a simple star or volume icon)
+        // You can also use a simple transparent icon you add, but this eliminates the risk.
+        val smallIcon = android.R.drawable.ic_media_play
+
+        val previousIcon = android.R.drawable.ic_media_previous
+        val playPauseIcon = if (isPlaying) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play
+        val nextIcon = android.R.drawable.ic_media_next
+
         val playPauseTitle = if (isPlaying) "Pause" else "Play"
-        val playPauseIntent = MediaButtonReceiver.buildMediaButtonPendingIntent(
-            this,
-            playPauseAction
-        )
 
-        // 1c. Next Action
-        val nextIntent = MediaButtonReceiver.buildMediaButtonPendingIntent(
-            this,
-            PlaybackStateCompat.ACTION_SKIP_TO_NEXT
-        )
 
-        // Build the notification that will act as our "Live Update"
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.outline_artist_24 )
+            .setSmallIcon(smallIcon)
             .setContentTitle(artist)
             .setContentText(title)
-            .setOngoing(true) // 1. Must be ongoing
+            .setOngoing(true)
             .setCategory(Notification.CATEGORY_PROGRESS)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setShortCriticalText(title.take(7))
-            .addAction(R.drawable.previous_svgrepo_com, "Previous", prevIntent)
-            .addAction(playPauseIcon, playPauseTitle, playPauseIntent)
-            .addAction(R.drawable.next_svgrepo_com, "Next", nextIntent)
 
-            // 2. The critical step for Live Updates (Promotion Request)
+            .addAction(previousIcon, "Previous", prevPendingIntent)
+            .addAction(playPauseIcon, playPauseTitle, playPausePendingIntent)
+            .addAction(nextIcon, "Next", nextPendingIntent)
             .setRequestPromotedOngoing(true)
 
         if (albumArtBitmap != null) {
             builder.setLargeIcon(albumArtBitmap)
         }
 
-        // This is a simplified way to show play/pause. A real app would use custom actions.
         builder.setSubText(if (isPlaying) "Playing" else "Paused")
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -176,7 +210,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
             val serviceChannel = NotificationChannel(
                 CHANNEL_ID,
                 "Media Live Updates",
-                NotificationManager.IMPORTANCE_LOW // Use low importance to be less intrusive
+                NotificationManager.IMPORTANCE_LOW
             )
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(serviceChannel)
@@ -188,4 +222,3 @@ class MediaNotificationListenerService : NotificationListenerService() {
         activeMediaController?.unregisterCallback(mediaControllerCallback)
     }
 }
-
