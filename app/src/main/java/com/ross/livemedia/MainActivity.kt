@@ -1,14 +1,20 @@
 package com.ross.livemedia
 
-import android.app.NotificationManager
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,28 +22,43 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 
 class MainActivity : ComponentActivity() {
 
-    // A state to hold the permission status, which the Compose UI will observe.
-    private val hasPermissionState = mutableStateOf(false)
+    private val hasNotificationListenerPermission = mutableStateOf(false)
+    private val hasPostNotificationPermission = mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            // MaterialTheme is the standard theming for Compose.
             MaterialTheme {
-                // Reading the value from the mutable state.
-                // When this value changes, the UI will automatically re-render.
-                val hasPermission = hasPermissionState.value
+                val requestPermissionLauncher = rememberLauncherForActivityResult(
+                    ActivityResultContracts.RequestPermission()
+                ) { isGranted: Boolean ->
+                    if (isGranted) {
+                        hasPostNotificationPermission.value = true
+                    }
+                }
+
+                SideEffect {
+                    checkPermissions()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !hasPostNotificationPermission.value) {
+                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                }
+
                 PermissionScreen(
-                    hasPermission = hasPermission,
-                    onGrantPermissionClick = {
-                        // This intent opens the system settings screen where the user can grant
-                        // Notification Listener permission to this app.
+                    hasNotificationListenerPermission = hasNotificationListenerPermission.value,
+                    hasPostNotificationPermission = hasPostNotificationPermission.value,
+                    onGrantNotificationListenerPermissionClick = {
                         startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+                    },
+                    onGrantPostNotificationPermissionClick = {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        }
                     }
                 )
             }
@@ -46,36 +67,39 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Every time the user comes back to the app, check the permission status and update the state.
-        checkPermissionAndUpdateState()
+        checkPermissions()
+    }
+
+    private fun checkPermissions() {
+        hasNotificationListenerPermission.value = isNotificationListenerEnabled()
+        hasPostNotificationPermission.value = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+
+        if (hasNotificationListenerPermission.value && hasPostNotificationPermission.value) {
+            val intent = Intent(this, MediaNotificationListenerService::class.java)
+            startService(intent)
+        }
     }
 
     private fun isNotificationListenerEnabled(): Boolean {
-        // Check if our service is in the list of enabled notification listeners.
-        val enabledListeners = NotificationManagerCompat.getEnabledListenerPackages(this)
-        return enabledListeners.contains(packageName)
-    }
-
-    private fun checkPermissionAndUpdateState() {
-        val hasPermission = isNotificationListenerEnabled()
-        // Update the state. This will trigger a recomposition of the UI.
-        hasPermissionState.value = hasPermission
-
-        if (hasPermission) {
-//            startActivity(Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS))
-            val intent = Intent(this, MediaNotificationListenerService::class.java)
-            startService(intent)
-
-//            it works but not ideally, so right now I'd prefer to duplicate media
-//            val intent2 = Intent(this, SystemUiStateService::class.java)
-//            startService(intent2)
-        }
+        val enabledListeners = Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
+        return enabledListeners?.contains(packageName) == true
     }
 }
 
-// This is our main UI, defined as a Composable function.
 @Composable
-fun PermissionScreen(hasPermission: Boolean, onGrantPermissionClick: () -> Unit) {
+fun PermissionScreen(
+    hasNotificationListenerPermission: Boolean,
+    hasPostNotificationPermission: Boolean,
+    onGrantNotificationListenerPermissionClick: () -> Unit,
+    onGrantPostNotificationPermissionClick: () -> Unit
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color(0xFF121212) // Dark background color
@@ -87,37 +111,53 @@ fun PermissionScreen(hasPermission: Boolean, onGrantPermissionClick: () -> Unit)
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = if (hasPermission) "Permission Granted!" else "Permission Needed",
-                color = Color.White,
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "This app requires Notification Access to detect media playback and create a live update. Please grant permission in the system settings.",
-                color = Color(0xFFCCCCCC),
-                fontSize = 16.sp,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Button(
-                onClick = onGrantPermissionClick,
-                // The button is disabled if permission has already been granted.
-                enabled = !hasPermission,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF3F51B5),
-                    disabledContainerColor = Color.Gray
-                ),
-                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 12.dp)
-            ) {
+            if (!hasNotificationListenerPermission) {
                 Text(
-                    text = if (hasPermission) "Service is Active" else "Grant Permission",
-                    color = Color.White
+                    text = "Notification Listener Permission Needed",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "This app requires Notification Access to detect media playback and create a live update. Please grant permission in the system settings.",
+                    color = Color(0xFFCCCCCC),
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Button(onClick = onGrantNotificationListenerPermissionClick) {
+                    Text(text = "Grant Notification Listener Permission")
+                }
+            }
+
+            if (!hasPostNotificationPermission) {
+                Spacer(modifier = Modifier.height(32.dp))
+                Text(
+                    text = "Post Notification Permission Needed",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "This app requires permission to post notifications to show the media controls.",
+                    color = Color(0xFFCCCCCC),
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Button(onClick = onGrantPostNotificationPermissionClick) {
+                    Text(text = "Grant Post Notification Permission")
+                }
+            }
+
+            if (hasNotificationListenerPermission && hasPostNotificationPermission) {
+                Text(
+                    text = "All Permissions Granted!",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center
                 )
             }
         }
