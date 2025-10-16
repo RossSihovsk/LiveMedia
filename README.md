@@ -38,7 +38,7 @@ Since LiveMedia intercepts system notifications and UI events, explicit user per
 
 1.  Clone the repository:
     ```bash
-    git clone [Your_Repo_URL]
+    git clone https://github.com/RossSihovsk/LiveMedia.git
     ```
 2.  Open the project in Android Studio and build the APK.
 3.  Install the app on your device.
