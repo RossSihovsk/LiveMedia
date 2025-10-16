@@ -4,8 +4,11 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver // NEW
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter // NEW
 import android.media.MediaMetadata
 import android.media.session.MediaController
 import android.media.session.MediaSessionManager
@@ -25,6 +28,12 @@ class MediaNotificationListenerService : NotificationListenerService() {
     private var currentTrackTitle: String? = null
     private var currentPackagePlaying: String? = null
 
+    // NEW: Receiver for screen state changes
+    private val lockStateReceiver = LockStateReceiver()
+
+    // Use lazy for efficient access to system services
+    private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+
     companion object {
         private const val NOTIFICATION_ID = 1337
         private const val CHANNEL_ID = "MediaLiveUpdateChannel"
@@ -38,7 +47,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
-            Log.d(TAG, "Playback state changed: $state")
+            Log.d(TAG, "Playback state changed: ${state?.state}")
             updateNotification()
         }
 
@@ -75,6 +84,14 @@ class MediaNotificationListenerService : NotificationListenerService() {
     override fun onListenerConnected() {
         super.onListenerConnected()
         Log.d(TAG, "Listener Connected")
+
+        // Register the Lock State Receiver
+        val filter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_USER_PRESENT)
+        }
+        registerReceiver(lockStateReceiver, filter)
+
         findActiveMediaController()
     }
 
@@ -85,9 +102,10 @@ class MediaNotificationListenerService : NotificationListenerService() {
         }
     }
 
+    // This method is now called by the LockStateReceiver when the phone is unlocked
     private fun findActiveMediaController() {
         val mediaSessionManager = getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager
-        val componentName = ComponentName(this, this::class.java)
+        val componentName = ComponentName(this, MediaNotificationListenerService::class.java)
         val controllers = mediaSessionManager.getActiveSessions(componentName)
 
         controllers.firstOrNull().let { newController ->
@@ -114,13 +132,25 @@ class MediaNotificationListenerService : NotificationListenerService() {
         activeMediaController?.let { controller ->
             val metadata = controller.metadata ?: return
             val playbackState = controller.playbackState ?: return
-            val isPlaying = playbackState.state == PlaybackState.STATE_PLAYING
 
+            // Clear notification if media is stopped
+            if (playbackState.state == PlaybackState.STATE_STOPPED || playbackState.state == PlaybackState.STATE_NONE) {
+                clearNotification()
+                return
+            }
+
+            // Before building, check if the screen is currently locked and the notification should be hidden.
+            // This is primarily for updates while locked (e.g., track change) where we still want it hidden.
+            if (!isScreenUnlocked()) {
+                clearNotification()
+                return
+            }
+
+            val isPlaying = playbackState.state == PlaybackState.STATE_PLAYING
             val title = metadata.getString(MediaMetadata.METADATA_KEY_TITLE) ?: "Unknown Title"
             val artist = metadata.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: "Unknown Artist"
 
             val notification = buildNotification(title, artist, isPlaying, metadata)
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(NOTIFICATION_ID, notification)
         }
     }
@@ -135,6 +165,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
         val prevAction = createAction(android.R.drawable.ic_media_previous, "Previous", ACTION_SKIP_TO_PREVIOUS, REQUEST_CODE_PREVIOUS)
         val nextAction = createAction(android.R.drawable.ic_media_next, "Next", ACTION_SKIP_TO_NEXT, REQUEST_CODE_NEXT)
 
+        // Using your working version without MediaStyle
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_media_play)
             .setContentTitle(artist)
@@ -158,21 +189,51 @@ class MediaNotificationListenerService : NotificationListenerService() {
         return NotificationCompat.Action(icon, title, pendingIntent)
     }
 
+    // Helper function using KeyguardManager's more reliable isDeviceLocked() check
+    private fun isScreenUnlocked(): Boolean {
+        val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as? android.app.KeyguardManager
+        // A device is considered "unlocked" if the KeyguardManager reports it's not locked.
+        // On older API levels (pre-Lollipop) isKeyguardLocked() might not exist or behave differently.
+        return !(keyguardManager?.isDeviceLocked ?: false)
+    }
+
     private fun clearNotification() {
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(NOTIFICATION_ID)
     }
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(CHANNEL_ID, "Media Live Updates", NotificationManager.IMPORTANCE_LOW)
-            getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    // NEW: Broadcast Receiver implementation
+    private inner class LockStateReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                Intent.ACTION_SCREEN_OFF -> {
+                    // Screen locked (or turned off) -> Hide the notification immediately
+                    Log.d(TAG, "Screen OFF broadcast received. Hiding notification.")
+                    clearNotification()
+                }
+                Intent.ACTION_USER_PRESENT -> {
+                    // Device unlocked (user present) -> Check if media is playing and show notification
+                    Log.d(TAG, "User PRESENT broadcast received. Checking media status.")
+                    findActiveMediaController()
+                }
+            }
         }
     }
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
         activeMediaController?.unregisterCallback(mediaControllerCallback)
+        try {
+            unregisterReceiver(lockStateReceiver) // Unregister receiver on disconnect
+        } catch (e: IllegalArgumentException) {
+            Log.e(TAG, "Receiver not registered, ignore: ${e.message}")
+        }
         activeMediaController = null
         currentPackagePlaying = null
         clearNotification()
