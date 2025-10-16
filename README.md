@@ -36,14 +36,22 @@ Since LiveMedia intercepts system notifications and UI events, explicit user per
 
 ### Installation
 
-1.  Clone the repository:
+  **Download APK (Recommended for Quick Setup):**
+    * Navigate to the **[Releases](https://github.com/RossSihovsk/LiveMedia/releases)** tab of this repository.
+    * Download the latest **`release.apk`** file directly to your device.
+    * You will need to use APKMirror to install it or to disable Play Protect.
+
+***OR***
+
+**Clone the repository:**
     ```bash
     git clone https://github.com/RossSihovsk/LiveMedia.git
     ```
-2.  Open the project in Android Studio and build the APK.
-3.  Install the app on your device.
-4.  After installation, go to **Settings** and manually grant both **Notification Listener Access** and **Accessibility Service** permissions to the LiveMedia app.
-5.  Start playing music! The LiveMedia control should appear once media playback begins and the phone is unlocked.
+  *Open the project in Android Studio and build the APK.
+  *Install the app on your device.
+
+After installation, go to **Settings** and manually grant both **Notification Listener Access** and **Accessibility Service** permissions to the LiveMedia app.
+Start playing music! The LiveMedia control should appear once media playback begins and the phone is unlocked.
 
 ---
 ![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/cef1f757-07f1-489e-b7b7-a87a7ea22991)
