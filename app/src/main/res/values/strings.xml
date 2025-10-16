@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">Detects Quick Settings events</string>
 </resources>
