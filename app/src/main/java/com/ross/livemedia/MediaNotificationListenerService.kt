@@ -182,7 +182,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
         // Using your working version without MediaStyle
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_media_play)
+            .setSmallIcon(R.drawable.outline_artist_24)
             .setContentTitle(artist)
             .setContentText(title)
             .setLargeIcon(metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART))
