@@ -1,5 +1,6 @@
 package com.ross.livemedia
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -19,10 +20,14 @@ import android.service.notification.StatusBarNotification
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 class MediaNotificationListenerService : NotificationListenerService() {
 
     private val TAG = "MediaListenerService"
+
+    @Volatile
+    private var isQuickSettingsOpen = false
 
     private var activeMediaController: MediaController? = null
     private var currentTrackTitle: String? = null
@@ -33,6 +38,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
     // Use lazy for efficient access to system services
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+    private val localBroadcastManager by lazy { LocalBroadcastManager.getInstance(this) }
 
     companion object {
         private const val NOTIFICATION_ID = 1337
@@ -44,6 +50,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
         private const val REQUEST_CODE_NEXT = 101
         private const val REQUEST_CODE_PREVIOUS = 102
     }
+
+    private val qsReceiver = SettingsReceiver()
 
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
@@ -91,6 +99,13 @@ class MediaNotificationListenerService : NotificationListenerService() {
             addAction(Intent.ACTION_USER_PRESENT)
         }
         registerReceiver(lockStateReceiver, filter)
+
+        val qsFilter = IntentFilter().apply {
+            addAction("com.ross.livemedia.QS_OPENED")
+            addAction("com.ross.livemedia.QS_CLOSED")
+        }
+
+        localBroadcastManager.registerReceiver(qsReceiver, qsFilter)
 
         findActiveMediaController()
     }
@@ -226,11 +241,34 @@ class MediaNotificationListenerService : NotificationListenerService() {
         }
     }
 
+    private inner class SettingsReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Log.d(TAG, "onReceive ${intent?.action}")
+            when (intent?.action) {
+                "com.ross.livemedia.QS_OPENED" -> {
+                    if (!isQuickSettingsOpen) {
+                        isQuickSettingsOpen = true
+                        Log.d(TAG, "Quick Settings opened → hiding notification")
+                        clearNotification()
+                    }
+                }
+                "com.ross.livemedia.QS_CLOSED" -> {
+                    if (isQuickSettingsOpen) {
+                        isQuickSettingsOpen = false
+                        Log.d(TAG, "Quick Settings closed → restoring notification")
+                        updateNotification()
+                    }
+                }
+            }
+        }
+    }
+
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
         activeMediaController?.unregisterCallback(mediaControllerCallback)
         try {
             unregisterReceiver(lockStateReceiver) // Unregister receiver on disconnect
+            localBroadcastManager.unregisterReceiver(qsReceiver)
         } catch (e: IllegalArgumentException) {
             Log.e(TAG, "Receiver not registered, ignore: ${e.message}")
         }

@@ -62,9 +62,13 @@ class MainActivity : ComponentActivity() {
         hasPermissionState.value = hasPermission
 
         if (hasPermission) {
-            // If permission is granted, ensure the background service is running.
+//            startActivity(Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS))
             val intent = Intent(this, MediaNotificationListenerService::class.java)
             startService(intent)
+
+//            it works but not ideally, so right now I'd prefer to duplicate media
+//            val intent2 = Intent(this, SystemUiStateService::class.java)
+//            startService(intent2)
         }
     }
 }
