@@ -14,6 +14,7 @@ import android.os.Build
 import android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
@@ -21,6 +22,7 @@ import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import androidx.core.widget.ListViewAutoScrollHelper
+import androidx.media.session.MediaButtonReceiver
 import com.ross.livemedia.R
 
 class MediaNotificationListenerService : NotificationListenerService() {
@@ -114,6 +116,29 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
         val isPlaying = playbackState.state == PlaybackState.STATE_PLAYING
 
+        val sessionToken = controller.sessionToken
+
+        // 1a. Previous Action
+        val prevIntent = MediaButtonReceiver.buildMediaButtonPendingIntent(
+            this,
+            PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+        )
+
+        // 1b. Play/Pause Action
+        val playPauseAction = if (isPlaying) PlaybackState.ACTION_PAUSE else PlaybackState.ACTION_PLAY
+        val playPauseIcon = R.drawable.play_pause_svgrepo_com
+        val playPauseTitle = if (isPlaying) "Pause" else "Play"
+        val playPauseIntent = MediaButtonReceiver.buildMediaButtonPendingIntent(
+            this,
+            playPauseAction
+        )
+
+        // 1c. Next Action
+        val nextIntent = MediaButtonReceiver.buildMediaButtonPendingIntent(
+            this,
+            PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+        )
+
         // Build the notification that will act as our "Live Update"
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.outline_artist_24 )
@@ -123,6 +148,9 @@ class MediaNotificationListenerService : NotificationListenerService() {
             .setCategory(Notification.CATEGORY_PROGRESS)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setShortCriticalText(title.take(7))
+            .addAction(R.drawable.previous_svgrepo_com, "Previous", prevIntent)
+            .addAction(playPauseIcon, playPauseTitle, playPauseIntent)
+            .addAction(R.drawable.next_svgrepo_com, "Next", nextIntent)
 
             // 2. The critical step for Live Updates (Promotion Request)
             .setRequestPromotedOngoing(true)
