@@ -180,8 +180,26 @@ class MediaNotificationListenerService : NotificationListenerService() {
         val prevAction = createAction(android.R.drawable.ic_media_previous, "Previous", ACTION_SKIP_TO_PREVIOUS, REQUEST_CODE_PREVIOUS)
         val nextAction = createAction(android.R.drawable.ic_media_next, "Next", ACTION_SKIP_TO_NEXT, REQUEST_CODE_NEXT)
 
+        var contentIntent: PendingIntent? = null
+
+        currentPackagePlaying?.let { packageName ->
+            val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+
+            if (launchIntent != null) {
+                launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+                contentIntent = PendingIntent.getActivity(
+                    this, 0, // Request code
+                    launchIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+            }
+        }
+
+
+
         // Using your working version without MediaStyle
-        return NotificationCompat.Builder(this, CHANNEL_ID)
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.outline_artist_24)
             .setContentTitle(artist)
             .setContentText(title)
@@ -195,7 +213,12 @@ class MediaNotificationListenerService : NotificationListenerService() {
             .addAction(nextAction)
             .setRequestPromotedOngoing(true)
             .setSubText(if (isPlaying) "Playing" else "Paused")
-            .build()
+
+        if (contentIntent != null) {
+            notification.setContentIntent(contentIntent)
+        }
+
+        return notification.build()
     }
 
     private fun createAction(icon: Int, title: String, action: String, requestCode: Int): NotificationCompat.Action {
