@@ -1,6 +1,5 @@
 package com.ross.livemedia
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -190,13 +189,10 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
                 contentIntent = PendingIntent.getActivity(
                     this, 0, // Request code
-                    launchIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    launchIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
             }
         }
-
-
 
         // Using your working version without MediaStyle
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -240,10 +236,10 @@ class MediaNotificationListenerService : NotificationListenerService() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(CHANNEL_ID, "Media Live Updates", NotificationManager.IMPORTANCE_LOW)
+            val channel = NotificationChannel(
+                CHANNEL_ID, "Media Live Updates", NotificationManager.IMPORTANCE_LOW
+            )
             notificationManager.createNotificationChannel(channel)
-        }
     }
 
     // NEW: Broadcast Receiver implementation
@@ -255,6 +251,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
                     Log.d(TAG, "Screen OFF broadcast received. Hiding notification.")
                     clearNotification()
                 }
+
                 Intent.ACTION_USER_PRESENT -> {
                     // Device unlocked (user present) -> Check if media is playing and show notification
                     Log.d(TAG, "User PRESENT broadcast received. Checking media status.")
@@ -275,6 +272,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
                         clearNotification()
                     }
                 }
+
                 "com.ross.livemedia.QS_CLOSED" -> {
                     if (isQuickSettingsOpen) {
                         isQuickSettingsOpen = false
