@@ -4,11 +4,12 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver // NEW
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter // NEW
+import android.content.IntentFilter
+import android.graphics.Color
 import android.media.MediaMetadata
 import android.media.session.MediaController
 import android.media.session.MediaSessionManager
@@ -21,6 +22,7 @@ import android.service.notification.StatusBarNotification
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.IconCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 class MediaNotificationListenerService : NotificationListenerService() {
@@ -236,7 +238,6 @@ class MediaNotificationListenerService : NotificationListenerService() {
             }
         }
 
-        // Using your working version without MediaStyle
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.outline_artist_24)
             .setContentTitle(artist)
@@ -251,22 +252,52 @@ class MediaNotificationListenerService : NotificationListenerService() {
             .addAction(nextAction)
             .setRequestPromotedOngoing(true)
             .setSubText(if (isPlaying) "Playing" else "Paused")
+            .setStyle(buildBaseProgressStyle(duration, position))
 
         if (contentIntent != null) {
             notification.setContentIntent(contentIntent)
         }
 
         if (duration > 0 && position >= 0) {
-            // The max value is the duration, the progress is the current position
             notification.setProgress(
-                duration.toInt(), // Max value
-                position.toInt(), // Current progress
-                false             // Not indeterminate (it's a known duration)
+                duration.toInt(),
+                position.toInt(),
+                false
             )
         }
 
         return notification.build()
     }
+
+    fun buildBaseProgressStyle(duration: Long, position: Long): NotificationCompat.ProgressStyle {
+        val playedColor = Color.valueOf(236f / 255f, 183f / 255f, 255f / 255f, 1f).toArgb()
+        val remainingColor = Color.LTGRAY
+        val pointColor = Color.GRAY
+
+        val clampedPosition = position.coerceIn(0, duration)
+        val playedPercent =
+            if (duration > 0) ((clampedPosition.toFloat() / duration) * 100).coerceIn(
+                0f,
+                100f
+            ) else 0f
+        val remainingPercent = 100 - playedPercent
+
+        val segments = listOf(
+            NotificationCompat.ProgressStyle.Segment(playedPercent.toInt()).setColor(playedColor),
+            NotificationCompat.ProgressStyle.Segment(remainingPercent.toInt())
+                .setColor(remainingColor)
+        )
+
+        val points = listOf(
+            NotificationCompat.ProgressStyle.Point(playedPercent.toInt()).setColor(pointColor)
+        )
+
+
+        return NotificationCompat.ProgressStyle()
+            .setProgressSegments(segments)
+            .setProgressPoints(points)
+    }
+
 
     private fun createAction(
         icon: Int,
