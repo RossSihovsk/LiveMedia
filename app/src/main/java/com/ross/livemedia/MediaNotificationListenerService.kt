@@ -14,6 +14,8 @@ import android.media.session.MediaController
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
@@ -38,6 +40,16 @@ class MediaNotificationListenerService : NotificationListenerService() {
     // Use lazy for efficient access to system services
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
     private val localBroadcastManager by lazy { LocalBroadcastManager.getInstance(this) }
+
+    private val updateHandler = Handler(Looper.getMainLooper())
+
+    private val updateRunnable = object : Runnable {
+        override fun run() {
+            updateNotification()
+
+            updateHandler.postDelayed(this, 2000)
+        }
+    }
 
     companion object {
         private const val NOTIFICATION_ID = 1337
@@ -72,6 +84,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
         super.onCreate()
         createNotificationChannel()
         Log.d(TAG, "Service Created")
+        updateHandler.removeCallbacks(updateRunnable)
+        updateHandler.post(updateRunnable)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -164,20 +178,48 @@ class MediaNotificationListenerService : NotificationListenerService() {
             val title = metadata.getString(MediaMetadata.METADATA_KEY_TITLE) ?: "Unknown Title"
             val artist = metadata.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: "Unknown Artist"
 
-            val notification = buildNotification(title, artist, isPlaying, metadata)
+            val duration = metadata.getLong(MediaMetadata.METADATA_KEY_DURATION)
+            val position = playbackState.position
+
+            updateHandler.removeCallbacks(updateRunnable)
+
+            if (isPlaying) {
+                updateHandler.post(updateRunnable)
+            }
+
+            val notification =
+                buildNotification(title, artist, isPlaying, metadata, position, duration)
+
             notificationManager.notify(NOTIFICATION_ID, notification)
         }
     }
 
-    private fun buildNotification(title: String, artist: String, isPlaying: Boolean, metadata: MediaMetadata): Notification {
+    private fun buildNotification(
+        title: String,
+        artist: String,
+        isPlaying: Boolean,
+        metadata: MediaMetadata,
+        position: Long,
+        duration: Long
+    ): Notification {
         val playPauseAction = createAction(
             if (isPlaying) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play,
             if (isPlaying) "Pause" else "Play",
             ACTION_PLAY_PAUSE,
             REQUEST_CODE_PLAY_PAUSE
         )
-        val prevAction = createAction(android.R.drawable.ic_media_previous, "Previous", ACTION_SKIP_TO_PREVIOUS, REQUEST_CODE_PREVIOUS)
-        val nextAction = createAction(android.R.drawable.ic_media_next, "Next", ACTION_SKIP_TO_NEXT, REQUEST_CODE_NEXT)
+        val prevAction = createAction(
+            android.R.drawable.ic_media_previous,
+            "Previous",
+            ACTION_SKIP_TO_PREVIOUS,
+            REQUEST_CODE_PREVIOUS
+        )
+        val nextAction = createAction(
+            android.R.drawable.ic_media_next,
+            "Next",
+            ACTION_SKIP_TO_NEXT,
+            REQUEST_CODE_NEXT
+        )
 
         var contentIntent: PendingIntent? = null
 
@@ -214,18 +256,38 @@ class MediaNotificationListenerService : NotificationListenerService() {
             notification.setContentIntent(contentIntent)
         }
 
+        if (duration > 0 && position >= 0) {
+            // The max value is the duration, the progress is the current position
+            notification.setProgress(
+                duration.toInt(), // Max value
+                position.toInt(), // Current progress
+                false             // Not indeterminate (it's a known duration)
+            )
+        }
+
         return notification.build()
     }
 
-    private fun createAction(icon: Int, title: String, action: String, requestCode: Int): NotificationCompat.Action {
+    private fun createAction(
+        icon: Int,
+        title: String,
+        action: String,
+        requestCode: Int
+    ): NotificationCompat.Action {
         val intent = Intent(this, this::class.java).setAction(action)
-        val pendingIntent = PendingIntent.getService(this, requestCode, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getService(
+            this,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
         return NotificationCompat.Action(icon, title, pendingIntent)
     }
 
     // Helper function using KeyguardManager's more reliable isDeviceLocked() check
     private fun isScreenUnlocked(): Boolean {
-        val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as? android.app.KeyguardManager
+        val keyguardManager =
+            getSystemService(Context.KEYGUARD_SERVICE) as? android.app.KeyguardManager
         // A device is considered "unlocked" if the KeyguardManager reports it's not locked.
         // On older API levels (pre-Lollipop) isKeyguardLocked() might not exist or behave differently.
         return !(keyguardManager?.isDeviceLocked ?: false)
@@ -236,10 +298,10 @@ class MediaNotificationListenerService : NotificationListenerService() {
     }
 
     private fun createNotificationChannel() {
-            val channel = NotificationChannel(
-                CHANNEL_ID, "Media Live Updates", NotificationManager.IMPORTANCE_LOW
-            )
-            notificationManager.createNotificationChannel(channel)
+        val channel = NotificationChannel(
+            CHANNEL_ID, "Media Live Updates", NotificationManager.IMPORTANCE_HIGH
+        )
+        notificationManager.createNotificationChannel(channel)
     }
 
     // NEW: Broadcast Receiver implementation
