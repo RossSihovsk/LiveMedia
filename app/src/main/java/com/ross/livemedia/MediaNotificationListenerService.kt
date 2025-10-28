@@ -22,7 +22,6 @@ import android.service.notification.StatusBarNotification
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.graphics.drawable.IconCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 class MediaNotificationListenerService : NotificationListenerService() {
@@ -330,7 +329,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
-            CHANNEL_ID, "Media Live Updates", NotificationManager.IMPORTANCE_HIGH
+            CHANNEL_ID, "Media Live Updates", NotificationManager.IMPORTANCE_LOW
         )
         notificationManager.createNotificationChannel(channel)
     }
