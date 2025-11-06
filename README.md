@@ -54,6 +54,8 @@ After installation, go to **Settings** and manually grant both **Notification Li
 Start playing music! The LiveMedia control should appear once media playback begins and the phone is unlocked.
 
 ---
-![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/cef1f757-07f1-489e-b7b7-a87a7ea22991)
-![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/bb674e7a-74d8-48e1-bd34-eece364aca9f)
+![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/12b5c780-2d72-4050-9203-04bc68944864)
+
+![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/84ff8c33-14e5-4d4e-8457-8efef3f648a5)
+
 ![LiveMedia Demo GIF](https://github.com/user-attachments/assets/b20d2f2c-aca7-4bc5-8ee4-7146a7b42979)
