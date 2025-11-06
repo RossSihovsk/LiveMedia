@@ -1,4 +1,4 @@
-package com.ross.livemedia
+package com.ross.livemedia.media
 
 import android.graphics.Bitmap
 import android.media.MediaMetadata
@@ -12,7 +12,7 @@ data class MusicState(
     val duration: Long,
     val position: Long,
     val packageName: String,
-    val mediaSessionActive: Boolean // Added to simplify check for existence
+    val mediaSessionActive: Boolean
 ) {
     constructor(
         metadata: MediaMetadata,
@@ -23,9 +23,31 @@ data class MusicState(
         artist = metadata.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: "Unknown Artist",
         albumArt = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART),
         isPlaying = playbackState.state == PlaybackState.STATE_PLAYING,
-        duration = metadata.getLong(MediaMetadata.METADATA_KEY_DURATION),
-        position = playbackState.position,
+        duration = metadata.getLong(MediaMetadata.METADATA_KEY_DURATION).coerceAtLeast(0L),
+        position = playbackState.position.coerceAtLeast(0L),
         packageName = packageName,
         mediaSessionActive = true
     )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+
+        if (javaClass != other?.javaClass) return false
+
+        other as MusicState
+
+        if (title != other.title) return false
+        if (artist != other.artist) return false
+        if (packageName != other.packageName) return false
+        if (albumArt != other.albumArt) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + artist.hashCode()
+        result = 31 * result + packageName.hashCode()
+        return result
+    }
 }

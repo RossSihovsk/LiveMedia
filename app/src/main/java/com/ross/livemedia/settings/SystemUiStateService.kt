@@ -1,9 +1,9 @@
 package com.ross.livemedia.settings
 
 import android.accessibilityservice.AccessibilityService
-import android.view.accessibility.AccessibilityEvent
 import android.content.Intent
 import android.util.Log
+import android.view.accessibility.AccessibilityEvent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 private const val TAG = "SystemUiStateService"
