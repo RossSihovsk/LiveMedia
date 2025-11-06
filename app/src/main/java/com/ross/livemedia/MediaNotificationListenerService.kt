@@ -23,24 +23,19 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.ross.livemedia.lockscreen.LockScreenManager
 
 class MediaNotificationListenerService : NotificationListenerService() {
 
     private val TAG = "MediaListenerService"
 
-    @Volatile
-    private var isQuickSettingsOpen = false
-
+    private lateinit var lockScreenManager: LockScreenManager
     private var activeMediaController: MediaController? = null
     private var currentTrackTitle: String? = null
     private var currentPackagePlaying: String? = null
 
-    // NEW: Receiver for screen state changes
-    private val lockStateReceiver = LockStateReceiver()
-
     // Use lazy for efficient access to system services
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
-    private val localBroadcastManager by lazy { LocalBroadcastManager.getInstance(this) }
 
     private val updateHandler = Handler(Looper.getMainLooper())
 
@@ -63,8 +58,6 @@ class MediaNotificationListenerService : NotificationListenerService() {
         private const val REQUEST_CODE_PREVIOUS = 102
     }
 
-    private val qsReceiver = SettingsReceiver()
-
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
             Log.d(TAG, "Playback state changed: ${state?.state}")
@@ -85,6 +78,12 @@ class MediaNotificationListenerService : NotificationListenerService() {
         super.onCreate()
         createNotificationChannel()
         Log.d(TAG, "Service Created")
+        lockScreenManager = LockScreenManager(this, deviceLocked = {
+            updateNotification()
+        }, deviceUnlocked = {
+            clearNotification()
+        })
+        lockScreenManager.start()
         updateHandler.removeCallbacks(updateRunnable)
         updateHandler.post(updateRunnable)
     }
@@ -106,20 +105,6 @@ class MediaNotificationListenerService : NotificationListenerService() {
     override fun onListenerConnected() {
         super.onListenerConnected()
         Log.d(TAG, "Listener Connected")
-
-        // Register the Lock State Receiver
-        val filter = IntentFilter().apply {
-            addAction(Intent.ACTION_SCREEN_OFF)
-            addAction(Intent.ACTION_USER_PRESENT)
-        }
-        registerReceiver(lockStateReceiver, filter)
-
-        val qsFilter = IntentFilter().apply {
-            addAction("com.ross.livemedia.QS_OPENED")
-            addAction("com.ross.livemedia.QS_CLOSED")
-        }
-
-        localBroadcastManager.registerReceiver(qsReceiver, qsFilter)
 
         findActiveMediaController()
     }
@@ -170,7 +155,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
             // Before building, check if the screen is currently locked and the notification should be hidden.
             // This is primarily for updates while locked (e.g., track change) where we still want it hidden.
-            if (!isScreenUnlocked()) {
+            if (!lockScreenManager.isScreenUnlocked()) {
                 clearNotification()
                 return
             }
@@ -314,15 +299,6 @@ class MediaNotificationListenerService : NotificationListenerService() {
         return NotificationCompat.Action(icon, title, pendingIntent)
     }
 
-    // Helper function using KeyguardManager's more reliable isDeviceLocked() check
-    private fun isScreenUnlocked(): Boolean {
-        val keyguardManager =
-            getSystemService(Context.KEYGUARD_SERVICE) as? android.app.KeyguardManager
-        // A device is considered "unlocked" if the KeyguardManager reports it's not locked.
-        // On older API levels (pre-Lollipop) isKeyguardLocked() might not exist or behave differently.
-        return !(keyguardManager?.isDeviceLocked ?: false)
-    }
-
     private fun clearNotification() {
         notificationManager.cancel(NOTIFICATION_ID)
     }
@@ -334,54 +310,11 @@ class MediaNotificationListenerService : NotificationListenerService() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    // NEW: Broadcast Receiver implementation
-    private inner class LockStateReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                Intent.ACTION_SCREEN_OFF -> {
-                    // Screen locked (or turned off) -> Hide the notification immediately
-                    Log.d(TAG, "Screen OFF broadcast received. Hiding notification.")
-                    clearNotification()
-                }
-
-                Intent.ACTION_USER_PRESENT -> {
-                    // Device unlocked (user present) -> Check if media is playing and show notification
-                    Log.d(TAG, "User PRESENT broadcast received. Checking media status.")
-                    findActiveMediaController()
-                }
-            }
-        }
-    }
-
-    private inner class SettingsReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            Log.d(TAG, "onReceive ${intent?.action}")
-            when (intent?.action) {
-                "com.ross.livemedia.QS_OPENED" -> {
-                    if (!isQuickSettingsOpen) {
-                        isQuickSettingsOpen = true
-                        Log.d(TAG, "Quick Settings opened → hiding notification")
-                        clearNotification()
-                    }
-                }
-
-                "com.ross.livemedia.QS_CLOSED" -> {
-                    if (isQuickSettingsOpen) {
-                        isQuickSettingsOpen = false
-                        Log.d(TAG, "Quick Settings closed → restoring notification")
-                        updateNotification()
-                    }
-                }
-            }
-        }
-    }
-
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
         activeMediaController?.unregisterCallback(mediaControllerCallback)
         try {
-            unregisterReceiver(lockStateReceiver) // Unregister receiver on disconnect
-            localBroadcastManager.unregisterReceiver(qsReceiver)
+            lockScreenManager.stop()
         } catch (e: IllegalArgumentException) {
             Log.e(TAG, "Receiver not registered, ignore: ${e.message}")
         }
