@@ -1,4 +1,4 @@
-# 🎵 LiveMedia: Always-On Media Control
+how # 🎵 LiveMedia: Always-On Media Control
 
 ## 🌟 Project Goal
 
@@ -10,17 +10,16 @@ It does not show any live notifications on the lock screen to avoid duplication 
 
 ---
 
-## 🛠️ Key Components
+## 🛠️ Code Description
 
-### 1. MediaNotificationListenerService (`MediaListenerService.kt`)
+The codebase is organized into the following key modules:
 
-This is the core service that manages the notification and media commands.
-
-| Component | Responsibility | API Used |
-| :--- | :--- | :--- |
-| **Media Monitoring** | Listens to all active media playback sessions. | `NotificationListenerService` |
-| **Command Sending** | Sends playback commands (e.g., Pause) back to the source player. | `MediaController.TransportControls` |
-| **Lock Detection** | Registers a receiver to handle device lock/unlock events. | `BroadcastReceiver` |
+- **`lockscreen`**: Manages the visibility of the media controls on the lock screen.
+- **`media`**: Handles media state management, including the `MusicState` data class.
+- **`notification`**: Contains the `MediaNotificationListenerService` for intercepting media notifications and the `NotificationUpdateScheduler` for updating the custom notification.
+- **`settings`**: Manages Quick Settings tile integration and System UI state. (Currently disabled)
+- **`ui`**: Defines the Jetpack Compose UI theme and components.
+- **`utils`**: Provides utility functions for logging and notification management.
 
 ---
 
