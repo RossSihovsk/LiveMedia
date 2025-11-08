@@ -106,8 +106,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.outline_artist_24)
-            .setContentTitle(musicState.artist)
-            .setContentText(musicState.title)
+            .setContentTitle(musicState.title)
+            .setContentText(musicState.artist)
             .setLargeIcon(musicState.albumArt)
             .setOngoing(true)
             .setCategory(Notification.CATEGORY_PROGRESS)
