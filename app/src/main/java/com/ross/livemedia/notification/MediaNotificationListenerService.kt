@@ -7,10 +7,11 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationCompat
-import com.ross.livemedia.R
 import com.ross.livemedia.lockscreen.LockScreenManager
 import com.ross.livemedia.media.MediaStateManager
+import com.ross.livemedia.media.MusicProvider
 import com.ross.livemedia.media.MusicState
 import com.ross.livemedia.utils.Logger
 import com.ross.livemedia.utils.buildArtisAlbumTitle
@@ -106,11 +107,14 @@ class MediaNotificationListenerService : NotificationListenerService() {
             )
         }
 
+        val musicAppName = packageManager.getAppName(musicState.packageName) as String
+
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.outline_artist_24)
+            .setSmallIcon(MusicProvider.getByAppName(musicAppName).iconRes  )
             .setContentTitle(musicState.title)
             .setContentText(buildArtisAlbumTitle(musicState))
             .setLargeIcon(musicState.albumArt)
+            .setColor(Color.Cyan.blue.toInt())
             .setOngoing(true)
             .setCategory(Notification.CATEGORY_PROGRESS)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -120,7 +124,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
             .addAction(nextMusicAction)
             .setRequestPromotedOngoing(true)
             .setShowWhen(false)
-            .setSubText(packageManager.getAppName(musicState.packageName))
+            .setSubText(musicAppName)
             .setStyle(buildBaseBigTextStyle(musicState))
             .setProgress(musicState.duration.toInt(), musicState.position.toInt(), false)
 
