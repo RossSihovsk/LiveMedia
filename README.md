@@ -1,4 +1,4 @@
-how # 🎵 LiveMedia: Always-On Media Control
+## 🎵 LiveMedia: Always-On Media Control
 
 ## 🌟 Project Goal
 
