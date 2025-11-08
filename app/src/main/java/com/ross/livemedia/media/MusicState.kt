@@ -12,7 +12,8 @@ data class MusicState(
     val duration: Long,
     val position: Long,
     val packageName: String,
-    val mediaSessionActive: Boolean
+    val mediaSessionActive: Boolean,
+    val albumName: String?
 ) {
     constructor(
         metadata: MediaMetadata,
@@ -26,7 +27,8 @@ data class MusicState(
         duration = metadata.getLong(MediaMetadata.METADATA_KEY_DURATION).coerceAtLeast(0L),
         position = playbackState.position.coerceAtLeast(0L),
         packageName = packageName,
-        mediaSessionActive = true
+        mediaSessionActive = true,
+        albumName = metadata.getString(MediaMetadata.METADATA_KEY_ALBUM) ?: "Unknown Album",
     )
 
     override fun equals(other: Any?): Boolean {
@@ -49,5 +51,9 @@ data class MusicState(
         result = 31 * result + artist.hashCode()
         result = 31 * result + packageName.hashCode()
         return result
+    }
+
+    companion object {
+        const val EMPTY_ALBUM = "Unknown Album"
     }
 }
