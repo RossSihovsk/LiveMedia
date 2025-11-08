@@ -7,6 +7,8 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import androidx.annotation.ColorInt
+import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.ross.livemedia.R
 import com.ross.livemedia.lockscreen.LockScreenManager
@@ -15,6 +17,7 @@ import com.ross.livemedia.media.MusicState
 import com.ross.livemedia.utils.Logger
 import com.ross.livemedia.utils.buildBaseProgressStyle
 import com.ross.livemedia.utils.createAction
+import com.ross.livemedia.utils.getAppName
 
 class MediaNotificationListenerService : NotificationListenerService() {
     private val logger = Logger("MediaListenerService")
@@ -117,7 +120,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
             .addAction(if (musicState.isPlaying) playMusicAction else pauseMusicAction)
             .addAction(nextMusicAction)
             .setRequestPromotedOngoing(true)
-            .setSubText(if (musicState.isPlaying) "Playing" else "Paused")
+            .setShowWhen(false)
+            .setSubText(packageManager.getAppName(musicState.packageName))
             .setStyle(buildBaseProgressStyle(musicState.duration, musicState.position))
             .setProgress(musicState.duration.toInt(), musicState.position.toInt(), false)
 

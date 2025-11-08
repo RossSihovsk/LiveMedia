@@ -29,12 +29,10 @@ fun buildBaseProgressStyle(duration: Long, position: Long): NotificationCompat.P
         NotificationCompat.ProgressStyle.Point(playedPercent.toInt()).setColor(pointColor)
     )
 
-
     return NotificationCompat.ProgressStyle()
         .setProgressSegments(segments)
         .setProgressPoints(points)
 }
-
 
 fun <T> createAction(
     icon: Int,
