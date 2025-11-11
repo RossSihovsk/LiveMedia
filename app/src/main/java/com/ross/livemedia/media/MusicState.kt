@@ -13,7 +13,7 @@ data class MusicState(
     val position: Long,
     val packageName: String,
     val mediaSessionActive: Boolean,
-    val albumName: String?
+    val albumName: String
 ) {
     constructor(
         metadata: MediaMetadata,

@@ -37,7 +37,7 @@ fun buildBaseProgressStyle(duration: Long, position: Long): NotificationCompat.P
 
 fun buildBaseBigTextStyle(musicState: MusicState) = NotificationCompat.BigTextStyle()
     .setBigContentTitle(musicState.title)
-    .bigText(buildArtisAlbumTitle(musicState))
+//    .bigText(buildArtisAlbumTitle(musicState))
 
 fun <T> createAction(
     icon: Int,

@@ -7,12 +7,12 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.ross.livemedia.lockscreen.LockScreenManager
 import com.ross.livemedia.media.MediaStateManager
 import com.ross.livemedia.media.MusicProvider
 import com.ross.livemedia.media.MusicState
+import com.ross.livemedia.storage.StorageHelper
 import com.ross.livemedia.utils.Logger
 import com.ross.livemedia.utils.buildArtisAlbumTitle
 import com.ross.livemedia.utils.buildBaseBigTextStyle
@@ -24,6 +24,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
     private lateinit var mediaStateManager: MediaStateManager
     private lateinit var lockScreenManager: LockScreenManager
     private lateinit var notificationUpdateScheduler: NotificationUpdateScheduler
+    private lateinit var storageHelper: StorageHelper
     private val notificationManager by lazy { getSystemService(NOTIFICATION_SERVICE) as NotificationManager }
 
     override fun onCreate() {
@@ -31,6 +32,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
         logger.info("onCreate")
 
         createNotificationChannel()
+
+        storageHelper = StorageHelper(this)
 
         lockScreenManager = LockScreenManager(
             this,
@@ -110,23 +113,42 @@ class MediaNotificationListenerService : NotificationListenerService() {
         val musicAppName = packageManager.getAppName(musicState.packageName) as String
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(MusicProvider.getByAppName(musicAppName).iconRes  )
-            .setContentTitle(musicState.title)
-            .setContentText(buildArtisAlbumTitle(musicState))
-            .setLargeIcon(musicState.albumArt)
-            .setColor(Color.Cyan.blue.toInt())
+            .setSmallIcon(MusicProvider.getByAppName(musicAppName).iconRes)
+//            .setContentTitle(musicState.title)
             .setOngoing(true)
             .setCategory(Notification.CATEGORY_PROGRESS)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setShortCriticalText(musicState.title.take(7))
-            .addAction(prevMusicAction)
-            .addAction(if (musicState.isPlaying) playMusicAction else pauseMusicAction)
-            .addAction(nextMusicAction)
             .setRequestPromotedOngoing(true)
             .setShowWhen(false)
             .setSubText(musicAppName)
             .setStyle(buildBaseBigTextStyle(musicState))
-            .setProgress(musicState.duration.toInt(), musicState.position.toInt(), false)
+
+        if (storageHelper.showAlbumArt) notification.setLargeIcon(musicState.albumArt)
+
+        if (storageHelper.showProgress) {
+            notification.setProgress(
+                musicState.duration.toInt(),
+                musicState.position.toInt(),
+                false
+            )
+        }
+
+        if (storageHelper.showArtistName || storageHelper.showAlbumName) {
+            notification.setContentText(
+                buildArtisAlbumTitle(
+                    storageHelper.showArtistName,
+                    storageHelper.showAlbumName,
+                    musicState
+                )
+            )
+        }
+
+        if (storageHelper.showActionButtons) {
+            notification.addAction(prevMusicAction)
+            notification.addAction(if (musicState.isPlaying) playMusicAction else pauseMusicAction)
+            notification.addAction(nextMusicAction)
+        }
 
         if (contentIntent != null) {
             notification.setContentIntent(contentIntent)
