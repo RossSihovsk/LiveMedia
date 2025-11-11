@@ -114,15 +114,15 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(MusicProvider.getByAppName(musicAppName).iconRes)
-//            .setContentTitle(musicState.title)
+            .setContentTitle(musicState.title)
             .setOngoing(true)
             .setCategory(Notification.CATEGORY_PROGRESS)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setShortCriticalText(musicState.title.take(7))
+            .setShortCriticalText(musicState.title.take(7).trimEnd())
             .setRequestPromotedOngoing(true)
             .setShowWhen(false)
             .setSubText(musicAppName)
-            .setStyle(buildBaseBigTextStyle(musicState))
+            .setStyle(buildBaseBigTextStyle())
 
         if (storageHelper.showAlbumArt) notification.setLargeIcon(musicState.albumArt)
 

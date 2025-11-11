@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
-import com.ross.livemedia.media.MusicState
 
 fun buildBaseProgressStyle(duration: Long, position: Long): NotificationCompat.ProgressStyle {
     val playedColor = Color.valueOf(236f / 255f, 183f / 255f, 255f / 255f, 1f).toArgb()
@@ -35,9 +34,7 @@ fun buildBaseProgressStyle(duration: Long, position: Long): NotificationCompat.P
         .setProgressPoints(points)
 }
 
-fun buildBaseBigTextStyle(musicState: MusicState) = NotificationCompat.BigTextStyle()
-    .setBigContentTitle(musicState.title)
-//    .bigText(buildArtisAlbumTitle(musicState))
+fun buildBaseBigTextStyle() = NotificationCompat.BigTextStyle()
 
 fun <T> createAction(
     icon: Int,
