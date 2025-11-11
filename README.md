@@ -2,7 +2,7 @@
 
 ## 🌟 Project Goal
 
-The goal of **LiveMedia** is to transform standard media playback into a **persistent, glanceable, and interactive experience** on your Android 16 device.
+update The goal of **LiveMedia** is to transform standard media playback into a **persistent, glanceable, and interactive experience**. This application is designed exclusively for **Android 16 and newer**, with a preference for Google Pixel phones.
 
 LiveMedia uses promoted ongoing notifications to create a "Live Activity" effect, bringing controls and track information directly to the screen.
 
@@ -18,14 +18,15 @@ The codebase is organized into the following key modules:
 - **`media`**: Handles media state management, including the `MusicState` data class.
 - **`notification`**: Contains the `MediaNotificationListenerService` for intercepting media notifications and the `NotificationUpdateScheduler` for updating the custom notification.
 - **`settings`**: Manages Quick Settings tile integration and System UI state. (Currently disabled)
-- **`ui`**: Defines the Jetpack Compose UI theme and components.
+- **`ui`**: Defines the Jetpack Compose UI. This includes the `PermissionScreen` for handling permission requests, the `SettingsScreen` for customizing notification content.
+- **`storage`**: Manages persistent user preferences for notification content using `SharedPreferences`.
 - **`utils`**: Provides utility functions for logging and notification management.
 
 ---
 
 ## 🚀 Setup and Permissions
 
-Since LiveMedia intercepts system notifications and UI events, explicit user permission is required.
+Since LiveMedia intercepts system notifications, explicit user permission is required.
 
 ### Required Permissions
 
@@ -49,7 +50,7 @@ Since LiveMedia intercepts system notifications and UI events, explicit user per
   *Open the project in Android Studio and build the APK.
   *Install the app on your device.
 
-After installation, go to **Settings** and manually grant both **Notification Listener Access** and **Accessibility Service** permissions to the LiveMedia app.
+After installation, go to **Settings** and manually grant **Notification Listener Access** to the LiveMedia app.
 Start playing music! The LiveMedia control should appear once media playback begins and the phone is unlocked.
 
 ---
