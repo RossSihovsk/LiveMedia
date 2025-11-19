@@ -2,6 +2,7 @@ package com.ross.livemedia.utils
 
 import com.ross.livemedia.media.MusicState
 import com.ross.livemedia.media.MusicState.Companion.EMPTY_ALBUM
+import com.ross.livemedia.media.MusicState.Companion.EMPTY_ARTIST
 
 private const val MAX_LENGTH = 70
 
@@ -12,7 +13,7 @@ fun buildArtisAlbumTitle(
 ): String {
     val parts = mutableListOf<String>()
 
-    val showArtist = showArtistName && musicState.artist.isNotBlank()
+    val showArtist = showArtistName && musicState.artist.isNotBlank() && musicState.artist != EMPTY_ARTIST
     val showAlbum = showAlbumName && musicState.albumName.isNotBlank() && musicState.albumName != EMPTY_ALBUM
 
     // 1. Add Artist Name if requested and available

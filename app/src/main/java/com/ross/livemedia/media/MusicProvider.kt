@@ -66,6 +66,11 @@ enum class MusicProvider(
         "Twitch",
         "tv.twitch.android.app",
         R.drawable.twitch
+    ),
+    NOTEBOOK_LM(
+        "NotebookLM",
+        "com.google.android.apps.labs.language.tailwind",
+        R.drawable.notebook_lm
     );
 
     companion object {

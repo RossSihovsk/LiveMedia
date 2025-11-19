@@ -55,5 +55,6 @@ data class MusicState(
 
     companion object {
         const val EMPTY_ALBUM = "Unknown Album"
+        const val EMPTY_ARTIST = "Unknown Artist"
     }
 }
