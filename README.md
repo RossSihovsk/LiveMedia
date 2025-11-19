@@ -1,8 +1,7 @@
 ## 🎵 LiveMedia: Always-On Media Control
 
 ## 🌟 Project Goal
-
-update The goal of **LiveMedia** is to transform standard media playback into a **persistent, glanceable, and interactive experience**. This application is designed exclusively for **Android 16 and newer**, with a preference for Google Pixel phones.
+The goal of **LiveMedia** is to transform standard media playback into a **persistent, glanceable, and interactive experience**. This application is designed exclusively for **Android 16 and newer**, with a preference for Google Pixel phones.
 
 LiveMedia uses promoted ongoing notifications to create a "Live Activity" effect, bringing controls and track information directly to the screen. Through the in-app settings, you can customize which elements are displayed, such as album art, artist and album names, and playback controls.
 
