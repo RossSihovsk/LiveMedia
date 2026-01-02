@@ -36,6 +36,8 @@ fun SettingsScreen(storageHelper: StorageHelper) {
     val showAlbumName = remember { mutableStateOf(storageHelper.showAlbumName) }
     val showActionButtons = remember { mutableStateOf(storageHelper.showActionButtons) }
     val showProgress = remember { mutableStateOf(storageHelper.showProgress) }
+    val showMusicProvider = remember { mutableStateOf(storageHelper.showMusicProvider) }
+    val showTimestamp = remember { mutableStateOf(storageHelper.showTimestamp) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -89,6 +91,20 @@ fun SettingsScreen(storageHelper: StorageHelper) {
                 description = "Show song progress",
                 checkedState = showProgress,
                 onCheckedChange = { storageHelper.showProgress = it }
+            )
+
+            SettingToggle(
+                label = "Show Music provider app name",
+                description = "It will show what music app you're using (Spotify/YT Music, etc...)",
+                checkedState = showMusicProvider,
+                onCheckedChange = { storageHelper.showMusicProvider = it }
+            )
+
+            SettingToggle(
+                label = "Show timestamps",
+                description = "Show elapsed time and total duration on the player.",
+                checkedState = showTimestamp,
+                onCheckedChange = { storageHelper.showTimestamp = it }
             )
         }
     }

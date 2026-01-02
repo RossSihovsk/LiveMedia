@@ -5,6 +5,8 @@ import android.os.Looper
 import com.ross.livemedia.media.MusicState
 import com.ross.livemedia.utils.Logger
 
+private const val STATE_UPDATE_DELAY_MS = 1000L
+
 class NotificationUpdateScheduler(
     private val updateAction: () -> Unit
 ) {
@@ -16,7 +18,7 @@ class NotificationUpdateScheduler(
         override fun run() {
             if (isPlaying) {
                 updateAction()
-                updateHandler.postDelayed(this, 2000)
+                updateHandler.postDelayed(this, STATE_UPDATE_DELAY_MS)
             } else {
                 logger.info("Runnable stopped: Not playing.")
             }

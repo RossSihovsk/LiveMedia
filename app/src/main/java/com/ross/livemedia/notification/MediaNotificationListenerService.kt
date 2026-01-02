@@ -16,6 +16,7 @@ import com.ross.livemedia.storage.StorageHelper
 import com.ross.livemedia.utils.Logger
 import com.ross.livemedia.utils.buildArtisAlbumTitle
 import com.ross.livemedia.utils.buildBaseBigTextStyle
+import com.ross.livemedia.utils.combineProviderAndTimestamp
 import com.ross.livemedia.utils.createAction
 import com.ross.livemedia.utils.getAppName
 
@@ -121,8 +122,16 @@ class MediaNotificationListenerService : NotificationListenerService() {
             .setShortCriticalText(musicState.title.take(7).trimEnd())
             .setRequestPromotedOngoing(true)
             .setShowWhen(false)
-            .setSubText(musicAppName)
             .setStyle(buildBaseBigTextStyle())
+            .setSubText(
+                combineProviderAndTimestamp(
+                    musicAppName,
+                    storageHelper.showMusicProvider,
+                    storageHelper.showTimestamp,
+                    musicState.position.toInt(),
+                    musicState.duration.toInt()
+                )
+            )
 
         if (storageHelper.showAlbumArt) notification.setLargeIcon(musicState.albumArt)
 
@@ -133,6 +142,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
                 false
             )
         }
+
 
         if (storageHelper.showArtistName || storageHelper.showAlbumName) {
             notification.setContentText(
@@ -172,8 +182,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
         createAction(
             android.R.drawable.ic_media_pause,
             "Pause",
-            MediaStateManager.Companion.ACTION_PLAY_PAUSE,
-            MediaStateManager.Companion.REQUEST_CODE_PLAY_PAUSE,
+            MediaStateManager.ACTION_PLAY_PAUSE,
+            MediaStateManager.REQUEST_CODE_PLAY_PAUSE,
             this,
             this::class.java
         )
@@ -183,8 +193,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
         createAction(
             android.R.drawable.ic_media_play,
             "Play",
-            MediaStateManager.Companion.ACTION_PLAY_PAUSE,
-            MediaStateManager.Companion.REQUEST_CODE_PLAY_PAUSE,
+            MediaStateManager.ACTION_PLAY_PAUSE,
+            MediaStateManager.REQUEST_CODE_PLAY_PAUSE,
             this,
             this::class.java
         )
@@ -194,8 +204,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
         createAction(
             android.R.drawable.ic_media_previous,
             "Previous",
-            MediaStateManager.Companion.ACTION_SKIP_TO_PREVIOUS,
-            MediaStateManager.Companion.REQUEST_CODE_PREVIOUS,
+            MediaStateManager.ACTION_SKIP_TO_PREVIOUS,
+            MediaStateManager.REQUEST_CODE_PREVIOUS,
             this,
             this::class.java
         )
@@ -204,8 +214,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
         createAction(
             android.R.drawable.ic_media_next,
             "Next",
-            MediaStateManager.Companion.ACTION_SKIP_TO_NEXT,
-            MediaStateManager.Companion.REQUEST_CODE_NEXT,
+            MediaStateManager.ACTION_SKIP_TO_NEXT,
+            MediaStateManager.REQUEST_CODE_NEXT,
             this,
             this::class.java
         )

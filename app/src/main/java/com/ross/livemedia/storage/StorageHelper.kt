@@ -28,12 +28,25 @@ class StorageHelper(context: Context) {
         get() = preferences.getBoolean(KEY_SHOW_PROGRESS, DEFAULT_VALUE)
         set(value) = preferences.edit { putBoolean(KEY_SHOW_PROGRESS, value) }
 
+    var showMusicProvider: Boolean
+        get() = preferences.getBoolean(KEY_SHOW_MUSIC_PROVIDER_NAME, DEFAULT_VALUE)
+        set(value) = preferences.edit { putBoolean(KEY_SHOW_MUSIC_PROVIDER_NAME, value) }
+
+    //False is the default value only for this field
+    var showTimestamp: Boolean
+        get() = preferences.getBoolean(KEY_SHOW_TIMESTAMP, false)
+        set(value) = preferences.edit { putBoolean(KEY_SHOW_TIMESTAMP, value) }
+
+
+
     companion object {
         private const val KEY_SHOW_ALBUM_ART = "show_album_art"
         private const val KEY_SHOW_ARTIST_NAME = "show_artist_name"
         private const val KEY_SHOW_ALBUM_NAME = "show_album_name"
         private const val KEY_SHOW_ACTION_BUTTONS = "show_action_buttons"
         private const val KEY_SHOW_PROGRESS = "show_progress"
+        private const val KEY_SHOW_TIMESTAMP = "show_song_timestamp"
+        private const val KEY_SHOW_MUSIC_PROVIDER_NAME = "show_music_provider"
         private const val DEFAULT_VALUE = true
     }
 }
