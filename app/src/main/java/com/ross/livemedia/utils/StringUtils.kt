@@ -43,7 +43,7 @@ fun buildArtisAlbumTitle(
 fun formatMusicProgress(currentPosition: Int, duration: Int): String {
     val positionStr = formatTime(currentPosition)
     val durationStr = formatTime(duration)
-    return "$positionStr/$durationStr"
+    return "$positionStr / $durationStr"
 }
 
 private fun formatTime(millis: Int): String {
