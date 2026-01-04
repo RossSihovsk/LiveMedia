@@ -5,7 +5,7 @@ The goal of **LiveMedia** is to transform standard media playback into a **persi
 
 LiveMedia uses promoted ongoing notifications to create a "Live Activity" effect, bringing controls and track information directly to the screen. Through the in-app settings, you can customize which elements are displayed, such as album art, artist and album names, and playback controls.
 
-It does not show any live notifications on the lock screen to avoid duplication with the default media player. (But I was not able to avoid it in QS)
+It does not show any live notifications on the lock screen or Quick Settings to avoid duplication with the default media player.
 
 ---
 
@@ -16,7 +16,7 @@ The codebase is organized into the following key modules:
 - **`lockscreen`**: Manages the visibility of the media controls on the lock screen.
 - **`media`**: Handles media state management, including the `MusicState` data class.
 - **`notification`**: Contains the `MediaNotificationListenerService` for intercepting media notifications and the `NotificationUpdateScheduler` for updating the custom notification.
-- **`settings`**: Manages Quick Settings tile integration and System UI state. (Currently disabled)
+- **`settings`**: Manages Quick Settings state and disable notifications when Quick Settings are opened.
 - **`ui`**: Defines the Jetpack Compose UI. This includes the `PermissionScreen` for handling permission requests, the `SettingsScreen` for customizing notification content.
 - **`storage`**: Manages persistent user preferences for notification content using `SharedPreferences`.
 - **`utils`**: Provides utility functions for logging and notification management.
@@ -32,6 +32,7 @@ Since LiveMedia intercepts system notifications, explicit user permission is req
 | Permission | Reason |
 | :--- | :--- |
 | **Notification Listener** | Required by `MediaNotificationListenerService` to access media metadata and session tokens. |
+| **Accessibility Service** | Required by `QSStateListener` to detect when Quick Settings or the Notification Shade is opened, allowing the app to hide notifications during user interaction. |
 
 ### Installation
 
@@ -49,7 +50,7 @@ Since LiveMedia intercepts system notifications, explicit user permission is req
   *Open the project in Android Studio and build the APK.
   *Install the app on your device.
 
-After installation, go to **Settings** and manually grant **Notification Listener Access** to the LiveMedia app.
+After installation, go to **Settings** and manually grant **Notification Listener Access** and **Accessibility Service** to the LiveMedia app.
 Start playing music! The LiveMedia control should appear once media playback begins and the phone is unlocked.
 
 ---
