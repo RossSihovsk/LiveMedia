@@ -8,7 +8,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 private const val TAG = "SystemUiStateService"
 
-class SystemUiStateService : AccessibilityService() {
+class QSStateListener : AccessibilityService() {
 
     val localBroadcastManager = LocalBroadcastManager.getInstance(this)
 

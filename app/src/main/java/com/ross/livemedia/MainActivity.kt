@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
         )
         if (accessibilityEnabled == 1) {
             val service =
-                "$packageName/${com.ross.livemedia.settings.SystemUiStateService::class.java.canonicalName}"
+                "$packageName/${com.ross.livemedia.settings.QSStateListener::class.java.canonicalName}"
             val enabledServices = Settings.Secure.getString(
                 contentResolver,
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES

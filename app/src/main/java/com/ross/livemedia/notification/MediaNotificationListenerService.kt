@@ -15,8 +15,8 @@ import com.ross.livemedia.lockscreen.LockScreenManager
 import com.ross.livemedia.media.MediaStateManager
 import com.ross.livemedia.media.MusicProvider
 import com.ross.livemedia.media.MusicState
-import com.ross.livemedia.settings.SystemUiStateService.Companion.QS_CLOSED_ACTION
-import com.ross.livemedia.settings.SystemUiStateService.Companion.QS_OPENED_ACTION
+import com.ross.livemedia.settings.QSStateListener.Companion.QS_CLOSED_ACTION
+import com.ross.livemedia.settings.QSStateListener.Companion.QS_OPENED_ACTION
 import com.ross.livemedia.storage.StorageHelper
 import com.ross.livemedia.utils.Logger
 import com.ross.livemedia.utils.buildArtisAlbumTitle
