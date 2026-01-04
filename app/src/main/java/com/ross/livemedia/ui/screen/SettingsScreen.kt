@@ -38,6 +38,7 @@ fun SettingsScreen(storageHelper: StorageHelper) {
     val showProgress = remember { mutableStateOf(storageHelper.showProgress) }
     val showMusicProvider = remember { mutableStateOf(storageHelper.showMusicProvider) }
     val showTimestamp = remember { mutableStateOf(storageHelper.showTimestamp) }
+    val hideNotificationOnQsOpen = remember { mutableStateOf(storageHelper.hideNotificationOnQsOpen) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -105,6 +106,13 @@ fun SettingsScreen(storageHelper: StorageHelper) {
                 description = "Show elapsed time and total duration on the player.",
                 checkedState = showTimestamp,
                 onCheckedChange = { storageHelper.showTimestamp = it }
+            )
+
+            SettingToggle(
+                label = "Hide on Quick Settings",
+                description = "Hide the media notification when Quick Settings or Notification Shade are opened.",
+                checkedState = hideNotificationOnQsOpen,
+                onCheckedChange = { storageHelper.hideNotificationOnQsOpen = it }
             )
         }
     }

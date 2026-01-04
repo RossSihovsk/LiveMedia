@@ -21,8 +21,10 @@ import androidx.compose.ui.unit.sp
 fun PermissionScreen(
     hasNotificationListenerPermission: Boolean,
     hasPostNotificationPermission: Boolean,
+    hasAccessibilityPermission: Boolean,
     onGrantNotificationListenerPermissionClick: () -> Unit,
-    onGrantPostNotificationPermissionClick: () -> Unit
+    onGrantPostNotificationPermissionClick: () -> Unit,
+    onGrantAccessibilityPermissionClick: () -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -76,7 +78,28 @@ fun PermissionScreen(
                 }
             }
 
-            if (hasNotificationListenerPermission && hasPostNotificationPermission) {
+            if (!hasAccessibilityPermission) {
+                Spacer(modifier = Modifier.height(32.dp))
+                Text(
+                    text = "Accessibility Permission Needed",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "This app requires Accessibility Access to detect when Quick Settings are opened. Please grant permission in the system settings.",
+                    color = Color(0xFFCCCCCC),
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Button(onClick = onGrantAccessibilityPermissionClick) {
+                    Text(text = "Grant Accessibility Permission")
+                }
+            }
+
+            if (hasNotificationListenerPermission && hasPostNotificationPermission && hasAccessibilityPermission) {
                 Text(
                     text = "All Permissions Granted!",
                     color = Color.White,

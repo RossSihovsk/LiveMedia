@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
 
     private val hasNotificationListenerPermission = mutableStateOf(false)
     private val hasPostNotificationPermission = mutableStateOf(false)
+    private val hasAccessibilityPermission = mutableStateOf(false)
     private lateinit var storageHelper: StorageHelper // Initialized in onCreate
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,17 +48,21 @@ class MainActivity : ComponentActivity() {
 
                 // Determine which screen to show
                 val showPermissions =
-                    !hasNotificationListenerPermission.value || !hasPostNotificationPermission.value
+                    !hasNotificationListenerPermission.value || !hasPostNotificationPermission.value || !hasAccessibilityPermission.value
 
                 if (showPermissions) {
                     PermissionScreen(
                         hasNotificationListenerPermission = hasNotificationListenerPermission.value,
                         hasPostNotificationPermission = hasPostNotificationPermission.value,
+                        hasAccessibilityPermission = hasAccessibilityPermission.value,
                         onGrantNotificationListenerPermissionClick = {
                             startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                         },
                         onGrantPostNotificationPermissionClick = {
                             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        },
+                        onGrantAccessibilityPermissionClick = {
+                            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
                         }
                     )
                 } else {
@@ -79,6 +84,7 @@ class MainActivity : ComponentActivity() {
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
+        hasAccessibilityPermission.value = isAccessibilityServiceEnabled()
 
         if (hasNotificationListenerPermission.value && hasPostNotificationPermission.value) {
             val intent = Intent(this, MediaNotificationListenerService::class.java)
@@ -90,5 +96,22 @@ class MainActivity : ComponentActivity() {
         val enabledListeners =
             Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
         return enabledListeners?.contains(packageName) == true
+    }
+
+    private fun isAccessibilityServiceEnabled(): Boolean {
+        val accessibilityEnabled = Settings.Secure.getInt(
+            contentResolver,
+            Settings.Secure.ACCESSIBILITY_ENABLED, 0
+        )
+        if (accessibilityEnabled == 1) {
+            val service =
+                "$packageName/${com.ross.livemedia.settings.SystemUiStateService::class.java.canonicalName}"
+            val enabledServices = Settings.Secure.getString(
+                contentResolver,
+                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+            )
+            return enabledServices?.contains(service) == true
+        }
+        return false
     }
 }

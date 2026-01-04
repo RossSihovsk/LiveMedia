@@ -37,6 +37,9 @@ class StorageHelper(context: Context) {
         get() = preferences.getBoolean(KEY_SHOW_TIMESTAMP, false)
         set(value) = preferences.edit { putBoolean(KEY_SHOW_TIMESTAMP, value) }
 
+    var hideNotificationOnQsOpen: Boolean
+        get() = preferences.getBoolean(KEY_HIDE_NOTIFICATION_ON_QS_OPEN, DEFAULT_VALUE)
+        set(value) = preferences.edit { putBoolean(KEY_HIDE_NOTIFICATION_ON_QS_OPEN, value) }
 
 
     companion object {
@@ -47,6 +50,7 @@ class StorageHelper(context: Context) {
         private const val KEY_SHOW_PROGRESS = "show_progress"
         private const val KEY_SHOW_TIMESTAMP = "show_song_timestamp"
         private const val KEY_SHOW_MUSIC_PROVIDER_NAME = "show_music_provider"
+        private const val KEY_HIDE_NOTIFICATION_ON_QS_OPEN = "hide_notification_on_qs_open"
         private const val DEFAULT_VALUE = true
     }
 }
