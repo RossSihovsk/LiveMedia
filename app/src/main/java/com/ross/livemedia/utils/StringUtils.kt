@@ -31,7 +31,7 @@ fun buildArtisAlbumTitle(
     }
 
     // Combine all parts. Use " • " or " - " as a clear, non-hyphenated separator.
-    val result = parts.joinToString(" • ")
+    val result = parts.joinToString(" - ")
 
     return if (result.length > MAX_LENGTH) {
         result.substring(0, MAX_LENGTH) + "..."
