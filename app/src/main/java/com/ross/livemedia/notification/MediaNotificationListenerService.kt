@@ -4,19 +4,21 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ross.livemedia.lockscreen.LockScreenManager
 import com.ross.livemedia.media.MediaStateManager
 import com.ross.livemedia.media.MusicProvider
 import com.ross.livemedia.media.MusicState
-import com.ross.livemedia.settings.QSStateListener.Companion.QS_CLOSED_ACTION
-import com.ross.livemedia.settings.QSStateListener.Companion.QS_OPENED_ACTION
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import com.ross.livemedia.settings.QSStateProvider
 import com.ross.livemedia.storage.StorageHelper
 import com.ross.livemedia.utils.Logger
 import com.ross.livemedia.utils.buildArtisAlbumTitle
@@ -31,25 +33,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
     private lateinit var lockScreenManager: LockScreenManager
     private lateinit var notificationUpdateScheduler: NotificationUpdateScheduler
     private lateinit var storageHelper: StorageHelper
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var isQsOpen = false
-    private val qsStateReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                QS_OPENED_ACTION -> {
-                    isQsOpen = true
-                    if (storageHelper.hideNotificationOnQsOpen) {
-                        clearNotification()
-                    }
-                }
-                QS_CLOSED_ACTION -> {
-                    isQsOpen = false
-                    mediaStateManager.getUpdatedMusicState()?.let {
-                        updateNotification(it)
-                    }
-                }
-            }
-        }
-    }
     private val notificationManager by lazy { getSystemService(NOTIFICATION_SERVICE) as NotificationManager }
 
     override fun onCreate() {
@@ -95,18 +80,25 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
             }
 
-        androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(this).registerReceiver(
-            qsStateReceiver,
-            android.content.IntentFilter().apply {
-                addAction(QS_OPENED_ACTION)
-                addAction(QS_CLOSED_ACTION)
+        serviceScope.launch {
+            QSStateProvider.isQsOpen.collectLatest { isOpen ->
+                val wasOpen = isQsOpen
+                isQsOpen = isOpen
+                if (isOpen) {
+                    if (storageHelper.hideNotificationOnQsOpen) {
+                        clearNotification()
+                    }
+                } else if (wasOpen) {
+                    mediaStateManager.getUpdatedMusicState()?.let {
+                        updateNotification(it)
+                    }
+                }
             }
-        )
+        }
     }
 
     override fun onDestroy() {
-        LocalBroadcastManager.getInstance(this)
-            .unregisterReceiver(qsStateReceiver)
+        serviceScope.cancel()
         super.onDestroy()
     }
 
