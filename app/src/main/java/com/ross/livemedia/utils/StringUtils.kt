@@ -3,6 +3,7 @@ package com.ross.livemedia.utils
 import com.ross.livemedia.media.MusicState
 import com.ross.livemedia.media.MusicState.Companion.EMPTY_ALBUM
 import com.ross.livemedia.media.MusicState.Companion.EMPTY_ARTIST
+import com.ross.livemedia.storage.PillContent
 import java.util.Locale
 
 private const val MAX_LENGTH = 70
@@ -31,10 +32,10 @@ fun buildArtisAlbumTitle(
     }
 
     // Combine all parts. Use " • " or " - " as a clear, non-hyphenated separator.
-    val result = parts.joinToString(" • ")
+    val result = parts.joinToString(" - ")
 
     return if (result.length > MAX_LENGTH) {
-        result.substring(0, MAX_LENGTH) + "..."
+        result.take(MAX_LENGTH) + "..."
     } else {
         result
     }
@@ -46,7 +47,7 @@ fun formatMusicProgress(currentPosition: Int, duration: Int): String {
     return "$positionStr / $durationStr"
 }
 
-private fun formatTime(millis: Int): String {
+fun formatTime(millis: Int): String {
     if (millis < 0) return "0:00"
 
     val totalSeconds = millis / 1000
@@ -67,3 +68,20 @@ fun combineProviderAndTimestamp(
     if (showMusicProvider) add(musicProvider)
     if (showTimestamp) add(formatMusicProgress(position, duration))
 }.joinToString(" • ").ifBlank { null }
+
+fun providePillText(
+    title: String,
+    position: Int,
+    duration: Int,
+    isPlaying: Boolean,
+    pillContent: PillContent
+): String {
+    val showTime = isPlaying && duration > 0
+    val truncatedTitle = title.take(7).trimEnd()
+
+    return when (pillContent) {
+        PillContent.ELAPSED if showTime -> formatTime(position)
+        PillContent.REMAINING if showTime -> formatTime(duration - position)
+        else -> truncatedTitle
+    }
+}

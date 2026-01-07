@@ -1,5 +1,6 @@
 package com.ross.livemedia.ui.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,11 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -27,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ross.livemedia.storage.PillContent
 import com.ross.livemedia.storage.StorageHelper
 
 @Composable
@@ -39,6 +45,7 @@ fun SettingsScreen(storageHelper: StorageHelper) {
     val showMusicProvider = remember { mutableStateOf(storageHelper.showMusicProvider) }
     val showTimestamp = remember { mutableStateOf(storageHelper.showTimestamp) }
     val hideNotificationOnQsOpen = remember { mutableStateOf(storageHelper.hideNotificationOnQsOpen) }
+    val pillContent = remember { mutableStateOf(storageHelper.pillContent) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -48,16 +55,19 @@ fun SettingsScreen(storageHelper: StorageHelper) {
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Notification Content Settings",
+                text = "Settings",
                 color = Color.White,
-                fontSize = 24.sp,
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(top = 24.dp, bottom = 32.dp)
+                fontSize = 28.sp,
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.padding(top = 24.dp, bottom = 24.dp)
             )
+
+            SectionHeader("Notification Body")
 
             SettingToggle(
                 label = "Show Album Art",
@@ -114,6 +124,40 @@ fun SettingsScreen(storageHelper: StorageHelper) {
                 checkedState = hideNotificationOnQsOpen,
                 onCheckedChange = { storageHelper.hideNotificationOnQsOpen = it }
             )
+
+            Spacer(modifier = Modifier.padding(top = 24.dp))
+            SectionHeader("Status Bar Pill")
+
+            PillContentOption(
+                label = "Song Title",
+                description = "Show the first 7 letters of the track title",
+                selected = pillContent.value == PillContent.TITLE,
+                onClick = {
+                    pillContent.value = PillContent.TITLE
+                    storageHelper.pillContent = PillContent.TITLE
+                }
+            )
+
+            PillContentOption(
+                label = "Elapsed Time",
+                description = "Show current playback position. The title would be shown anyway when music is on pause",
+                selected = pillContent.value == PillContent.ELAPSED,
+                onClick = {
+                    pillContent.value = PillContent.ELAPSED
+                    storageHelper.pillContent = PillContent.ELAPSED
+                }
+            )
+
+            PillContentOption(
+                label = "Remaining Time",
+                description = "Show time left in the song. The title would be shown anyway when music is on pause",
+                selected = pillContent.value == PillContent.REMAINING,
+                onClick = {
+                    pillContent.value = PillContent.REMAINING
+                    storageHelper.pillContent = PillContent.REMAINING
+                }
+            )
+            Spacer(modifier = Modifier.padding(top = 24.dp))
         }
     }
 }
@@ -125,9 +169,6 @@ fun SettingToggle(
     checkedState: MutableState<Boolean>,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    val labelColor = MaterialTheme.colorScheme.onSurface
-    val descriptionColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -172,6 +213,75 @@ fun SettingToggle(
                 null
             },
             modifier = Modifier.padding(start = 16.dp)
+        )
+    }
+
+    HorizontalDivider(
+        modifier = Modifier.padding(horizontal = 0.dp),
+        thickness = 1.dp,
+        color = Color(0xFF333333)
+    )
+}
+
+@Composable
+fun SectionHeader(title: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp)
+    ) {
+        Text(
+            text = title.uppercase(),
+            color = Color(0xFF888888),
+            fontSize = 12.sp,
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+        HorizontalDivider(color = Color(0xFF333333), thickness = 1.dp)
+    }
+}
+
+@Composable
+fun PillContentOption(
+    label: String,
+    description: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = label,
+                color = Color.White,
+                fontSize = 18.sp,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.padding(top = 2.dp))
+            Text(
+                text = description,
+                color = Color(0xFFCCCCCC),
+                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
+        RadioButton(
+            selected = selected,
+            onClick = onClick,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = Color.White,
+                unselectedColor = Color(0xFF666666)
+            )
         )
     }
 

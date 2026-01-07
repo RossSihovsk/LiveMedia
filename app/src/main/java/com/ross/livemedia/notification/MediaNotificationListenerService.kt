@@ -19,13 +19,16 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.ross.livemedia.settings.QSStateProvider
+import com.ross.livemedia.storage.PillContent
 import com.ross.livemedia.storage.StorageHelper
 import com.ross.livemedia.utils.Logger
 import com.ross.livemedia.utils.buildArtisAlbumTitle
 import com.ross.livemedia.utils.buildBaseBigTextStyle
 import com.ross.livemedia.utils.combineProviderAndTimestamp
 import com.ross.livemedia.utils.createAction
+import com.ross.livemedia.utils.formatTime
 import com.ross.livemedia.utils.getAppName
+import com.ross.livemedia.utils.providePillText
 
 class MediaNotificationListenerService : NotificationListenerService() {
     private val logger = Logger("MediaListenerService")
@@ -149,7 +152,13 @@ class MediaNotificationListenerService : NotificationListenerService() {
             .setOngoing(true)
             .setCategory(Notification.CATEGORY_PROGRESS)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setShortCriticalText(musicState.title.take(7).trimEnd())
+            .setShortCriticalText(providePillText(
+                musicState.title,
+                musicState.position.toInt(),
+                musicState.duration.toInt(),
+                musicState.isPlaying,
+                storageHelper.pillContent
+            ))
             .setRequestPromotedOngoing(true)
             .setShowWhen(false)
             .setStyle(buildBaseBigTextStyle())
