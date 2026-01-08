@@ -48,14 +48,20 @@ fun formatMusicProgress(currentPosition: Int, duration: Int): String {
 }
 
 fun formatTime(millis: Int): String {
-    if (millis < 0) return "0:00"
+    if (millis <= 0) return "0:00"
 
     val totalSeconds = millis / 1000
-    val minutes = totalSeconds / 60
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
     val seconds = totalSeconds % 60
 
-    // Uses Locale.US to ensure numbers are formatted with standard digits
-    return String.format(Locale.US, "%d:%02d", minutes, seconds)
+    return if (hours > 0) {
+        // Format: H:MM:SS
+        String.format(Locale.US, "%d:%02d:%02d", hours, minutes, seconds)
+    } else {
+        // Format: M:SS
+        String.format(Locale.US, "%d:%02d", minutes, seconds)
+    }
 }
 
 fun combineProviderAndTimestamp(

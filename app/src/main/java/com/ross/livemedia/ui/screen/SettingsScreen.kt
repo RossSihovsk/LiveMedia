@@ -140,7 +140,7 @@ fun SettingsScreen(storageHelper: StorageHelper) {
 
             PillContentOption(
                 label = "Elapsed Time",
-                description = "Show current playback position. The title would be shown anyway when music is on pause",
+                description = "Show current playback position. The title will be shown anyway when music is on pause",
                 selected = pillContent.value == PillContent.ELAPSED,
                 onClick = {
                     pillContent.value = PillContent.ELAPSED
@@ -150,7 +150,7 @@ fun SettingsScreen(storageHelper: StorageHelper) {
 
             PillContentOption(
                 label = "Remaining Time",
-                description = "Show time left in the song. The title would be shown anyway when music is on pause",
+                description = "Show time left in the song. The title will be shown anyway when music is on pause",
                 selected = pillContent.value == PillContent.REMAINING,
                 onClick = {
                     pillContent.value = PillContent.REMAINING
