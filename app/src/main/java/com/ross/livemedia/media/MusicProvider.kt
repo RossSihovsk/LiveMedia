@@ -71,6 +71,16 @@ enum class MusicProvider(
         "NotebookLM",
         "com.google.android.apps.labs.language.tailwind",
         R.drawable.notebook_lm
+    ),
+    QOBUZ(
+        "Qobuz",
+        "com.qobuz.music",
+        R.drawable.qobuz_com
+    ),
+    UAPP(
+        "USB Audio Player PRO",
+        "com.extreamsd.usbaudioplayerpro",
+        R.drawable.usb_audio_player_pro
     );
 
     companion object {
