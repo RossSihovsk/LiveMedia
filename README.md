@@ -62,7 +62,7 @@ View the [list of supported apps](https://github.com/RossSihovsk/LiveMedia/blob/
 
 **Notification Settings:**
 Tailor the media notification to your preference. You have full control over the content and format, allowing you to toggle specific elements—such as album art, artist name, action buttons, and progress bars—to create a cleaner or more detailed look.
-<img width="1024" height="751" alt="image" src="https://github.com/user-attachments/assets/4d86e620-1952-44d8-a578-88bac7d13e8c" />
+<img width="2752" height="1536" alt="Gemini_Generated_Image_n3g6dsn3g6dsn3g6" src="https://github.com/user-attachments/assets/7cb26e4f-db41-470e-b850-eaa95e028856" />
 
 
 ![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/cf87c831-1949-4d0b-b846-2747b5b00d61)
