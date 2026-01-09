@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">クイック設定のイベントを検出します</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">設定</string>
+    
+    <!-- Section Headers -->
+    <string name="section_notification_body">通知内容</string>
+    <string name="section_status_bar_pill">ステータスバーウィジェット</string>
+    
+    <!-- Notification Body Settings -->
+    <string name="setting_show_album_art">アルバムアートを表示</string>
+    <string name="setting_show_album_art_desc">通知にアルバムカバーアートを表示します。</string>
+    
+    <string name="setting_show_artist_name">アーティスト名を表示</string>
+    <string name="setting_show_artist_name_desc">トラックタイトルの下にアーティスト名を含めます。</string>
+    
+    <string name="setting_show_album_name">アルバム名を表示</string>
+    <string name="setting_show_album_name_desc">通知の詳細にアルバム名を表示します。</string>
+    
+    <string name="setting_show_action_buttons">操作ボタンを表示</string>
+    <string name="setting_show_action_buttons_desc">再生/一時停止、次へ、前へなどの操作を含めます。</string>
+    
+    <string name="setting_show_progress">進行状況を表示</string>
+    <string name="setting_show_progress_desc">曲の進行状況を表示します</string>
+    
+    <string name="setting_show_music_provider">音楽提供アプリ名を表示</string>
+    <string name="setting_show_music_provider_desc">使用している音楽アプリを表示します（Spotify/YT Musicなど）</string>
+    
+    <string name="setting_show_timestamp">タイムスタンプを表示</string>
+    <string name="setting_show_timestamp_desc">プレーヤーに経過時間と合計時間を表示します。</string>
+    
+    <string name="setting_hide_on_qs">クイック設定で非表示</string>
+    <string name="setting_hide_on_qs_desc">クイック設定または通知シェードが開いているときにメディア通知を非表示にします。</string>
+    
+    <!-- Status Bar Pill Options -->
+    <string name="pill_option_title">曲のタイトル</string>
+    <string name="pill_option_title_desc">トラックタイトルの最初の7文字を表示します</string>
+    
+    <string name="pill_option_elapsed">経過時間</string>
+    <string name="pill_option_elapsed_desc">現在の再生位置を表示します。音楽が一時停止中でもタイトルは表示されます</string>
+    
+    <string name="pill_option_remaining">残り時間</string>
+    <string name="pill_option_remaining_desc">曲の残り時間を表示します。音楽が一時停止中でもタイトルは表示されます</string>
+    
+    <!-- Permission Screen -->
+    <string name="permission_notification_listener_title">通知リスナー権限が必要です</string>
+    <string name="permission_notification_listener_desc">このアプリは、メディアの再生を検出してライブアップデートを作成するために通知アクセスが必要です。システム設定で権限を付与してください。</string>
+    <string name="permission_notification_listener_button">通知リスナー権限を付与</string>
+    
+    <string name="permission_post_notification_title">通知投稿の権限が必要です</string>
+    <string name="permission_post_notification_desc">このアプリは、メディアコントロールを表示するために通知を投稿する権限が必要です。</string>
+    <string name="permission_post_notification_button">通知投稿の権限を付与</string>
+    
+    <string name="permission_accessibility_title">アクセシビリティ権限が必要です</string>
+    <string name="permission_accessibility_desc">このアプリは、クイック設定が開いているかを検出するためにアクセシビリティアクセスが必要です。システム設定で権限を付与してください。</string>
+    <string name="permission_accessibility_button">アクセシビリティ権限を付与</string>
+    
+    <string name="permission_all_granted">すべての権限が付与されました！</string>
+</resources>

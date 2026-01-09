@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">Wykrywa zdarzenia szybkich ustawień</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">Ustawienia</string>
+    
+    <!-- Section Headers -->
+    <string name="section_notification_body">Treść powiadomienia</string>
+    <string name="section_status_bar_pill">Widget paska stanu</string>
+    
+    <!-- Notification Body Settings -->
+    <string name="setting_show_album_art">Pokaż okładkę albumu</string>
+    <string name="setting_show_album_art_desc">Wyświetl okładkę albumu w powiadomieniu.</string>
+    
+    <string name="setting_show_artist_name">Pokaż nazwę wykonawcy</string>
+    <string name="setting_show_artist_name_desc">Dołącz nazwę wykonawcy poniżej tytułu utworu.</string>
+    
+    <string name="setting_show_album_name">Pokaż nazwę albumu</string>
+    <string name="setting_show_album_name_desc">Wyświetl nazwę albumu w szczegółach powiadomienia.</string>
+    
+    <string name="setting_show_action_buttons">Pokaż przyciski akcji</string>
+    <string name="setting_show_action_buttons_desc">Dołącz elementy sterujące takie jak Odtwarzanie/Pauza, Następny i Poprzedni.</string>
+    
+    <string name="setting_show_progress">Pokaż postęp</string>
+    <string name="setting_show_progress_desc">Pokaż postęp utworu</string>
+    
+    <string name="setting_show_music_provider">Pokaż nazwę aplikacji muzycznej</string>
+    <string name="setting_show_music_provider_desc">Pokaże, której aplikacji muzycznej używasz (Spotify/YT Music itp.)</string>
+    
+    <string name="setting_show_timestamp">Pokaż znaczniki czasu</string>
+    <string name="setting_show_timestamp_desc">Pokaż upłynięty czas i całkowitą długość na odtwarzaczu.</string>
+    
+    <string name="setting_hide_on_qs">Ukryj w szybkich ustawieniach</string>
+    <string name="setting_hide_on_qs_desc">Ukryj powiadomienie multimedialne, gdy otwarte są szybkie ustawienia lub panel powiadomień.</string>
+    
+    <!-- Status Bar Pill Options -->
+    <string name="pill_option_title">Tytuł utworu</string>
+    <string name="pill_option_title_desc">Pokaż pierwsze 7 liter tytułu utworu</string>
+    
+    <string name="pill_option_elapsed">Czas upłynięty</string>
+    <string name="pill_option_elapsed_desc">Pokaż bieżącą pozycję odtwarzania. Tytuł będzie pokazany w każdym razie, gdy muzyka jest wstrzymana</string>
+    
+    <string name="pill_option_remaining">Czas pozostały</string>
+    <string name="pill_option_remaining_desc">Pokaż czas pozostały do końca utworu. Tytuł będzie pokazany w każdym razie, gdy muzyka jest wstrzymana</string>
+    
+    <!-- Permission Screen -->
+    <string name="permission_notification_listener_title">Wymagane uprawnienie słuchacza powiadomień</string>
+    <string name="permission_notification_listener_desc">Ta aplikacja wymaga dostępu do powiadomień, aby wykrywać odtwarzanie multimediów i tworzyć aktualizację na żywo. Proszę przyznać uprawnienie w ustawieniach systemowych.</string>
+    <string name="permission_notification_listener_button">Przyznaj uprawnienie słuchacza powiadomień</string>
+    
+    <string name="permission_post_notification_title">Wymagane uprawnienie do publikowania powiadomień</string>
+    <string name="permission_post_notification_desc">Ta aplikacja wymaga uprawnienia do publikowania powiadomień, aby pokazywać elementy sterujące multimediami.</string>
+    <string name="permission_post_notification_button">Przyznaj uprawnienie do publikowania powiadomień</string>
+    
+    <string name="permission_accessibility_title">Wymagane uprawnienie dostępności</string>
+    <string name="permission_accessibility_desc">Ta aplikacja wymaga dostępu do usług dostępności, aby wykrywać, kiedy otwarte są szybkie ustawienia. Proszę przyznać uprawnienie w ustawieniach systemowych.</string>
+    <string name="permission_accessibility_button">Przyznaj uprawnienie dostępności</string>
+    
+    <string name="permission_all_granted">Wszystkie uprawnienia przyznane!</string>
+</resources>

@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">Détecte les événements des paramètres rapides</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">Paramètres</string>
+    
+    <!-- Section Headers -->
+    <string name="section_notification_body">Contenu de la notification</string>
+    <string name="section_status_bar_pill">Widget de barre d\'état</string>
+    
+    <!-- Notification Body Settings -->
+    <string name="setting_show_album_art">Afficher la pochette d\'album</string>
+    <string name="setting_show_album_art_desc">Afficher la pochette d\'album dans la notification.</string>
+    
+    <string name="setting_show_artist_name">Afficher le nom de l\'artiste</string>
+    <string name="setting_show_artist_name_desc">Inclure le nom de l\'artiste sous le titre de la piste.</string>
+    
+    <string name="setting_show_album_name">Afficher le nom de l\'album</string>
+    <string name="setting_show_album_name_desc">Afficher le nom de l\'album dans les détails de la notification.</string>
+    
+    <string name="setting_show_action_buttons">Afficher les boutons d\'action</string>
+    <string name="setting_show_action_buttons_desc">Inclure les contrôles comme Lecture/Pause, Suivant et Précédent.</string>
+    
+    <string name="setting_show_progress">Afficher la progression</string>
+    <string name="setting_show_progress_desc">Afficher la progression de la chanson</string>
+    
+    <string name="setting_show_music_provider">Afficher le nom de l\'application musicale</string>
+    <string name="setting_show_music_provider_desc">Affichera l\'application musicale que vous utilisez (Spotify/YT Music, etc.)</string>
+    
+    <string name="setting_show_timestamp">Afficher les horodatages</string>
+    <string name="setting_show_timestamp_desc">Afficher le temps écoulé et la durée totale sur le lecteur.</string>
+    
+    <string name="setting_hide_on_qs">Masquer sur Paramètres rapides</string>
+    <string name="setting_hide_on_qs_desc">Masquer la notification média lorsque les Paramètres rapides ou l\'ombre de notification sont ouverts.</string>
+    
+    <!-- Status Bar Pill Options -->
+    <string name="pill_option_title">Titre de la chanson</string>
+    <string name="pill_option_title_desc">Afficher les 7 premières lettres du titre de la piste</string>
+    
+    <string name="pill_option_elapsed">Temps écoulé</string>
+    <string name="pill_option_elapsed_desc">Afficher la position de lecture actuelle. Le titre sera affiché de toute façon lorsque la musique est en pause</string>
+    
+    <string name="pill_option_remaining">Temps restant</string>
+    <string name="pill_option_remaining_desc">Afficher le temps restant dans la chanson. Le titre sera affiché de toute façon lorsque la musique est en pause</string>
+    
+    <!-- Permission Screen -->
+    <string name="permission_notification_listener_title">Permission d\'écoute de notification nécessaire</string>
+    <string name="permission_notification_listener_desc">Cette application nécessite un accès aux notifications pour détecter la lecture multimédia et créer une mise à jour en direct. Veuillez accorder l\'autorisation dans les paramètres système.</string>
+    <string name="permission_notification_listener_button">Accorder la permission d\'écoute de notification</string>
+    
+    <string name="permission_post_notification_title">Permission de publication de notification nécessaire</string>
+    <string name="permission_post_notification_desc">Cette application nécessite l\'autorisation de publier des notifications pour afficher les commandes multimédias.</string>
+    <string name="permission_post_notification_button">Accorder la permission de publication de notification</string>
+    
+    <string name="permission_accessibility_title">Permission d\'accessibilité nécessaire</string>
+    <string name="permission_accessibility_desc">Cette application nécessite un accès à l\'accessibilité pour détecter quand les Paramètres rapides sont ouverts. Veuillez accorder l\'autorisation dans les paramètres système.</string>
+    <string name="permission_accessibility_button">Accorder la permission d\'accessibilité</string>
+    
+    <string name="permission_all_granted">Toutes les permissions accordées !</string>
+</resources>

@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">त्वरित सेटिंग्स इवेंट का पता लगाता है</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">सेटिंग्स</string>
+    
+    <!-- Section Headers -->
+    <string name="section_notification_body">सूचना सामग्री</string>
+    <string name="section_status_bar_pill">स्टेटस बार विजेट</string>
+    
+    <!-- Notification Body Settings -->
+    <string name="setting_show_album_art">एल्बम कवर दिखाएं</string>
+    <string name="setting_show_album_art_desc">सूचना में एल्बम कवर आर्ट प्रदर्शित करें।</string>
+    
+    <string name="setting_show_artist_name">कलाकार का नाम दिखाएं</string>
+    <string name="setting_show_artist_name_desc">ट्रैक शीर्षक के नीचे कलाकार का नाम शामिल करें।</string>
+    
+    <string name="setting_show_album_name">एल्बम का नाम दिखाएं</string>
+    <string name="setting_show_album_name_desc">सूचना विवरण में एल्बम का नाम प्रदर्शित करें।</string>
+    
+    <string name="setting_show_action_buttons">एक्शन बटन दिखाएं</string>
+    <string name="setting_show_action_buttons_desc">प्ले/पॉज़, अगला और पिछला जैसे नियंत्रण शामिल करें।</string>
+    
+    <string name="setting_show_progress">प्रगति दिखाएं</string>
+    <string name="setting_show_progress_desc">गाने की प्रगति दिखाएं</string>
+    
+    <string name="setting_show_music_provider">संगीत प्रदाता ऐप का नाम दिखाएं</string>
+    <string name="setting_show_music_provider_desc">यह दिखाएगा कि आप कौन सा संगीत ऐप उपयोग कर रहे हैं (Spotify/YT Music, आदि...)</string>
+    
+    <string name="setting_show_timestamp">टाइमस्टैम्प दिखाएं</string>
+    <string name="setting_show_timestamp_desc">प्लेयर पर बीता हुआ समय और कुल अवधि दिखाएं।</string>
+    
+    <string name="setting_hide_on_qs">त्वरित सेटिंग्स पर छिपाएं</string>
+    <string name="setting_hide_on_qs_desc">त्वरित सेटिंग्स या सूचना शेड खोले जाने पर मीडिया सूचना छिपाएं।</string>
+    
+    <!-- Status Bar Pill Options -->
+    <string name="pill_option_title">गाने का शीर्षक</string>
+    <string name="pill_option_title_desc">ट्रैक शीर्षक के पहले 7 अक्षर दिखाएं</string>
+    
+    <string name="pill_option_elapsed">बीता हुआ समय</string>
+    <string name="pill_option_elapsed_desc">वर्तमान प्लेबैक स्थिति दिखाएं। जब संगीत पॉज़ पर हो तब भी शीर्षक दिखाया जाएगा</string>
+    
+    <string name="pill_option_remaining">शेष समय</string>
+    <string name="pill_option_remaining_desc">गाने में शेष समय दिखाएं। जब संगीत पॉज़ पर हो तब भी शीर्षक दिखाया जाएगा</string>
+    
+    <!-- Permission Screen -->
+    <string name="permission_notification_listener_title">सूचना श्रोता अनुमति आवश्यक</string>
+    <string name="permission_notification_listener_desc">इस ऐप को मीडिया प्लेबैक का पता लगाने और लाइव अपडेट बनाने के लिए सूचना पहुंच की आवश्यकता है। कृपया सिस्टम सेटिंग्स में अनुमति दें।</string>
+    <string name="permission_notification_listener_button">सूचना श्रोता अनुमति दें</string>
+    
+    <string name="permission_post_notification_title">सूचना पोस्ट करने की अनुमति आवश्यक</string>
+    <string name="permission_post_notification_desc">इस ऐप को मीडिया नियंत्रण दिखाने के लिए सूचना पोस्ट करने की अनुमति की आवश्यकता है।</string>
+    <string name="permission_post_notification_button">सूचना पोस्ट करने की अनुमति दें</string>
+    
+    <string name="permission_accessibility_title">पहुंच-योग्यता अनुमति आवश्यक</string>
+    <string name="permission_accessibility_desc">इस ऐप को यह पता लगाने के लिए पहुंच-योग्यता पहुंच की आवश्यकता है कि त्वरित सेटिंग्स कब खोली जाती हैं। कृपया सिस्टम सेटिंग्स में अनुमति दें।</string>
+    <string name="permission_accessibility_button">पहुंच-योग्यता अनुमति दें</string>
+    
+    <string name="permission_all_granted">सभी अनुमतियाँ दी गईं!</string>
+</resources>

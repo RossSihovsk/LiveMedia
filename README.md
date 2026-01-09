@@ -55,6 +55,28 @@ Start playing music! The LiveMedia control should appear once media playback beg
 
 ---
 
+## 🌍 Localization
+
+LiveMedia supports **9 languages** with complete translations for Settings and Permission screens. The app automatically displays in your device's system language.
+
+### Supported Languages
+
+| Language | Locale Code | Native Name |
+| :--- | :---: | :--- |
+| **English** | `en` | English (Default) |
+| **Ukrainian** | `uk` | Українська |
+| **German** | `de` | Deutsch |
+| **Spanish** | `es` | Español |
+| **Polish** | `pl` | Polski |
+| **Hindi** | `hi` | हिन्दी |
+| **Chinese** | `zh` | 简体中文 |
+| **Japanese** | `ja` | 日本語 |
+| **French** | `fr` | Français |
+
+The app will automatically use your device's language setting. If your device language is not in the list above, the app will default to English.
+
+---
+
 ### 🎨 Customization & Supported Apps
 
 **Status Bar Pill:**
@@ -62,6 +84,9 @@ View the [list of supported apps](https://github.com/RossSihovsk/LiveMedia/blob/
 
 **Notification Settings:**
 Tailor the media notification to your preference. You have full control over the content and format, allowing you to toggle specific elements—such as album art, artist name, action buttons, and progress bars—to create a cleaner or more detailed look.
+
+### Screenshots
+
 <img width="2752" height="1536" alt="Gemini_Generated_Image_n3g6dsn3g6dsn3g6" src="https://github.com/user-attachments/assets/7cb26e4f-db41-470e-b850-eaa95e028856" />
 
 

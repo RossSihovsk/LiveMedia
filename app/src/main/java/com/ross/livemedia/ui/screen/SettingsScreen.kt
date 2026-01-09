@@ -32,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import com.ross.livemedia.R
 import com.ross.livemedia.storage.PillContent
 import com.ross.livemedia.storage.StorageHelper
 
@@ -60,77 +62,77 @@ fun SettingsScreen(storageHelper: StorageHelper) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Settings",
+                text = stringResource(R.string.settings_title),
                 color = Color.White,
                 fontSize = 28.sp,
                 style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier.padding(top = 24.dp, bottom = 24.dp)
             )
 
-            SectionHeader("Notification Body")
+            SectionHeader(stringResource(R.string.section_notification_body))
 
             SettingToggle(
-                label = "Show Album Art",
-                description = "Display the album cover art in the notification.",
+                label = stringResource(R.string.setting_show_album_art),
+                description = stringResource(R.string.setting_show_album_art_desc),
                 checkedState = showAlbumArt,
                 onCheckedChange = { storageHelper.showAlbumArt = it }
             )
 
             SettingToggle(
-                label = "Show Artist Name",
-                description = "Include the artist's name below the track title.",
+                label = stringResource(R.string.setting_show_artist_name),
+                description = stringResource(R.string.setting_show_artist_name_desc),
                 checkedState = showArtistName,
                 onCheckedChange = { storageHelper.showArtistName = it }
             )
 
             SettingToggle(
-                label = "Show Album Name",
-                description = "Display the album name in the notification details.",
+                label = stringResource(R.string.setting_show_album_name),
+                description = stringResource(R.string.setting_show_album_name_desc),
                 checkedState = showAlbumName,
                 onCheckedChange = { storageHelper.showAlbumName = it }
             )
 
             SettingToggle(
-                label = "Show Action Buttons",
-                description = "Include controls like Play/Pause, Next, and Previous.",
+                label = stringResource(R.string.setting_show_action_buttons),
+                description = stringResource(R.string.setting_show_action_buttons_desc),
                 checkedState = showActionButtons,
                 onCheckedChange = { storageHelper.showActionButtons = it }
             )
 
             SettingToggle(
-                label = "Show Progress",
-                description = "Show song progress",
+                label = stringResource(R.string.setting_show_progress),
+                description = stringResource(R.string.setting_show_progress_desc),
                 checkedState = showProgress,
                 onCheckedChange = { storageHelper.showProgress = it }
             )
 
             SettingToggle(
-                label = "Show Music provider app name",
-                description = "It will show what music app you're using (Spotify/YT Music, etc...)",
+                label = stringResource(R.string.setting_show_music_provider),
+                description = stringResource(R.string.setting_show_music_provider_desc),
                 checkedState = showMusicProvider,
                 onCheckedChange = { storageHelper.showMusicProvider = it }
             )
 
             SettingToggle(
-                label = "Show timestamps",
-                description = "Show elapsed time and total duration on the player.",
+                label = stringResource(R.string.setting_show_timestamp),
+                description = stringResource(R.string.setting_show_timestamp_desc),
                 checkedState = showTimestamp,
                 onCheckedChange = { storageHelper.showTimestamp = it }
             )
 
             SettingToggle(
-                label = "Hide on Quick Settings",
-                description = "Hide the media notification when Quick Settings or Notification Shade are opened.",
+                label = stringResource(R.string.setting_hide_on_qs),
+                description = stringResource(R.string.setting_hide_on_qs_desc),
                 checkedState = hideNotificationOnQsOpen,
                 onCheckedChange = { storageHelper.hideNotificationOnQsOpen = it }
             )
 
             Spacer(modifier = Modifier.padding(top = 24.dp))
-            SectionHeader("Status Bar Pill")
+            SectionHeader(stringResource(R.string.section_status_bar_pill))
 
             PillContentOption(
-                label = "Song Title",
-                description = "Show the first 7 letters of the track title",
+                label = stringResource(R.string.pill_option_title),
+                description = stringResource(R.string.pill_option_title_desc),
                 selected = pillContent.value == PillContent.TITLE,
                 onClick = {
                     pillContent.value = PillContent.TITLE
@@ -139,8 +141,8 @@ fun SettingsScreen(storageHelper: StorageHelper) {
             )
 
             PillContentOption(
-                label = "Elapsed Time",
-                description = "Show current playback position. The title will be shown anyway when music is on pause",
+                label = stringResource(R.string.pill_option_elapsed),
+                description = stringResource(R.string.pill_option_elapsed_desc),
                 selected = pillContent.value == PillContent.ELAPSED,
                 onClick = {
                     pillContent.value = PillContent.ELAPSED
@@ -149,8 +151,8 @@ fun SettingsScreen(storageHelper: StorageHelper) {
             )
 
             PillContentOption(
-                label = "Remaining Time",
-                description = "Show time left in the song. The title will be shown anyway when music is on pause",
+                label = stringResource(R.string.pill_option_remaining),
+                description = stringResource(R.string.pill_option_remaining_desc),
                 selected = pillContent.value == PillContent.REMAINING,
                 onClick = {
                     pillContent.value = PillContent.REMAINING

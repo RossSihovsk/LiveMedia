@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">Erkennt Schnelleinstellungen-Ereignisse</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">Einstellungen</string>
+    
+    <!-- Section Headers -->
+    <string name="section_notification_body">Benachrichtigungsinhalt</string>
+    <string name="section_status_bar_pill">Statusleisten-Widget</string>
+    
+    <!-- Notification Body Settings -->
+    <string name="setting_show_album_art">Albumcover anzeigen</string>
+    <string name="setting_show_album_art_desc">Das Albumcover in der Benachrichtigung anzeigen.</string>
+    
+    <string name="setting_show_artist_name">Künstlername anzeigen</string>
+    <string name="setting_show_artist_name_desc">Den Künstlernamen unter dem Titel anzeigen.</string>
+    
+    <string name="setting_show_album_name">Albumname anzeigen</string>
+    <string name="setting_show_album_name_desc">Den Albumnamen in den Benachrichtigungsdetails anzeigen.</string>
+    
+    <string name="setting_show_action_buttons">Aktionsschaltflächen anzeigen</string>
+    <string name="setting_show_action_buttons_desc">Steuerelemente wie Wiedergabe/Pause, Weiter und Zurück einschließen.</string>
+    
+    <string name="setting_show_progress">Fortschritt anzeigen</string>
+    <string name="setting_show_progress_desc">Songfortschritt anzeigen</string>
+    
+    <string name="setting_show_music_provider">Musikanbieter-App-Name anzeigen</string>
+    <string name="setting_show_music_provider_desc">Zeigt an, welche Musik-App Sie verwenden (Spotify/YT Music usw.)</string>
+    
+    <string name="setting_show_timestamp">Zeitstempel anzeigen</string>
+    <string name="setting_show_timestamp_desc">Verstrichene Zeit und Gesamtdauer auf dem Player anzeigen.</string>
+    
+    <string name="setting_hide_on_qs">Bei Schnelleinstellungen ausblenden</string>
+    <string name="setting_hide_on_qs_desc">Die Medienbenachrichtigung ausblenden, wenn Schnelleinstellungen oder Benachrichtigungsleiste geöffnet sind.</string>
+    
+    <!-- Status Bar Pill Options -->
+    <string name="pill_option_title">Songtitel</string>
+    <string name="pill_option_title_desc">Die ersten 7 Buchstaben des Titels anzeigen</string>
+    
+    <string name="pill_option_elapsed">Verstrichene Zeit</string>
+    <string name="pill_option_elapsed_desc">Aktuelle Wiedergabeposition anzeigen. Der Titel wird trotzdem angezeigt, wenn die Musik pausiert ist</string>
+    
+    <string name="pill_option_remaining">Verbleibende Zeit</string>
+    <string name="pill_option_remaining_desc">Verbleibende Zeit im Song anzeigen. Der Titel wird trotzdem angezeigt, wenn die Musik pausiert ist</string>
+    
+    <!-- Permission Screen -->
+    <string name="permission_notification_listener_title">Berechtigung für Benachrichtigungszugriff erforderlich</string>
+    <string name="permission_notification_listener_desc">Diese App benötigt Benachrichtigungszugriff, um Medienwiedergabe zu erkennen und ein Live-Update zu erstellen. Bitte erteilen Sie die Berechtigung in den Systemeinstellungen.</string>
+    <string name="permission_notification_listener_button">Berechtigung für Benachrichtigungszugriff erteilen</string>
+    
+    <string name="permission_post_notification_title">Berechtigung zum Posten von Benachrichtigungen erforderlich</string>
+    <string name="permission_post_notification_desc">Diese App benötigt die Berechtigung zum Posten von Benachrichtigungen, um die Mediensteuerung anzuzeigen.</string>
+    <string name="permission_post_notification_button">Berechtigung zum Posten von Benachrichtigungen erteilen</string>
+    
+    <string name="permission_accessibility_title">Bedienungshilfen-Berechtigung erforderlich</string>
+    <string name="permission_accessibility_desc">Diese App benötigt Bedienungshilfen-Zugriff, um zu erkennen, wann Schnelleinstellungen geöffnet sind. Bitte erteilen Sie die Berechtigung in den Systemeinstellungen.</string>
+    <string name="permission_accessibility_button">Bedienungshilfen-Berechtigung erteilen</string>
+    
+    <string name="permission_all_granted">Alle Berechtigungen erteilt!</string>
+</resources>

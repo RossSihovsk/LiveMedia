@@ -1,4 +1,61 @@
 <resources>
     <string name="app_name">LiveMedia</string>
     <string name="accessibility_service_description">Detects Quick Settings events</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">Settings</string>
+    
+    <!-- Section Headers -->
+    <string name="section_notification_body">Notification Body</string>
+    <string name="section_status_bar_pill">Status Bar Pill</string>
+    
+    <!-- Notification Body Settings -->
+    <string name="setting_show_album_art">Show Album Art</string>
+    <string name="setting_show_album_art_desc">Display the album cover art in the notification.</string>
+    
+    <string name="setting_show_artist_name">Show Artist Name</string>
+    <string name="setting_show_artist_name_desc">Include the artist\'s name below the track title.</string>
+    
+    <string name="setting_show_album_name">Show Album Name</string>
+    <string name="setting_show_album_name_desc">Display the album name in the notification details.</string>
+    
+    <string name="setting_show_action_buttons">Show Action Buttons</string>
+    <string name="setting_show_action_buttons_desc">Include controls like Play/Pause, Next, and Previous.</string>
+    
+    <string name="setting_show_progress">Show Progress</string>
+    <string name="setting_show_progress_desc">Show song progress</string>
+    
+    <string name="setting_show_music_provider">Show Music provider app name</string>
+    <string name="setting_show_music_provider_desc">It will show what music app you\'re using (Spotify/YT Music, etc...)</string>
+    
+    <string name="setting_show_timestamp">Show timestamps</string>
+    <string name="setting_show_timestamp_desc">Show elapsed time and total duration on the player.</string>
+    
+    <string name="setting_hide_on_qs">Hide on Quick Settings</string>
+    <string name="setting_hide_on_qs_desc">Hide the media notification when Quick Settings or Notification Shade are opened.</string>
+    
+    <!-- Status Bar Pill Options -->
+    <string name="pill_option_title">Song Title</string>
+    <string name="pill_option_title_desc">Show the first 7 letters of the track title</string>
+    
+    <string name="pill_option_elapsed">Elapsed Time</string>
+    <string name="pill_option_elapsed_desc">Show current playback position. The title will be shown anyway when music is on pause</string>
+    
+    <string name="pill_option_remaining">Remaining Time</string>
+    <string name="pill_option_remaining_desc">Show time left in the song. The title will be shown anyway when music is on pause</string>
+    
+    <!-- Permission Screen -->
+    <string name="permission_notification_listener_title">Notification Listener Permission Needed</string>
+    <string name="permission_notification_listener_desc">This app requires Notification Access to detect media playback and create a live update. Please grant permission in the system settings.</string>
+    <string name="permission_notification_listener_button">Grant Notification Listener Permission</string>
+    
+    <string name="permission_post_notification_title">Post Notification Permission Needed</string>
+    <string name="permission_post_notification_desc">This app requires permission to post notifications to show the media controls.</string>
+    <string name="permission_post_notification_button">Grant Post Notification Permission</string>
+    
+    <string name="permission_accessibility_title">Accessibility Permission Needed</string>
+    <string name="permission_accessibility_desc">This app requires Accessibility Access to detect when Quick Settings are opened. Please grant permission in the system settings.</string>
+    <string name="permission_accessibility_button">Grant Accessibility Permission</string>
+    
+    <string name="permission_all_granted">All Permissions Granted!</string>
 </resources>

@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">Виявляє події швидких налаштувань</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">Налаштування</string>
+    
+    <!-- Section Headers -->
+    <string name="section_notification_body">Тіло сповіщення</string>
+    <string name="section_status_bar_pill">Віджет статус-бару</string>
+    
+    <!-- Notification Body Settings -->
+    <string name="setting_show_album_art">Показати обкладинку альбому</string>
+    <string name="setting_show_album_art_desc">Відображати обкладинку альбому в сповіщенні.</string>
+    
+    <string name="setting_show_artist_name">Показати ім\'я виконавця</string>
+    <string name="setting_show_artist_name_desc">Включити ім\'я виконавця під назвою треку.</string>
+    
+    <string name="setting_show_album_name">Показати назву альбому</string>
+    <string name="setting_show_album_name_desc">Відображати назву альбому в деталях сповіщення.</string>
+    
+    <string name="setting_show_action_buttons">Показати кнопки дій</string>
+    <string name="setting_show_action_buttons_desc">Включити елементи керування, такі як Відтворення/Пауза, Наступний і Попередній.</string>
+    
+    <string name="setting_show_progress">Показати прогрес</string>
+    <string name="setting_show_progress_desc">Показувати прогрес пісні</string>
+    
+    <string name="setting_show_music_provider">Показати назву музичного застосунку</string>
+    <string name="setting_show_music_provider_desc">Показуватиме, який музичний застосунок ви використовуєте (Spotify/YT Music тощо...)</string>
+    
+    <string name="setting_show_timestamp">Показати час</string>
+    <string name="setting_show_timestamp_desc">Показувати минулий час і загальну тривалість на програвачі.</string>
+    
+    <string name="setting_hide_on_qs">Приховати при швидких налаштуваннях</string>
+    <string name="setting_hide_on_qs_desc">Приховувати медіа-сповіщення, коли відкриті швидкі налаштування або панель сповіщень.</string>
+    
+    <!-- Status Bar Pill Options -->
+    <string name="pill_option_title">Назва пісні</string>
+    <string name="pill_option_title_desc">Показати перші 7 літер назви треку</string>
+    
+    <string name="pill_option_elapsed">Минулий час</string>
+    <string name="pill_option_elapsed_desc">Показати поточну позицію відтворення. Назва все одно буде показана, коли музика на паузі</string>
+    
+    <string name="pill_option_remaining">Час, що залишився</string>
+    <string name="pill_option_remaining_desc">Показати час, що залишився до кінця пісні. Назва все одно буде показана, коли музика на паузі</string>
+    
+    <!-- Permission Screen -->
+    <string name="permission_notification_listener_title">Потрібен дозвіл слухача сповіщень</string>
+    <string name="permission_notification_listener_desc">Цьому застосунку потрібен доступ до сповіщень для виявлення відтворення медіа та створення живого оновлення. Будь ласка, надайте дозвіл у системних налаштуваннях.</string>
+    <string name="permission_notification_listener_button">Надати дозвіл слухача сповіщень</string>
+    
+    <string name="permission_post_notification_title">Потрібен дозвіл на публікацію сповіщень</string>
+    <string name="permission_post_notification_desc">Цьому застосунку потрібен дозвіл на публікацію сповіщень для показу елементів керування медіа.</string>
+    <string name="permission_post_notification_button">Надати дозвіл на публікацію сповіщень</string>
+    
+    <string name="permission_accessibility_title">Потрібен дозвіл доступності</string>
+    <string name="permission_accessibility_desc">Цьому застосунку потрібен доступ до служб доступності для виявлення, коли відкриті швидкі налаштування. Будь ласка, надайте дозвіл у системних налаштуваннях.</string>
+    <string name="permission_accessibility_button">Надати дозвіл доступності</string>
+    
+    <string name="permission_all_granted">Усі дозволи надано!</string>
+</resources>

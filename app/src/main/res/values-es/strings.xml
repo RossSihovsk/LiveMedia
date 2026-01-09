@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">Detecta eventos de Configuración rápida</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">Configuración</string>
+    
+    <!-- Section Headers -->
+    <string name="section_notification_body">Cuerpo de notificación</string>
+    <string name="section_status_bar_pill">Widget de barra de estado</string>
+    
+    <!-- Notification Body Settings -->
+    <string name="setting_show_album_art">Mostrar portada del álbum</string>
+    <string name="setting_show_album_art_desc">Mostrar la portada del álbum en la notificación.</string>
+    
+    <string name="setting_show_artist_name">Mostrar nombre del artista</string>
+    <string name="setting_show_artist_name_desc">Incluir el nombre del artista debajo del título de la pista.</string>
+    
+    <string name="setting_show_album_name">Mostrar nombre del álbum</string>
+    <string name="setting_show_album_name_desc">Mostrar el nombre del álbum en los detalles de la notificación.</string>
+    
+    <string name="setting_show_action_buttons">Mostrar botones de acción</string>
+    <string name="setting_show_action_buttons_desc">Incluir controles como Reproducir/Pausa, Siguiente y Anterior.</string>
+    
+    <string name="setting_show_progress">Mostrar progreso</string>
+    <string name="setting_show_progress_desc">Mostrar progreso de la canción</string>
+    
+    <string name="setting_show_music_provider">Mostrar nombre de la app de música</string>
+    <string name="setting_show_music_provider_desc">Mostrará qué aplicación de música estás usando (Spotify/YT Music, etc.)</string>
+    
+    <string name="setting_show_timestamp">Mostrar marcas de tiempo</string>
+    <string name="setting_show_timestamp_desc">Mostrar tiempo transcurrido y duración total en el reproductor.</string>
+    
+    <string name="setting_hide_on_qs">Ocultar en configuración rápida</string>
+    <string name="setting_hide_on_qs_desc">Ocultar la notificación multimedia cuando se abran la Configuración rápida o el Panel de notificaciones.</string>
+    
+    <!-- Status Bar Pill Options -->
+    <string name="pill_option_title">Título de la canción</string>
+    <string name="pill_option_title_desc">Mostrar las primeras 7 letras del título de la pista</string>
+    
+    <string name="pill_option_elapsed">Tiempo transcurrido</string>
+    <string name="pill_option_elapsed_desc">Mostrar la posición actual de reproducción. El título se mostrará de todos modos cuando la música esté en pausa</string>
+    
+    <string name="pill_option_remaining">Tiempo restante</string>
+    <string name="pill_option_remaining_desc">Mostrar el tiempo restante en la canción. El título se mostrará de todos modos cuando la música esté en pausa</string>
+    
+    <!-- Permission Screen -->
+    <string name="permission_notification_listener_title">Se necesita permiso de escucha de notificaciones</string>
+    <string name="permission_notification_listener_desc">Esta aplicación requiere acceso a notificaciones para detectar la reproducción de medios y crear una actualización en vivo. Por favor, otorga el permiso en la configuración del sistema.</string>
+    <string name="permission_notification_listener_button">Otorgar permiso de escucha de notificaciones</string>
+    
+    <string name="permission_post_notification_title">Se necesita permiso para publicar notificaciones</string>
+    <string name="permission_post_notification_desc">Esta aplicación requiere permiso para publicar notificaciones para mostrar los controles multimedia.</string>
+    <string name="permission_post_notification_button">Otorgar permiso para publicar notificaciones</string>
+    
+    <string name="permission_accessibility_title">Se necesita permiso de accesibilidad</string>
+    <string name="permission_accessibility_desc">Esta aplicación requiere acceso de accesibilidad para detectar cuándo se abren los ajustes rápidos. Por favor, otorga el permiso en la configuración del sistema.</string>
+    <string name="permission_accessibility_button">Otorgar permiso de accesibilidad</string>
+    
+    <string name="permission_all_granted">¡Todos los permisos otorgados!</string>
+</resources>

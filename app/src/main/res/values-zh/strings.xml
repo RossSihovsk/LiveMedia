@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">检测快速设置事件</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">设置</string>
+    
+    <!-- Section Headers -->
+    <string name="section_notification_body">通知内容</string>
+    <string name="section_status_bar_pill">状态栏小部件</string>
+    
+    <!-- Notification Body Settings -->
+    <string name="setting_show_album_art">显示专辑封面</string>
+    <string name="setting_show_album_art_desc">在通知中显示专辑封面。</string>
+    
+    <string name="setting_show_artist_name">显示艺术家姓名</string>
+    <string name="setting_show_artist_name_desc">在曲目标题下包含艺术家姓名。</string>
+    
+    <string name="setting_show_album_name">显示专辑名称</string>
+    <string name="setting_show_album_name_desc">在通知详情中显示专辑名称。</string>
+    
+    <string name="setting_show_action_buttons">显示操作按钮</string>
+    <string name="setting_show_action_buttons_desc">包含播放/暂停、下一首和上一首等控制键。</string>
+    
+    <string name="setting_show_progress">显示进度</string>
+    <string name="setting_show_progress_desc">显示歌曲进度</string>
+    
+    <string name="setting_show_music_provider">显示音乐提供商应用名称</string>
+    <string name="setting_show_music_provider_desc">将显示您正在使用的音乐应用（Spotify/YT Music等）</string>
+    
+    <string name="setting_show_timestamp">显示时间戳</string>
+    <string name="setting_show_timestamp_desc">在播放器上显示已播放时间和总时长。</string>
+    
+    <string name="setting_hide_on_qs">在快速设置时隐藏</string>
+    <string name="setting_hide_on_qs_desc">打开快速设置或通知栏时隐藏媒体通知。</string>
+    
+    <!-- Status Bar Pill Options -->
+    <string name="pill_option_title">歌曲标题</string>
+    <string name="pill_option_title_desc">显示曲目标题的前7个字母</string>
+    
+    <string name="pill_option_elapsed">已播放时间</string>
+    <string name="pill_option_elapsed_desc">显示当前播放位置。音乐暂停时仍会显示标题</string>
+    
+    <string name="pill_option_remaining">剩余时间</string>
+    <string name="pill_option_remaining_desc">显示歌曲剩余时间。音乐暂停时仍会显示标题</string>
+    
+    <!-- Permission Screen -->
+    <string name="permission_notification_listener_title">需要通知监听权限</string>
+    <string name="permission_notification_listener_desc">此应用需要通知访问权限以检测媒体播放并创建实时更新。请在系统设置中授予权限。</string>
+    <string name="permission_notification_listener_button">授予通知监听权限</string>
+    
+    <string name="permission_post_notification_title">需要发布通知权限</string>
+    <string name="permission_post_notification_desc">此应用需要发布通知的权限以显示媒体控制。</string>
+    <string name="permission_post_notification_button">授予发布通知权限</string>
+    
+    <string name="permission_accessibility_title">需要辅助功能权限</string>
+    <string name="permission_accessibility_desc">此应用需要辅助功能访问权限以检测快速设置何时打开。请在系统设置中授予权限。</string>
+    <string name="permission_accessibility_button">授予辅助功能权限</string>
+    
+    <string name="permission_all_granted">已授予所有权限！</string>
+</resources>
