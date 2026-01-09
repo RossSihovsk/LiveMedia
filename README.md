@@ -54,6 +54,17 @@ After installation, go to **Settings** and manually grant **Notification Listene
 Start playing music! The LiveMedia control should appear once media playback begins and the phone is unlocked.
 
 ---
+
+### 🎨 Customization & Supported Apps
+
+**Status Bar Pill:**
+View the [list of supported apps](https://github.com/RossSihovsk/LiveMedia/blob/main/app/src/main/java/com/ross/livemedia/media/MusicProvider.kt) that display their icons in the status bar pill.
+
+**Notification Settings:**
+Tailor the media notification to your preference. You have full control over the content and format, allowing you to toggle specific elements—such as album art, artist name, action buttons, and progress bars—to create a cleaner or more detailed look.
+<img width="1024" height="751" alt="image" src="https://github.com/user-attachments/assets/4d86e620-1952-44d8-a578-88bac7d13e8c" />
+
+
 ![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/cf87c831-1949-4d0b-b846-2747b5b00d61)
 
 ![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/049e39dc-87b9-4fa2-b2ac-b55684b72da2)
