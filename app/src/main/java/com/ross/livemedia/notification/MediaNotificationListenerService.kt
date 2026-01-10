@@ -5,30 +5,33 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.Bitmap
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
+import com.bumptech.glide.Glide
 import com.ross.livemedia.lockscreen.LockScreenManager
 import com.ross.livemedia.media.MediaStateManager
 import com.ross.livemedia.media.MusicProvider
 import com.ross.livemedia.media.MusicState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import com.ross.livemedia.settings.QSStateProvider
-import com.ross.livemedia.storage.PillContent
 import com.ross.livemedia.storage.StorageHelper
 import com.ross.livemedia.utils.Logger
 import com.ross.livemedia.utils.buildArtisAlbumTitle
 import com.ross.livemedia.utils.buildBaseBigTextStyle
 import com.ross.livemedia.utils.combineProviderAndTimestamp
 import com.ross.livemedia.utils.createAction
-import com.ross.livemedia.utils.formatTime
 import com.ross.livemedia.utils.getAppName
 import com.ross.livemedia.utils.providePillText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MediaNotificationListenerService : NotificationListenerService() {
     private val logger = Logger("MediaListenerService")
@@ -123,9 +126,15 @@ class MediaNotificationListenerService : NotificationListenerService() {
             return
         }
 
-        val notification = buildNotification(musicState)
+        // Launch on background thread (IO) to handle image loading
+        serviceScope.launch(Dispatchers.IO) {
+            val notification = buildNotification(musicState)
 
-        notificationManager.notify(NOTIFICATION_ID, notification)
+            // Switch back to Main thread to update UI (System Notification)
+            withContext(Dispatchers.Main) {
+                notificationManager.notify(NOTIFICATION_ID, notification)
+            }
+        }
     }
 
     private fun buildNotification(
@@ -172,7 +181,23 @@ class MediaNotificationListenerService : NotificationListenerService() {
                 )
             )
 
-        if (storageHelper.showAlbumArt) notification.setLargeIcon(musicState.albumArt)
+        if (storageHelper.showAlbumArt) {
+            var art: Bitmap? = musicState.albumArt
+
+            if (art == null && musicState.albumArtUri != null) {
+                try {
+                    art = Glide.with(this@MediaNotificationListenerService)
+                        .asBitmap()
+                        .load(musicState.albumArtUri)
+                        .submit(144, 144) // Increased to 256 for sharper icons
+                        .get()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            notification.setLargeIcon(art)
+        }
+
 
         if (storageHelper.showProgress) {
             notification.setProgress(

@@ -10,6 +10,7 @@ activityCompose = "1.11.0"
 composeBom = "2025.11.00"
 localbroadcastmanager = "1.1.0"
 media = "1.7.1"
+glide = "4.16.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,6 +30,9 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-media = { group = "androidx.media", name = "media", version.ref = "media" }
 androidx-compose-material3-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+# Optional: Only needed if you use Glide's annotation processor
+glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

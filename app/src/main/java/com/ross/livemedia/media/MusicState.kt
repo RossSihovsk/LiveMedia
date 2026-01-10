@@ -3,11 +3,14 @@ package com.ross.livemedia.media
 import android.graphics.Bitmap
 import android.media.MediaMetadata
 import android.media.session.PlaybackState
+import android.net.Uri
+import androidx.core.net.toUri
 
 data class MusicState(
     val title: String,
     val artist: String,
     val albumArt: Bitmap?,
+    val albumArtUri: Uri?,
     val isPlaying: Boolean,
     val duration: Long,
     val position: Long,
@@ -23,6 +26,8 @@ data class MusicState(
         title = metadata.getString(MediaMetadata.METADATA_KEY_TITLE) ?: "Unknown Title",
         artist = metadata.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: "Unknown Artist",
         albumArt = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART),
+        albumArtUri = (metadata.getString(MediaMetadata.METADATA_KEY_ALBUM_ART_URI)
+                ?: metadata.getString(MediaMetadata.METADATA_KEY_ART_URI))?.toUri(),
         isPlaying = playbackState.state == PlaybackState.STATE_PLAYING,
         duration = metadata.getLong(MediaMetadata.METADATA_KEY_DURATION).coerceAtLeast(0L),
         position = playbackState.position.coerceAtLeast(0L),
