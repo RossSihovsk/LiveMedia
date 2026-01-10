@@ -34,6 +34,10 @@ Since LiveMedia intercepts system notifications, explicit user permission is req
 | **Notification Listener** | Required by `MediaNotificationListenerService` to access media metadata and session tokens. |
 | **Accessibility Service** | Required by `QSStateListener` to detect when Quick Settings or the Notification Shade is opened, allowing the app to hide notifications during user interaction. |
 
+### Live Updates note:
+
+You may need to manually open app notification settings and allow to use Live Updates. It's not required on PixelOS, but it may be required on other vendors, such as OnePlus.
+
 ### Installation
 
   **Download APK (Recommended for Quick Setup):**
