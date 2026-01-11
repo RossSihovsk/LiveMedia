@@ -99,3 +99,7 @@ Tailor the media notification to your preference. You have full control over the
 ![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/049e39dc-87b9-4fa2-b2ac-b55684b72da2)
 
 ![ezgif-4220ad52c4c430a7](https://github.com/user-attachments/assets/923c0059-350d-47f4-938e-d202ba7ac369)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=RossSihovsk/LiveMedia&type=date&legend=top-left)](https://www.star-history.com/#RossSihovsk/LiveMedia&type=date&legend=top-left)
