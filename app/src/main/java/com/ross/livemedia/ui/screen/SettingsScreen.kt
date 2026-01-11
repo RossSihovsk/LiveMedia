@@ -1,5 +1,10 @@
 package com.ross.livemedia.ui.screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,8 +51,10 @@ fun SettingsScreen(storageHelper: StorageHelper) {
     val showProgress = remember { mutableStateOf(storageHelper.showProgress) }
     val showMusicProvider = remember { mutableStateOf(storageHelper.showMusicProvider) }
     val showTimestamp = remember { mutableStateOf(storageHelper.showTimestamp) }
-    val hideNotificationOnQsOpen = remember { mutableStateOf(storageHelper.hideNotificationOnQsOpen) }
+    val hideNotificationOnQsOpen =
+        remember { mutableStateOf(storageHelper.hideNotificationOnQsOpen) }
     val pillContent = remember { mutableStateOf(storageHelper.pillContent) }
+    val isScrollEnabled = remember { mutableStateOf(storageHelper.isScrollEnabled) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -139,6 +146,19 @@ fun SettingsScreen(storageHelper: StorageHelper) {
                     storageHelper.pillContent = PillContent.TITLE
                 }
             )
+
+            AnimatedVisibility(
+                visible = pillContent.value == PillContent.TITLE,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                SettingToggle(
+                    label = stringResource(R.string.setting_scroll_text),
+                    description = stringResource(R.string.setting_scroll_text_desc),
+                    checkedState = isScrollEnabled,
+                    onCheckedChange = { storageHelper.isScrollEnabled = it }
+                )
+            }
 
             PillContentOption(
                 label = stringResource(R.string.pill_option_elapsed),

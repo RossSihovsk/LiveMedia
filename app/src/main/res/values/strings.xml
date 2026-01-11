@@ -36,7 +36,9 @@
     
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Song Title</string>
-    <string name="pill_option_title_desc">Show the first 7 letters of the track title</string>
+    <string name="pill_option_title_desc">Show the track title in the status bar pill</string>
+    <string name="setting_scroll_text">Scroll track title</string>
+    <string name="setting_scroll_text_desc">Animate the track title if it exceeds 7 characters</string>
     
     <string name="pill_option_elapsed">Elapsed Time</string>
     <string name="pill_option_elapsed_desc">Show current playback position. The title will be shown anyway when music is on pause</string>

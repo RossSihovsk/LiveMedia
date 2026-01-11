@@ -52,6 +52,10 @@ class StorageHelper(context: Context) {
         )
         set(value) = preferences.edit { putString(KEY_PILL_CONTENT, value.name) }
 
+    var isScrollEnabled: Boolean
+        get() = preferences.getBoolean(KEY_SCROLL_ENABLED, DEFAULT_VALUE)
+        set(value) = preferences.edit { putBoolean(KEY_SCROLL_ENABLED, value) }
+
 
     companion object {
         private const val KEY_SHOW_ALBUM_ART = "show_album_art"
@@ -63,6 +67,7 @@ class StorageHelper(context: Context) {
         private const val KEY_SHOW_MUSIC_PROVIDER_NAME = "show_music_provider"
         private const val KEY_HIDE_NOTIFICATION_ON_QS_OPEN = "hide_notification_on_qs_open"
         private const val KEY_PILL_CONTENT = "pill_content"
+        private const val KEY_SCROLL_ENABLED = "is_scroll_enabled"
         private const val DEFAULT_VALUE = true
     }
 }
