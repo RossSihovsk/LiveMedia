@@ -80,14 +80,38 @@ fun providePillText(
     position: Int,
     duration: Int,
     isPlaying: Boolean,
-    pillContent: PillContent
+    pillContent: PillContent,
+    isScrollEnabled: Boolean,
+    elapsedTimeMs: Long
 ): String {
     val showTime = isPlaying && duration > 0
-    val truncatedTitle = title.take(7).trimEnd()
 
-    return when (pillContent) {
-        PillContent.ELAPSED if showTime -> formatTime(position)
-        PillContent.REMAINING if showTime -> formatTime(duration - position)
-        else -> truncatedTitle
+    if (pillContent == PillContent.ELAPSED && showTime) return formatTime(position)
+    if (pillContent == PillContent.REMAINING && showTime) return formatTime(duration - position)
+
+    // TITLE mode or time not available (or paused)
+    val trimmedTitle = title.trim()
+    if (!isScrollEnabled || trimmedTitle.length <= 7) return trimmedTitle.take(7)
+
+    return provideScrollableText(trimmedTitle, elapsedTimeMs)
+}
+
+private fun provideScrollableText(title: String, elapsedTimeMs: Long): String {
+    val speedMs = 300 // Scroll every 300ms
+    val waitAtStartSteps = 4 // Pause for 1.2s (4 * 300ms) at the beginning
+    val waitAtEndSteps = 4 // Pause for 900ms (3 * 300ms) at the end
+    
+    val scrollRange = title.length - 7
+    val cycleSteps = waitAtStartSteps + scrollRange + waitAtEndSteps
+    
+    val totalSteps = elapsedTimeMs / speedMs
+    val stepInCycle = (totalSteps % cycleSteps).toInt()
+    
+    val offset = when {
+        stepInCycle < waitAtStartSteps -> 0
+        stepInCycle < waitAtStartSteps + scrollRange -> stepInCycle - waitAtStartSteps
+        else -> scrollRange
     }
+    
+    return title.substring(offset, offset + 7)
 }

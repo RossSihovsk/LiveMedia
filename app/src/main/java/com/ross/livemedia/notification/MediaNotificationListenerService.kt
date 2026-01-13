@@ -33,6 +33,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+private const val SCROLL_UPDATE_DELAY_MS = 300L
+private const val STATIC_UPDATE_DELAY_MS = 1000L
+
 class MediaNotificationListenerService : NotificationListenerService() {
     private val logger = Logger("MediaListenerService")
     private lateinit var mediaStateManager: MediaStateManager
@@ -70,7 +73,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
             onStateUpdated = { state ->
                 logger.info("StateUpdated")
                 updateNotification(state)
-                notificationUpdateScheduler.scheduleUpdate(state)
+                notificationUpdateScheduler.scheduleUpdate()
             },
             noActiveMedia = {
                 logger.info("No audio. Disable notification")
@@ -79,11 +82,27 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
         notificationUpdateScheduler =
             NotificationUpdateScheduler {
-                logger.info("Time to check new state")
-                mediaStateManager.getUpdatedMusicState()?.let {
-                    updateNotification(it)
-                }
+                val state = mediaStateManager.getUpdatedMusicState()
+                if (state != null) {
+                    updateNotification(state)
 
+                    val isPlaying = state.isPlaying
+                    val isTitleScrollable = state.title.trim().length > 7
+                    
+                    val shouldScroll = storageHelper.isScrollEnabled && 
+                        (storageHelper.pillContent == com.ross.livemedia.storage.PillContent.TITLE || !isPlaying) &&
+                        isTitleScrollable
+                    
+                    val shouldRun = isPlaying || shouldScroll
+                    
+                    if (shouldRun) {
+                        if (shouldScroll) SCROLL_UPDATE_DELAY_MS else STATIC_UPDATE_DELAY_MS
+                    } else {
+                        null
+                    }
+                } else {
+                    null
+                }
             }
 
         serviceScope.launch {
@@ -137,9 +156,24 @@ class MediaNotificationListenerService : NotificationListenerService() {
         }
     }
 
+    private var lastTitle: String? = null
+    private var titleStartTime: Long = 0L
+    private var lastIsPlaying: Boolean = false
+
     private fun buildNotification(
         musicState: MusicState
     ): Notification {
+        // Reset scroll if title changed OR if we just paused and were showing time
+        val justPaused = lastIsPlaying && !musicState.isPlaying
+        val wasShowingTime = storageHelper.pillContent != com.ross.livemedia.storage.PillContent.TITLE
+        
+        if (musicState.title != lastTitle || (justPaused && wasShowingTime)) {
+            lastTitle = musicState.title
+            titleStartTime = System.currentTimeMillis()
+        }
+        
+        lastIsPlaying = musicState.isPlaying
+
         var contentIntent: PendingIntent? = null
 
         val launchIntent = packageManager.getLaunchIntentForPackage(musicState.packageName)
@@ -166,7 +200,9 @@ class MediaNotificationListenerService : NotificationListenerService() {
                 musicState.position.toInt(),
                 musicState.duration.toInt(),
                 musicState.isPlaying,
-                storageHelper.pillContent
+                storageHelper.pillContent,
+                storageHelper.isScrollEnabled,
+                System.currentTimeMillis() - titleStartTime
             ))
             .setRequestPromotedOngoing(true)
             .setShowWhen(false)

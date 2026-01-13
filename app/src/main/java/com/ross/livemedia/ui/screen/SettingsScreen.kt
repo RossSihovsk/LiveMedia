@@ -43,7 +43,11 @@ import com.ross.livemedia.storage.PillContent
 import com.ross.livemedia.storage.StorageHelper
 
 @Composable
-fun SettingsScreen(storageHelper: StorageHelper) {
+fun SettingsScreen(
+    storageHelper: StorageHelper,
+    hasAccessibilityPermission: Boolean,
+    onRequestAccessibilityPermission: () -> Unit
+) {
     val showAlbumArt = remember { mutableStateOf(storageHelper.showAlbumArt) }
     val showArtistName = remember { mutableStateOf(storageHelper.showArtistName) }
     val showAlbumName = remember { mutableStateOf(storageHelper.showAlbumName) }
@@ -77,6 +81,12 @@ fun SettingsScreen(storageHelper: StorageHelper) {
             )
 
             SectionHeader(stringResource(R.string.section_notification_body))
+
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 0.dp),
+                thickness = 1.dp,
+                color = Color(0xFF333333)
+            )
 
             SettingToggle(
                 label = stringResource(R.string.setting_show_album_art),
@@ -131,7 +141,16 @@ fun SettingsScreen(storageHelper: StorageHelper) {
                 label = stringResource(R.string.setting_hide_on_qs),
                 description = stringResource(R.string.setting_hide_on_qs_desc),
                 checkedState = hideNotificationOnQsOpen,
-                onCheckedChange = { storageHelper.hideNotificationOnQsOpen = it }
+                onCheckedChange = { isChecked ->
+                    if (isChecked && !hasAccessibilityPermission) {
+                        // Reset toggle to false until permission is granted
+                        hideNotificationOnQsOpen.value = false
+                        onRequestAccessibilityPermission()
+                    } else {
+                        hideNotificationOnQsOpen.value = isChecked
+                        storageHelper.hideNotificationOnQsOpen = isChecked
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.padding(top = 24.dp))
@@ -147,18 +166,12 @@ fun SettingsScreen(storageHelper: StorageHelper) {
                 }
             )
 
-            AnimatedVisibility(
-                visible = pillContent.value == PillContent.TITLE,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
-            ) {
-                SettingToggle(
-                    label = stringResource(R.string.setting_scroll_text),
-                    description = stringResource(R.string.setting_scroll_text_desc),
-                    checkedState = isScrollEnabled,
-                    onCheckedChange = { storageHelper.isScrollEnabled = it }
-                )
-            }
+            SettingToggle(
+                label = stringResource(R.string.setting_scroll_text),
+                description = stringResource(R.string.setting_scroll_text_desc),
+                checkedState = isScrollEnabled,
+                onCheckedChange = { storageHelper.isScrollEnabled = it }
+            )
 
             PillContentOption(
                 label = stringResource(R.string.pill_option_elapsed),
@@ -259,7 +272,7 @@ fun SectionHeader(title: String) {
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(bottom = 4.dp)
         )
-        HorizontalDivider(color = Color(0xFF333333), thickness = 1.dp)
+//        HorizontalDivider(color = Color(0xFF333333), thickness = 1.dp)
     }
 }
 
@@ -270,6 +283,12 @@ fun PillContentOption(
     selected: Boolean,
     onClick: () -> Unit
 ) {
+    HorizontalDivider(
+        modifier = Modifier.padding(horizontal = 0.dp),
+        thickness = 1.dp,
+        color = Color(0xFF333333)
+    )
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -306,10 +325,4 @@ fun PillContentOption(
             )
         )
     }
-
-    HorizontalDivider(
-        modifier = Modifier.padding(horizontal = 0.dp),
-        thickness = 1.dp,
-        color = Color(0xFF333333)
-    )
 }
