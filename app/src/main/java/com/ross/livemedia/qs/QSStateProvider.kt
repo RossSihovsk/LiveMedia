@@ -1,4 +1,4 @@
-package com.ross.livemedia.settings
+package com.ross.livemedia.qs
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -16,9 +16,10 @@ The codebase is organized into the following key modules:
 - **`lockscreen`**: Manages the visibility of the media controls on the lock screen.
 - **`media`**: Handles media state management, including the `MusicState` data class.
 - **`notification`**: Contains the `MediaNotificationListenerService` for intercepting media notifications and the `NotificationUpdateScheduler` for updating the custom notification.
-- **`settings`**: Manages Quick Settings state and disable notifications when Quick Settings are opened.
+- **`qs`**: Manages Quick Settings state and disable notifications when Quick Settings are opened.
 - **`ui`**: Defines the Jetpack Compose UI. This includes the `PermissionScreen` for handling permission requests, the `SettingsScreen` for customizing notification content.
 - **`storage`**: Manages persistent user preferences for notification content using `SharedPreferences`.
+- **`permission`**: Responsible for permission requests and validating state
 - **`utils`**: Provides utility functions for logging and notification management.
 
 ---

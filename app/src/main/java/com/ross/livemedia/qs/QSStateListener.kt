@@ -1,4 +1,4 @@
-package com.ross.livemedia.settings
+package com.ross.livemedia.qs
 
 import android.accessibilityservice.AccessibilityService
 import android.util.Log

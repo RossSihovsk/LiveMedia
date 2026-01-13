@@ -8,15 +8,13 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import com.bumptech.glide.Glide
 import com.ross.livemedia.lockscreen.LockScreenManager
 import com.ross.livemedia.media.MediaStateManager
 import com.ross.livemedia.media.MusicProvider
 import com.ross.livemedia.media.MusicState
-import com.ross.livemedia.settings.QSStateProvider
+import com.ross.livemedia.qs.QSStateProvider
 import com.ross.livemedia.storage.StorageHelper
 import com.ross.livemedia.utils.Logger
 import com.ross.livemedia.utils.buildArtisAlbumTitle

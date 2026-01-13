@@ -44,7 +44,7 @@
         </service>
 
         <service
-            android:name=".settings.QSStateListener"
+            android:name=".qs.QSStateListener"
             android:exported="true"
             android:label="LiveMedia Accessibility Service"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">

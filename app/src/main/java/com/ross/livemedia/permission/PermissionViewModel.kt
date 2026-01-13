@@ -9,7 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
-import com.ross.livemedia.settings.QSStateListener
+import com.ross.livemedia.qs.QSStateListener
 import com.ross.livemedia.storage.StorageHelper
 
 class PermissionViewModel(application: Application) : AndroidViewModel(application) {
