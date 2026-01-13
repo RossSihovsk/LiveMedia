@@ -23,11 +23,15 @@ class MainActivity : ComponentActivity() {
     private val hasNotificationListenerPermission = mutableStateOf(false)
     private val hasPostNotificationPermission = mutableStateOf(false)
     private val hasAccessibilityPermission = mutableStateOf(false)
+    // Add state for skipped permission to trigger recomposition
+    private val accessibilitySkippedState = mutableStateOf(false)
     private lateinit var storageHelper: StorageHelper // Initialized in onCreate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         storageHelper = StorageHelper(this) // Initialize SettingsManager
+        // Initialize state from storage
+        accessibilitySkippedState.value = storageHelper.accessibilityPermissionSkipped
 
         setContent {
             MaterialTheme {
@@ -46,9 +50,14 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                // Determine which screen to show
-                val showPermissions =
-                    !hasNotificationListenerPermission.value || !hasPostNotificationPermission.value || !hasAccessibilityPermission.value
+                // Determine if we should show the permission screen
+                // We show it if any required permission is missing, UNLESS it's just accessibility and the user skipped it.
+                val missingNotification = !hasNotificationListenerPermission.value
+                val missingPostNotification = !hasPostNotificationPermission.value
+                val missingAccessibility = !hasAccessibilityPermission.value
+                val accessibilitySkipped = accessibilitySkippedState.value
+
+                val showPermissions = missingNotification || missingPostNotification || (missingAccessibility && !accessibilitySkipped)
 
                 if (showPermissions) {
                     PermissionScreen(
@@ -63,10 +72,20 @@ class MainActivity : ComponentActivity() {
                         },
                         onGrantAccessibilityPermissionClick = {
                             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                        },
+                        onSkipAccessibilityPermissionClick = {
+                            storageHelper.accessibilityPermissionSkipped = true
+                            accessibilitySkippedState.value = true
                         }
                     )
                 } else {
-                    SettingsScreen(storageHelper = storageHelper)
+                    SettingsScreen(
+                        storageHelper = storageHelper,
+                        hasAccessibilityPermission = hasAccessibilityPermission.value,
+                        onRequestAccessibilityPermission = {
+                            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                        }
+                    )
                 }
             }
         }

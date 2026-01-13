@@ -1,5 +1,6 @@
 package com.ross.livemedia.ui.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +27,8 @@ fun PermissionScreen(
     hasAccessibilityPermission: Boolean,
     onGrantNotificationListenerPermissionClick: () -> Unit,
     onGrantPostNotificationPermissionClick: () -> Unit,
-    onGrantAccessibilityPermissionClick: () -> Unit
+    onGrantAccessibilityPermissionClick: () -> Unit,
+    onSkipAccessibilityPermissionClick: () -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -39,75 +41,86 @@ fun PermissionScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (!hasNotificationListenerPermission) {
-                Text(
-                    text = stringResource(R.string.permission_notification_listener_title),
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = stringResource(R.string.permission_notification_listener_desc),
-                    color = Color(0xFFCCCCCC),
-                    fontSize = 16.sp,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-                Button(onClick = onGrantNotificationListenerPermissionClick) {
-                    Text(text = stringResource(R.string.permission_notification_listener_button))
+            when {
+                // 1. Check Notification Listener Permission
+                !hasNotificationListenerPermission -> {
+                    Text(
+                        text = stringResource(R.string.permission_notification_listener_title),
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(R.string.permission_notification_listener_desc),
+                        color = Color(0xFFCCCCCC),
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    Button(onClick = onGrantNotificationListenerPermissionClick) {
+                        Text(text = stringResource(R.string.permission_notification_listener_button))
+                    }
                 }
-            }
 
-            if (!hasPostNotificationPermission) {
-                Spacer(modifier = Modifier.height(32.dp))
-                Text(
-                    text = stringResource(R.string.permission_post_notification_title),
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = stringResource(R.string.permission_post_notification_desc),
-                    color = Color(0xFFCCCCCC),
-                    fontSize = 16.sp,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-                Button(onClick = onGrantPostNotificationPermissionClick) {
-                    Text(text = stringResource(R.string.permission_post_notification_button))
+                // 2. Check Post Notification Permission
+                !hasPostNotificationPermission -> {
+                    Text(
+                        text = stringResource(R.string.permission_post_notification_title),
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(R.string.permission_post_notification_desc),
+                        color = Color(0xFFCCCCCC),
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    Button(onClick = onGrantPostNotificationPermissionClick) {
+                        Text(text = stringResource(R.string.permission_post_notification_button))
+                    }
                 }
-            }
 
-            if (!hasAccessibilityPermission) {
-                Spacer(modifier = Modifier.height(32.dp))
-                Text(
-                    text = stringResource(R.string.permission_accessibility_title),
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = stringResource(R.string.permission_accessibility_desc),
-                    color = Color(0xFFCCCCCC),
-                    fontSize = 16.sp,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-                Button(onClick = onGrantAccessibilityPermissionClick) {
-                    Text(text = stringResource(R.string.permission_accessibility_button))
+                // 3. Check Accessibility Permission
+                !hasAccessibilityPermission -> {
+                    Text(
+                        text = stringResource(R.string.permission_accessibility_title),
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(R.string.permission_accessibility_desc),
+                        color = Color(0xFFCCCCCC),
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    Button(onClick = onGrantAccessibilityPermissionClick) {
+                        Text(text = stringResource(R.string.permission_accessibility_button))
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(R.string.permission_skip_button),
+                        color = Color(0xFF888888),
+                        fontSize = 16.sp,
+                        modifier = Modifier.clickable { onSkipAccessibilityPermissionClick() }
+                    )
                 }
-            }
 
-            if (hasNotificationListenerPermission && hasPostNotificationPermission && hasAccessibilityPermission) {
-                Text(
-                    text = stringResource(R.string.permission_all_granted),
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
-                )
+                else -> {
+                    // All permissions granted (or handled)
+                    Text(
+                        text = stringResource(R.string.permission_all_granted),
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }

@@ -32,7 +32,7 @@
     <string name="setting_show_timestamp_desc">Show elapsed time and total duration on the player.</string>
     
     <string name="setting_hide_on_qs">Hide on Quick Settings</string>
-    <string name="setting_hide_on_qs_desc">Hide the media notification when Quick Settings or Notification Shade are opened.</string>
+    <string name="setting_hide_on_qs_desc">Hide the media notification when Quick Settings or Notification Shade are opened. Accessibility permission is required.</string>
     
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Song Title</string>
@@ -58,6 +58,7 @@
     <string name="permission_accessibility_title">Accessibility Permission Needed</string>
     <string name="permission_accessibility_desc">This app requires Accessibility Access to detect when Quick Settings are opened. Please grant permission in the system settings.</string>
     <string name="permission_accessibility_button">Grant Accessibility Permission</string>
+    <string name="permission_skip_button">Skip</string>
     
     <string name="permission_all_granted">All Permissions Granted!</string>
 </resources>

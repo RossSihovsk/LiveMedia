@@ -42,8 +42,12 @@ class StorageHelper(context: Context) {
         set(value) = preferences.edit { putBoolean(KEY_SHOW_TIMESTAMP, value) }
 
     var hideNotificationOnQsOpen: Boolean
-        get() = preferences.getBoolean(KEY_HIDE_NOTIFICATION_ON_QS_OPEN, DEFAULT_VALUE)
+        get() = preferences.getBoolean(KEY_HIDE_NOTIFICATION_ON_QS_OPEN, false)
         set(value) = preferences.edit { putBoolean(KEY_HIDE_NOTIFICATION_ON_QS_OPEN, value) }
+
+    var accessibilityPermissionSkipped: Boolean
+        get() = preferences.getBoolean(KEY_ACCESSIBILITY_PERMISSION_SKIPPED, false)
+        set(value) = preferences.edit { putBoolean(KEY_ACCESSIBILITY_PERMISSION_SKIPPED, value) }
 
     var pillContent: PillContent
         get() = PillContent.valueOf(
@@ -53,7 +57,7 @@ class StorageHelper(context: Context) {
         set(value) = preferences.edit { putString(KEY_PILL_CONTENT, value.name) }
 
     var isScrollEnabled: Boolean
-        get() = preferences.getBoolean(KEY_SCROLL_ENABLED, DEFAULT_VALUE)
+        get() = preferences.getBoolean(KEY_SCROLL_ENABLED, false)
         set(value) = preferences.edit { putBoolean(KEY_SCROLL_ENABLED, value) }
 
 
@@ -66,6 +70,7 @@ class StorageHelper(context: Context) {
         private const val KEY_SHOW_TIMESTAMP = "show_song_timestamp"
         private const val KEY_SHOW_MUSIC_PROVIDER_NAME = "show_music_provider"
         private const val KEY_HIDE_NOTIFICATION_ON_QS_OPEN = "hide_notification_on_qs_open"
+        private const val KEY_ACCESSIBILITY_PERMISSION_SKIPPED = "accessibility_permission_skipped"
         private const val KEY_PILL_CONTENT = "pill_content"
         private const val KEY_SCROLL_ENABLED = "is_scroll_enabled"
         private const val DEFAULT_VALUE = true
