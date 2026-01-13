@@ -37,6 +37,8 @@
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">歌曲标题</string>
     <string name="pill_option_title_desc">显示曲目标题的前7个字母</string>
+    <string name="setting_scroll_text">滚动歌曲标题</string>
+    <string name="setting_scroll_text_desc">若标题超过7个字符则进行滚动动画</string>
     
     <string name="pill_option_elapsed">已播放时间</string>
     <string name="pill_option_elapsed_desc">显示当前播放位置。音乐暂停时仍会显示标题</string>
@@ -56,6 +58,7 @@
     <string name="permission_accessibility_title">需要辅助功能权限</string>
     <string name="permission_accessibility_desc">此应用需要辅助功能访问权限以检测快速设置何时打开。请在系统设置中授予权限。</string>
     <string name="permission_accessibility_button">授予辅助功能权限</string>
+    <string name="permission_skip_button">跳过</string>
     
     <string name="permission_all_granted">已授予所有权限！</string>
 </resources>

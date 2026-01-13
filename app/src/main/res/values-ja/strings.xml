@@ -37,6 +37,8 @@
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">曲のタイトル</string>
     <string name="pill_option_title_desc">トラックタイトルの最初の7文字を表示します</string>
+    <string name="setting_scroll_text">トラックタイトルをスクロール</string>
+    <string name="setting_scroll_text_desc">7文字を超える場合、トラックタイトルをアニメーション化</string>
     
     <string name="pill_option_elapsed">経過時間</string>
     <string name="pill_option_elapsed_desc">現在の再生位置を表示します。音楽が一時停止中でもタイトルは表示されます</string>
@@ -56,6 +58,7 @@
     <string name="permission_accessibility_title">アクセシビリティ権限が必要です</string>
     <string name="permission_accessibility_desc">このアプリは、クイック設定が開いているかを検出するためにアクセシビリティアクセスが必要です。システム設定で権限を付与してください。</string>
     <string name="permission_accessibility_button">アクセシビリティ権限を付与</string>
+    <string name="permission_skip_button">スキップ</string>
     
     <string name="permission_all_granted">すべての権限が付与されました！</string>
 </resources>

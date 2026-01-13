@@ -37,6 +37,8 @@
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Título de la canción</string>
     <string name="pill_option_title_desc">Mostrar las primeras 7 letras del título de la pista</string>
+    <string name="setting_scroll_text">Desplazar título de la pista</string>
+    <string name="setting_scroll_text_desc">Animar el título de la pista si supera los 7 caracteres</string>
     
     <string name="pill_option_elapsed">Tiempo transcurrido</string>
     <string name="pill_option_elapsed_desc">Mostrar la posición actual de reproducción. El título se mostrará de todos modos cuando la música esté en pausa</string>
@@ -56,6 +58,7 @@
     <string name="permission_accessibility_title">Se necesita permiso de accesibilidad</string>
     <string name="permission_accessibility_desc">Esta aplicación requiere acceso de accesibilidad para detectar cuándo se abren los ajustes rápidos. Por favor, otorga el permiso en la configuración del sistema.</string>
     <string name="permission_accessibility_button">Otorgar permiso de accesibilidad</string>
+    <string name="permission_skip_button">Omitir</string>
     
     <string name="permission_all_granted">¡Todos los permisos otorgados!</string>
 </resources>

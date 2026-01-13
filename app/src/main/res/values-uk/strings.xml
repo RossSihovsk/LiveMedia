@@ -37,6 +37,8 @@
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Назва пісні</string>
     <string name="pill_option_title_desc">Показати перші 7 літер назви треку</string>
+    <string name="setting_scroll_text">Прокручувати назву треку</string>
+    <string name="setting_scroll_text_desc">Анімувати назву треку, якщо вона перевищує 7 символів</string>
     
     <string name="pill_option_elapsed">Минулий час</string>
     <string name="pill_option_elapsed_desc">Показати поточну позицію відтворення. Назва все одно буде показана, коли музика на паузі</string>
@@ -56,6 +58,7 @@
     <string name="permission_accessibility_title">Потрібен дозвіл доступності</string>
     <string name="permission_accessibility_desc">Цьому застосунку потрібен доступ до служб доступності для виявлення, коли відкриті швидкі налаштування. Будь ласка, надайте дозвіл у системних налаштуваннях.</string>
     <string name="permission_accessibility_button">Надати дозвіл доступності</string>
+    <string name="permission_skip_button">Пропустити</string>
     
     <string name="permission_all_granted">Усі дозволи надано!</string>
 </resources>

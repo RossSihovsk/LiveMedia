@@ -37,6 +37,8 @@
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">गाने का शीर्षक</string>
     <string name="pill_option_title_desc">ट्रैक शीर्षक के पहले 7 अक्षर दिखाएं</string>
+    <string name="setting_scroll_text">ट्रैक शीर्षक स्क्रॉल करें</string>
+    <string name="setting_scroll_text_desc">यदि ट्रैक शीर्षक 7 वर्णों से अधिक हो तो उसे एनिमेट करें</string>
     
     <string name="pill_option_elapsed">बीता हुआ समय</string>
     <string name="pill_option_elapsed_desc">वर्तमान प्लेबैक स्थिति दिखाएं। जब संगीत पॉज़ पर हो तब भी शीर्षक दिखाया जाएगा</string>
@@ -56,6 +58,7 @@
     <string name="permission_accessibility_title">पहुंच-योग्यता अनुमति आवश्यक</string>
     <string name="permission_accessibility_desc">इस ऐप को यह पता लगाने के लिए पहुंच-योग्यता पहुंच की आवश्यकता है कि त्वरित सेटिंग्स कब खोली जाती हैं। कृपया सिस्टम सेटिंग्स में अनुमति दें।</string>
     <string name="permission_accessibility_button">पहुंच-योग्यता अनुमति दें</string>
+    <string name="permission_skip_button">छोड़ें</string>
     
     <string name="permission_all_granted">सभी अनुमतियाँ दी गईं!</string>
 </resources>

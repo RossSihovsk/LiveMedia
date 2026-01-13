@@ -37,6 +37,8 @@
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Songtitel</string>
     <string name="pill_option_title_desc">Die ersten 7 Buchstaben des Titels anzeigen</string>
+    <string name="setting_scroll_text">Titel scrollen</string>
+    <string name="setting_scroll_text_desc">Tracktitel animieren, wenn er länger als 7 Zeichen ist</string>
     
     <string name="pill_option_elapsed">Verstrichene Zeit</string>
     <string name="pill_option_elapsed_desc">Aktuelle Wiedergabeposition anzeigen. Der Titel wird trotzdem angezeigt, wenn die Musik pausiert ist</string>
@@ -56,6 +58,7 @@
     <string name="permission_accessibility_title">Bedienungshilfen-Berechtigung erforderlich</string>
     <string name="permission_accessibility_desc">Diese App benötigt Bedienungshilfen-Zugriff, um zu erkennen, wann Schnelleinstellungen geöffnet sind. Bitte erteilen Sie die Berechtigung in den Systemeinstellungen.</string>
     <string name="permission_accessibility_button">Bedienungshilfen-Berechtigung erteilen</string>
+    <string name="permission_skip_button">Überspringen</string>
     
     <string name="permission_all_granted">Alle Berechtigungen erteilt!</string>
 </resources>
