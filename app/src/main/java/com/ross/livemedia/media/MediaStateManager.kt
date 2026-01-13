@@ -92,6 +92,9 @@ class MediaStateManager(
         logger.info("handleTransportControl action: $action")
         if (action == null) return
 
+        // Ensure we have the latest valid controller before attempting to control it
+        maybeUpdateMediaController()
+
         activeMediaController?.transportControls?.let { controls ->
             when (action) {
                 ACTION_PLAY_PAUSE -> if (activeMediaController?.playbackState?.state == PlaybackState.STATE_PLAYING) controls.pause() else controls.play()

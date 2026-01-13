@@ -97,9 +97,9 @@ fun providePillText(
 }
 
 private fun provideScrollableText(title: String, elapsedTimeMs: Long): String {
-    val speedMs = 300 // Scroll every 300ms
-    val waitAtStartSteps = 4 // Pause for 1.2s (4 * 300ms) at the beginning
-    val waitAtEndSteps = 4 // Pause for 900ms (3 * 300ms) at the end
+    val speedMs = 500 // Scroll every 300ms
+    val waitAtStartSteps = 2 // Pause for 1.2s (4 * 300ms) at the beginning
+    val waitAtEndSteps = 2 // Pause for 900ms (3 * 300ms) at the end
     
     val scrollRange = title.length - 7
     val cycleSteps = waitAtStartSteps + scrollRange + waitAtEndSteps
