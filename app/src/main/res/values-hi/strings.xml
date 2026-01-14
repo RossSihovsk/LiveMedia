@@ -26,13 +26,13 @@
     <string name="setting_show_progress_desc">गाने की प्रगति दिखाएं</string>
     
     <string name="setting_show_music_provider">संगीत प्रदाता ऐप का नाम दिखाएं</string>
-    <string name="setting_show_music_provider_desc">यह दिखाएगा कि आप कौन सा संगीत ऐप उपयोग कर रहे हैं (Spotify/YT Music, आदि...)</string>
+    <string name="setting_show_music_provider_desc">यह दिखाएगा कि आप कौन सा संगीत ऐप उपयोग कर रहे हैं (Spotify/YT Music, आदि…)</string>
     
     <string name="setting_show_timestamp">टाइमस्टैम्प दिखाएं</string>
     <string name="setting_show_timestamp_desc">प्लेयर पर बीता हुआ समय और कुल अवधि दिखाएं।</string>
     
     <string name="setting_hide_on_qs">त्वरित सेटिंग्स पर छिपाएं</string>
-    <string name="setting_hide_on_qs_desc">त्वरित सेटिंग्स या सूचना शेड खोले जाने पर मीडिया सूचना छिपाएं।</string>
+    <string name="setting_hide_on_qs_desc">त्वरित सेटिंग्स या सूचना शेड खोले जाने पर मीडिया सूचना छिपाएं। पहुंच-योग्यता अनुमति आवश्यक है।</string>
     
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">गाने का शीर्षक</string>

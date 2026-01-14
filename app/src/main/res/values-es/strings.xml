@@ -26,13 +26,13 @@
     <string name="setting_show_progress_desc">Mostrar progreso de la canción</string>
     
     <string name="setting_show_music_provider">Mostrar nombre de la app de música</string>
-    <string name="setting_show_music_provider_desc">Mostrará qué aplicación de música estás usando (Spotify/YT Music, etc.)</string>
+    <string name="setting_show_music_provider_desc">Mostrará qué aplicación de música estás usando (Spotify/YT Music, etc…)</string>
     
     <string name="setting_show_timestamp">Mostrar marcas de tiempo</string>
     <string name="setting_show_timestamp_desc">Mostrar tiempo transcurrido y duración total en el reproductor.</string>
     
     <string name="setting_hide_on_qs">Ocultar en configuración rápida</string>
-    <string name="setting_hide_on_qs_desc">Ocultar la notificación multimedia cuando se abran la Configuración rápida o el Panel de notificaciones.</string>
+    <string name="setting_hide_on_qs_desc">Ocultar la notificación multimedia cuando se abran la Configuración rápida o el Panel de notificaciones. Se requiere permiso de accesibilidad.</string>
     
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Título de la canción</string>

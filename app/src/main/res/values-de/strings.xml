@@ -32,7 +32,7 @@
     <string name="setting_show_timestamp_desc">Verstrichene Zeit und Gesamtdauer auf dem Player anzeigen.</string>
     
     <string name="setting_hide_on_qs">Bei Schnelleinstellungen ausblenden</string>
-    <string name="setting_hide_on_qs_desc">Die Medienbenachrichtigung ausblenden, wenn Schnelleinstellungen oder Benachrichtigungsleiste geöffnet sind.</string>
+    <string name="setting_hide_on_qs_desc">Die Medienbenachrichtigung ausblenden, wenn Schnelleinstellungen oder Benachrichtigungsleiste geöffnet sind. Bedienungshilfen-Berechtigung ist erforderlich.</string>
     
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Songtitel</string>

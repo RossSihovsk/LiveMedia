@@ -32,7 +32,7 @@
     <string name="setting_show_timestamp_desc">プレーヤーに経過時間と合計時間を表示します。</string>
     
     <string name="setting_hide_on_qs">クイック設定で非表示</string>
-    <string name="setting_hide_on_qs_desc">クイック設定または通知シェードが開いているときにメディア通知を非表示にします。</string>
+    <string name="setting_hide_on_qs_desc">クイック設定または通知シェードが開いているときにメディア通知を非表示にします。アクセシビリティ権限が必要です。</string>
     
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">曲のタイトル</string>

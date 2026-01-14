@@ -26,13 +26,13 @@
     <string name="setting_show_progress_desc">Показувати прогрес пісні</string>
     
     <string name="setting_show_music_provider">Показати назву музичного застосунку</string>
-    <string name="setting_show_music_provider_desc">Показуватиме, який музичний застосунок ви використовуєте (Spotify/YT Music тощо...)</string>
+    <string name="setting_show_music_provider_desc">Показуватиме, який музичний застосунок ви використовуєте (Spotify/YT Music тощо…)</string>
     
     <string name="setting_show_timestamp">Показати час</string>
     <string name="setting_show_timestamp_desc">Показувати минулий час і загальну тривалість на програвачі.</string>
     
     <string name="setting_hide_on_qs">Приховати при швидких налаштуваннях</string>
-    <string name="setting_hide_on_qs_desc">Приховувати медіа-сповіщення, коли відкриті швидкі налаштування або панель сповіщень.</string>
+    <string name="setting_hide_on_qs_desc">Приховувати медіа-сповіщення, коли відкриті швидкі налаштування або панель сповіщень. Потрібен дозвіл доступності.</string>
     
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Назва пісні</string>

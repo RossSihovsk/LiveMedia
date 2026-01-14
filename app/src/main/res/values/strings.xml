@@ -26,7 +26,7 @@
     <string name="setting_show_progress_desc">Show song progress</string>
     
     <string name="setting_show_music_provider">Show Music provider app name</string>
-    <string name="setting_show_music_provider_desc">It will show what music app you\'re using (Spotify/YT Music, etc...)</string>
+    <string name="setting_show_music_provider_desc">It will show what music app you\'re using (Spotify/YT Music, etc…)</string>
     
     <string name="setting_show_timestamp">Show timestamps</string>
     <string name="setting_show_timestamp_desc">Show elapsed time and total duration on the player.</string>

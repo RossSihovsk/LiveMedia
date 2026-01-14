@@ -32,7 +32,7 @@
     <string name="setting_show_timestamp_desc">Pokaż upłynięty czas i całkowitą długość na odtwarzaczu.</string>
     
     <string name="setting_hide_on_qs">Ukryj w szybkich ustawieniach</string>
-    <string name="setting_hide_on_qs_desc">Ukryj powiadomienie multimedialne, gdy otwarte są szybkie ustawienia lub panel powiadomień.</string>
+    <string name="setting_hide_on_qs_desc">Ukryj powiadomienie multimedialne, gdy otwarte są szybkie ustawienia lub panel powiadomień. Wymagane jest uprawnienie dostępności.</string>
     
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Tytuł utworu</string>
