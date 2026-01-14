@@ -38,7 +38,7 @@
     <string name="pill_option_title">Titre de la chanson</string>
     <string name="pill_option_title_desc">Afficher les 7 premières lettres du titre de la piste</string>
     <string name="setting_scroll_text">Faire défiler le titre</string>
-    <string name="setting_scroll_text_desc">Animer le titre s'il dépasse 7 caractères</string>
+    <string name="setting_scroll_text_desc">Animer le titre s\'il dépasse 7 caractères</string>
     
     <string name="pill_option_elapsed">Temps écoulé</string>
     <string name="pill_option_elapsed_desc">Afficher la position de lecture actuelle. Le titre sera affiché de toute façon lorsque la musique est en pause</string>
