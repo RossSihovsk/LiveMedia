@@ -7,9 +7,6 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ross.livemedia.utils.Logger
 
-private const val SCROLL_UPDATE_DELAY_MS = 300L
-private const val STATIC_UPDATE_DELAY_MS = 1000L
-
 class MediaNotificationListenerService : NotificationListenerService() {
     private val logger = Logger("MediaListenerService")
     private lateinit var viewModel: NotificationViewModel

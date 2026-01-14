@@ -4,48 +4,58 @@ import android.Manifest
 import android.app.Application
 import android.content.pm.PackageManager
 import android.provider.Settings
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import com.ross.livemedia.qs.QSStateListener
 import com.ross.livemedia.storage.StorageHelper
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+
+data class PermissionUiState(
+    val hasNotificationListenerPermission: Boolean = false,
+    val hasPostNotificationPermission: Boolean = false,
+    val hasAccessibilityPermission: Boolean = false,
+    val accessibilitySkipped: Boolean = false
+) {
+    val shouldShowPermissions: Boolean
+        get() = !hasNotificationListenerPermission ||
+                !hasPostNotificationPermission ||
+                (!hasAccessibilityPermission && !accessibilitySkipped)
+}
 
 class PermissionViewModel(application: Application) : AndroidViewModel(application) {
 
     private val storageHelper = StorageHelper(application)
 
-    var hasNotificationListenerPermission by mutableStateOf(false)
-        private set
-
-    var hasPostNotificationPermission by mutableStateOf(false)
-        private set
-
-    var hasAccessibilityPermission by mutableStateOf(false)
-        private set
-
-    var accessibilitySkippedState by mutableStateOf(storageHelper.accessibilityPermissionSkipped)
-        private set
+    private val _uiState = MutableStateFlow(
+        PermissionUiState(
+            accessibilitySkipped = storageHelper.accessibilityPermissionSkipped
+        )
+    )
+    val uiState = _uiState.asStateFlow()
 
     fun checkPermissions() {
         val context = getApplication<Application>()
-        hasNotificationListenerPermission = isNotificationListenerEnabled(context)
-        hasPostNotificationPermission =
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        hasAccessibilityPermission = isAccessibilityServiceEnabled(context)
+        _uiState.update { currentState ->
+            currentState.copy(
+                hasNotificationListenerPermission = isNotificationListenerEnabled(context),
+                hasPostNotificationPermission = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED,
+                hasAccessibilityPermission = isAccessibilityServiceEnabled(context)
+            )
+        }
     }
 
     fun onPostNotificationPermissionGranted() {
-        hasPostNotificationPermission = true
+        _uiState.update { it.copy(hasPostNotificationPermission = true) }
     }
 
     fun skipAccessibilityPermission() {
         storageHelper.accessibilityPermissionSkipped = true
-        accessibilitySkippedState = true
+        _uiState.update { it.copy(accessibilitySkipped = true) }
     }
 
     private fun isNotificationListenerEnabled(context: Application): Boolean {
@@ -69,14 +79,5 @@ class PermissionViewModel(application: Application) : AndroidViewModel(applicati
             return enabledServices?.contains(service) == true
         }
         return false
-    }
-
-    fun shouldShowPermissions(): Boolean {
-        val missingNotification = !hasNotificationListenerPermission
-        val missingPostNotification = !hasPostNotificationPermission
-        val missingAccessibility = !hasAccessibilityPermission
-        val accessibilitySkipped = accessibilitySkippedState
-
-        return missingNotification || missingPostNotification || (missingAccessibility && !accessibilitySkipped)
     }
 }

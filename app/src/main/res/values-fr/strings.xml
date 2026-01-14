@@ -32,7 +32,7 @@
     <string name="setting_show_timestamp_desc">Afficher le temps écoulé et la durée totale sur le lecteur.</string>
     
     <string name="setting_hide_on_qs">Masquer sur Paramètres rapides</string>
-    <string name="setting_hide_on_qs_desc">Masquer la notification média lorsque les Paramètres rapides ou l\'ombre de notification sont ouverts. La permission d'accessibilité est requise.</string>
+    <string name="setting_hide_on_qs_desc">Masquer la notification média lorsque les Paramètres rapides ou l\'ombre de notification sont ouverts. La permission d\'accessibilité est requise.</string>
     
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Titre de la chanson</string>

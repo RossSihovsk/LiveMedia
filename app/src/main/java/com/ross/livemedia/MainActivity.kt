@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import com.ross.livemedia.notification.MediaNotificationListenerService
 import com.ross.livemedia.storage.StorageHelper
 import com.ross.livemedia.permission.PermissionViewModel
@@ -28,6 +29,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
+                val uiState = viewModel.uiState.collectAsState().value
                 val requestPermissionLauncher = rememberLauncherForActivityResult(
                     ActivityResultContracts.RequestPermission()
                 ) { isGranted: Boolean ->
@@ -38,16 +40,16 @@ class MainActivity : ComponentActivity() {
 
                 SideEffect {
                     viewModel.checkPermissions()
-                    if (!viewModel.hasPostNotificationPermission) {
+                    if (!uiState.hasPostNotificationPermission) {
                         requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
                 }
 
-                if (viewModel.shouldShowPermissions()) {
+                if (uiState.shouldShowPermissions) {
                     PermissionScreen(
-                        hasNotificationListenerPermission = viewModel.hasNotificationListenerPermission,
-                        hasPostNotificationPermission = viewModel.hasPostNotificationPermission,
-                        hasAccessibilityPermission = viewModel.hasAccessibilityPermission,
+                        hasNotificationListenerPermission = uiState.hasNotificationListenerPermission,
+                        hasPostNotificationPermission = uiState.hasPostNotificationPermission,
+                        hasAccessibilityPermission = uiState.hasAccessibilityPermission,
                         onGrantNotificationListenerPermissionClick = {
                             startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                         },
@@ -64,7 +66,7 @@ class MainActivity : ComponentActivity() {
                 } else {
                     SettingsScreen(
                         storageHelper = storageHelper,
-                        hasAccessibilityPermission = viewModel.hasAccessibilityPermission,
+                        hasAccessibilityPermission = uiState.hasAccessibilityPermission,
                         onRequestAccessibilityPermission = {
                             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
                         }
@@ -81,7 +83,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun startServiceIfEnabled() {
-        if (viewModel.hasNotificationListenerPermission && viewModel.hasPostNotificationPermission) {
+        // We can access current value directly for non-compose logic if needed,
+        // or just check uiState's value if we were in Compose, but here we are in Activity.
+        // viewModel.uiState.value is safe to access for the current state snapshot.
+        val state = viewModel.uiState.value
+        if (state.hasNotificationListenerPermission && state.hasPostNotificationPermission) {
             val intent = Intent(this, MediaNotificationListenerService::class.java)
             startService(intent)
         }
