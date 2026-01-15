@@ -28,19 +28,23 @@ class QSStateListener : AccessibilityService() {
                 window.getBoundsInScreen(outBounds)
 
                 val windowHeight = outBounds.height()
+                val windowWidth = outBounds.width()
+                val screenWidth = displayMetrics.widthPixels
+                val childCount = window.root?.childCount ?: 0
 
-                if (windowHeight > screenHeight / 2) {
+                // QS/Notification shade is a complex view with multiple children (header, QS tiles, notifications, etc).
+                // Screen overlays like Screenshot UI usually have a simpler hierarchy (e.g., childCount = 1).
+                if (windowHeight > screenHeight / 2 && 
+                    windowWidth > screenWidth * 0.9 && 
+                    childCount > 2
+                ) {
                     isQsOpen = true
                 }
                 break
             }
         }
 
-        if (isQsOpen) {
-            Log.d(TAG, "🔽 Quick Settings or Notification Shade opened")
-        } else {
-            Log.d(TAG, "🔼 Quick Settings closed")
-        }
+        Log.d(TAG, "Is QS opened: $isQsOpen")
         QSStateProvider.updateQsState(isQsOpen)
     }
 
