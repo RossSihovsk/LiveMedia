@@ -61,4 +61,12 @@
     <string name="permission_skip_button">Pomiń</string>
     
     <string name="permission_all_granted">Wszystkie uprawnienia przyznane!</string>
+    <!-- App Selection Screen -->
+    <string name="section_app_selection">Kontrola aplikacji</string>
+    <string name="setting_app_selection">Wybierz aplikacje</string>
+    <string name="setting_app_selection_desc">Wybierz aplikacje, z którymi Live Media ma współpracować.</string>
+    <string name="app_selection_title">Wybierz aplikacje</string>
+    <string name="app_selection_enable_all">Włącz wszystko</string>
+    <string name="app_selection_disable_all">Wyłącz wszystko</string>
 </resources>
+

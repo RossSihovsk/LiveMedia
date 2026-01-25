@@ -60,6 +60,32 @@ class StorageHelper(context: Context) {
         get() = preferences.getBoolean(KEY_SCROLL_ENABLED, false)
         set(value) = preferences.edit { putBoolean(KEY_SCROLL_ENABLED, value) }
 
+    var disabledPackages: Set<String>
+        get() = preferences.getStringSet(KEY_DISABLED_PACKAGES, emptySet()) ?: emptySet()
+        set(value) = preferences.edit { putStringSet(KEY_DISABLED_PACKAGES, value) }
+
+    fun isAppEnabled(packageName: String): Boolean {
+        return !disabledPackages.contains(packageName)
+    }
+
+    fun setAppEnabled(packageName: String, enabled: Boolean) {
+        val current = disabledPackages.toMutableSet()
+        if (enabled) {
+            current.remove(packageName)
+        } else {
+            current.add(packageName)
+        }
+        disabledPackages = current
+    }
+
+    fun setAllAppsEnabled(packageNames: List<String>, enabled: Boolean) {
+        if (enabled) {
+            disabledPackages = emptySet()
+        } else {
+            disabledPackages = packageNames.toSet()
+        }
+    }
+
 
     companion object {
         private const val KEY_SHOW_ALBUM_ART = "show_album_art"
@@ -73,6 +99,7 @@ class StorageHelper(context: Context) {
         private const val KEY_ACCESSIBILITY_PERMISSION_SKIPPED = "accessibility_permission_skipped"
         private const val KEY_PILL_CONTENT = "pill_content"
         private const val KEY_SCROLL_ENABLED = "is_scroll_enabled"
+        private const val KEY_DISABLED_PACKAGES = "disabled_packages"
         private const val DEFAULT_VALUE = true
     }
 }

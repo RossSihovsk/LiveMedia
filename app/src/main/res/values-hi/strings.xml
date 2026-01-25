@@ -61,4 +61,12 @@
     <string name="permission_skip_button">छोड़ें</string>
     
     <string name="permission_all_granted">सभी अनुमतियाँ दी गईं!</string>
+    <!-- App Selection Screen -->
+    <string name="section_app_selection">ऐप्स नियंत्रण</string>
+    <string name="setting_app_selection">ऐप्स चुनें</string>
+    <string name="setting_app_selection_desc">चुनें कि Live Media किन ऐप्स के साथ काम करे।</string>
+    <string name="app_selection_title">ऐप्स चुनें</string>
+    <string name="app_selection_enable_all">सभी सक्षम करें</string>
+    <string name="app_selection_disable_all">सभी अक्षम करें</string>
 </resources>
+

@@ -41,12 +41,14 @@ import androidx.compose.ui.res.stringResource
 import com.ross.livemedia.R
 import com.ross.livemedia.storage.PillContent
 import com.ross.livemedia.storage.StorageHelper
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 
 @Composable
 fun SettingsScreen(
     storageHelper: StorageHelper,
     hasAccessibilityPermission: Boolean,
-    onRequestAccessibilityPermission: () -> Unit
+    onRequestAccessibilityPermission: () -> Unit,
+    onNavigateToAppSelection: () -> Unit
 ) {
     val showAlbumArt = remember { mutableStateOf(storageHelper.showAlbumArt) }
     val showArtistName = remember { mutableStateOf(storageHelper.showArtistName) }
@@ -192,6 +194,53 @@ fun SettingsScreen(
                     storageHelper.pillContent = PillContent.REMAINING
                 }
             )
+            Spacer(modifier = Modifier.padding(top = 24.dp))
+            SectionHeader(stringResource(R.string.section_app_selection))
+
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 0.dp),
+                thickness = 1.dp,
+                color = Color(0xFF333333)
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onNavigateToAppSelection)
+                    .padding(vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.setting_app_selection),
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Spacer(modifier = Modifier.padding(top = 2.dp))
+                    Text(
+                        text = stringResource(R.string.setting_app_selection_desc),
+                        color = Color(0xFFCCCCCC),
+                        fontSize = 14.sp,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = Color(0xFF888888)
+                )
+            }
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 0.dp),
+                thickness = 1.dp,
+                color = Color(0xFF333333)
+            )
+
             Spacer(modifier = Modifier.padding(top = 24.dp))
         }
     }

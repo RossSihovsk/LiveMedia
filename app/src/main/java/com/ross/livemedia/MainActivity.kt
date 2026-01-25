@@ -17,6 +17,8 @@ import com.ross.livemedia.storage.StorageHelper
 import com.ross.livemedia.permission.PermissionViewModel
 import com.ross.livemedia.ui.screen.PermissionScreen
 import com.ross.livemedia.ui.screen.SettingsScreen
+import com.ross.livemedia.ui.screen.AppSelectionScreen
+import androidx.compose.runtime.*
 
 class MainActivity : ComponentActivity() {
 
@@ -64,13 +66,24 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 } else {
-                    SettingsScreen(
-                        storageHelper = storageHelper,
-                        hasAccessibilityPermission = uiState.hasAccessibilityPermission,
-                        onRequestAccessibilityPermission = {
-                            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                        }
-                    )
+                    var currentScreen by remember { mutableStateOf("settings") }
+
+                    when (currentScreen) {
+                        "settings" -> SettingsScreen(
+                            storageHelper = storageHelper,
+                            hasAccessibilityPermission = uiState.hasAccessibilityPermission,
+                            onRequestAccessibilityPermission = {
+                                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                            },
+                            onNavigateToAppSelection = {
+                                currentScreen = "app_selection"
+                            }
+                        )
+
+                        "app_selection" -> AppSelectionScreen(
+                            onBack = { currentScreen = "settings" }
+                        )
+                    }
                 }
             }
         }

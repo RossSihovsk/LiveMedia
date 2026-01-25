@@ -140,7 +140,7 @@ class NotificationViewModel(
     }
 
     private fun updateNotification(musicState: MusicState) {
-        if (!lockScreenManager.isScreenUnlocked() || (isQsOpen && storageHelper.hideNotificationOnQsOpen)) {
+        if (!lockScreenManager.isScreenUnlocked() || (isQsOpen && storageHelper.hideNotificationOnQsOpen) || !storageHelper.isAppEnabled(musicState.packageName)) {
             onCancelNotification()
             return
         }
