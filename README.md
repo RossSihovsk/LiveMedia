@@ -92,12 +92,11 @@ Tailor the media notification to your preference. You have full control over the
 
 ### Screenshots
 
-<img width="2752" height="1536" alt="Gemini_Generated_Image_n3g6dsn3g6dsn3g6" src="https://github.com/user-attachments/assets/7cb26e4f-db41-470e-b850-eaa95e028856" />
+<img width="1024" height="572" alt="image" src="https://github.com/user-attachments/assets/0bc8ef28-6fc6-432d-aa42-2b44055e45b7" />
 
+<img width="1241" height="913" alt="image" src="https://github.com/user-attachments/assets/2d900e9f-c115-4865-b7f7-8ce6baa799e0" />
 
-![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/cf87c831-1949-4d0b-b846-2747b5b00d61)
-
-![LiveMedia Notification Screenshot](https://github.com/user-attachments/assets/049e39dc-87b9-4fa2-b2ac-b55684b72da2)
+![anim](https://github.com/user-attachments/assets/ee2814a1-b535-4155-94c1-09dd9de65de0)
 
 ![ezgif-4220ad52c4c430a7](https://github.com/user-attachments/assets/923c0059-350d-47f4-938e-d202ba7ac369)
 
