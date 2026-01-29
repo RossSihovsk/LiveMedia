@@ -49,6 +49,7 @@ class NotificationViewModel(
     private lateinit var notificationUpdateScheduler: NotificationUpdateScheduler
 
     private var isQsOpen = false
+    private var isNotificationDismissed = false
     private var lastTitle: String? = null
     private var titleStartTime: Long = 0L
     private var lastIsPlaying: Boolean = false
@@ -139,7 +140,21 @@ class NotificationViewModel(
         mediaStateManager.handleTransportControl(action)
     }
 
+    fun onNotificationDismissed() {
+        isNotificationDismissed = true
+        logger.info("Notification dismissed by user")
+    }
+
     private fun updateNotification(musicState: MusicState) {
+        if (musicState.isPlaying) {
+            isNotificationDismissed = false
+        }
+
+        if (isNotificationDismissed) {
+            logger.info("Notification is dismissed")
+            return
+        }
+
         if (!lockScreenManager.isScreenUnlocked() || (isQsOpen && storageHelper.hideNotificationOnQsOpen) || !storageHelper.isAppEnabled(musicState.packageName)) {
             onCancelNotification()
             return

@@ -47,6 +47,16 @@ class MediaNotificationListenerService : NotificationListenerService() {
         return super.onStartCommand(intent, flags, startId)
     }
 
+    override fun onNotificationRemoved(sbn: StatusBarNotification?, rankingMap: RankingMap?, reason: Int) {
+        if (sbn?.id == NOTIFICATION_ID && sbn.packageName == packageName) {
+            // REASON_CANCEL = 2 (User dismissed single notification)
+            // REASON_CANCEL_ALL = 3 (User dismissed all notifications)
+            if (reason == REASON_CANCEL || reason == REASON_CANCEL_ALL) {
+                viewModel.onNotificationDismissed()
+            }
+        }
+    }
+
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID, "Media Live Updates", NotificationManager.IMPORTANCE_LOW
