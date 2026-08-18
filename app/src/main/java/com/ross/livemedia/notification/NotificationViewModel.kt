@@ -94,8 +94,6 @@ class NotificationViewModel(
 
                 val state = mediaStateManager.getUpdatedMusicState()
                 if (state != null) {
-                    updateNotification(state)
-
                     val isPlaying = state.isPlaying
                     val isTitleScrollable = state.title.trim().length > 7
 
@@ -106,9 +104,15 @@ class NotificationViewModel(
                     val shouldRun = isPlaying || shouldScroll
 
                     when {
-                        shouldRun -> if (shouldScroll) SCROLL_UPDATE_DELAY_MS else STATIC_UPDATE_DELAY_MS
-                        // Keep polling while paused so a killed app is still detected,
-                        // but stop once the user dismissed the notification.
+                        shouldRun -> {
+                            // Only rebuild the notification when its content is
+                            // actually changing (progress/scrolling).
+                            updateNotification(state)
+                            if (shouldScroll) SCROLL_UPDATE_DELAY_MS else STATIC_UPDATE_DELAY_MS
+                        }
+                        // While paused the notification is static: keep only a
+                        // lightweight session liveness poll so a killed app is
+                        // still detected, and stop once the user dismissed it.
                         isNotificationDismissed -> null
                         else -> PAUSED_POLL_DELAY_MS
                     }
