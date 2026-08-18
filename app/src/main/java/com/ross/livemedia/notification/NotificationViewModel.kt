@@ -32,6 +32,7 @@ import androidx.lifecycle.AndroidViewModel
 
 private const val SCROLL_UPDATE_DELAY_MS = 500L
 private const val STATIC_UPDATE_DELAY_MS = 1000L
+private const val PAUSED_POLL_DELAY_MS = 2000L
 private const val CHANNEL_ID = "MediaLiveUpdateChannel"
 
 
@@ -80,11 +81,17 @@ class NotificationViewModel(
             },
             noActiveMedia = {
                 logger.info("No audio. Disable notification")
-                onCancelNotification()
+                if (storageHelper.hideNotificationOnAppClose) {
+                    onCancelNotification()
+                }
             })
 
         notificationUpdateScheduler =
             NotificationUpdateScheduler {
+                // Re-check the active media sessions on every tick so that a killed
+                // media app clears the notification even if callbacks are missed.
+                mediaStateManager.maybeUpdateMediaController()
+
                 val state = mediaStateManager.getUpdatedMusicState()
                 if (state != null) {
                     updateNotification(state)
@@ -98,12 +105,18 @@ class NotificationViewModel(
 
                     val shouldRun = isPlaying || shouldScroll
 
-                    if (shouldRun) {
-                        if (shouldScroll) SCROLL_UPDATE_DELAY_MS else STATIC_UPDATE_DELAY_MS
-                    } else {
-                        null
+                    when {
+                        shouldRun -> if (shouldScroll) SCROLL_UPDATE_DELAY_MS else STATIC_UPDATE_DELAY_MS
+                        // Keep polling while paused so a killed app is still detected,
+                        // but stop once the user dismissed the notification.
+                        isNotificationDismissed -> null
+                        else -> PAUSED_POLL_DELAY_MS
                     }
                 } else {
+                    logger.info("No active media. Disable notification")
+                    if (storageHelper.hideNotificationOnAppClose) {
+                        onCancelNotification()
+                    }
                     null
                 }
             }

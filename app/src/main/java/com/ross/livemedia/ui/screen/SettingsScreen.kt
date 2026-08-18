@@ -59,6 +59,8 @@ fun SettingsScreen(
     val showTimestamp = remember { mutableStateOf(storageHelper.showTimestamp) }
     val hideNotificationOnQsOpen =
         remember { mutableStateOf(storageHelper.hideNotificationOnQsOpen) }
+    val hideNotificationOnAppClose =
+        remember { mutableStateOf(storageHelper.hideNotificationOnAppClose) }
     val pillContent = remember { mutableStateOf(storageHelper.pillContent) }
     val isScrollEnabled = remember { mutableStateOf(storageHelper.isScrollEnabled) }
 
@@ -153,6 +155,13 @@ fun SettingsScreen(
                         storageHelper.hideNotificationOnQsOpen = isChecked
                     }
                 }
+            )
+
+            SettingToggle(
+                label = stringResource(R.string.setting_hide_on_app_close),
+                description = stringResource(R.string.setting_hide_on_app_close_desc),
+                checkedState = hideNotificationOnAppClose,
+                onCheckedChange = { storageHelper.hideNotificationOnAppClose = it }
             )
 
             Spacer(modifier = Modifier.padding(top = 24.dp))

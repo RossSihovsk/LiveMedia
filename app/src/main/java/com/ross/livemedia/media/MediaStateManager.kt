@@ -26,6 +26,18 @@ class MediaStateManager(
         override fun onMetadataChanged(metadata: MediaMetadata?) {
             handleOnMetadataChanged(metadata)
         }
+
+        override fun onSessionDestroyed() {
+            handleSessionDestroyed()
+        }
+    }
+
+    private fun handleSessionDestroyed() {
+        logger.info("Media session destroyed")
+        activeMediaController?.unregisterCallback(mediaControllerCallback)
+        activeMediaController = null
+        currentState = null
+        maybeUpdateMediaController()
     }
 
     init {
@@ -63,19 +75,31 @@ class MediaStateManager(
     }
 
     fun maybeUpdateMediaController() {
-        val mediaSessionManager =
-            context.getSystemService(Context.MEDIA_SESSION_SERVICE) as MediaSessionManager
-        val componentName = ComponentName(context, MediaNotificationListenerService::class.java)
-        val controllers = mediaSessionManager.getActiveSessions(componentName)
+        val controllers = getActiveSessions() ?: return
 
-        controllers.firstOrNull().let { newController ->
-            if (newController != activeMediaController) {
-                activeMediaController?.unregisterCallback(mediaControllerCallback)
-                activeMediaController = newController?.also {
-                    it.registerCallback(mediaControllerCallback)
-                    logger.info("Found and registered new media controller: ${it.packageName}")
-                    pushCurrentState()
-                }
+        // If the session we are tracking is no longer in the active list,
+        // the media app was killed/removed. Clear the state regardless of
+        // whether other (unrelated) sessions still exist.
+        val activeToken = activeMediaController?.sessionToken
+        if (activeToken != null && controllers.none { it.sessionToken == activeToken }) {
+            logger.info("Active media session no longer exists. Notify that the media is stopped")
+            activeMediaController?.unregisterCallback(mediaControllerCallback)
+            activeMediaController = null
+            currentState = null
+            noActiveMedia()
+            return
+        }
+
+        val newController = controllers.firstOrNull()
+
+        // MediaController does not override equals(), so compare session tokens
+        // to detect whether the active session actually changed.
+        if (newController?.sessionToken != activeMediaController?.sessionToken) {
+            activeMediaController?.unregisterCallback(mediaControllerCallback)
+            activeMediaController = newController?.also {
+                it.registerCallback(mediaControllerCallback)
+                logger.info("Found and registered new media controller: ${it.packageName}")
+                pushCurrentState()
             }
         }
 
@@ -84,7 +108,20 @@ class MediaStateManager(
             logger.info("No controllers are found, notify that the media is stopped")
             activeMediaController?.unregisterCallback(mediaControllerCallback)
             activeMediaController = null
+            currentState = null
             noActiveMedia()
+        }
+    }
+
+    private fun getActiveSessions(): List<MediaController>? {
+        return try {
+            val mediaSessionManager =
+                context.getSystemService(Context.MEDIA_SESSION_SERVICE) as MediaSessionManager
+            val componentName = ComponentName(context, MediaNotificationListenerService::class.java)
+            mediaSessionManager.getActiveSessions(componentName)
+        } catch (e: SecurityException) {
+            logger.e("Cannot access active media sessions", e)
+            null
         }
     }
 

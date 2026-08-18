@@ -34,6 +34,9 @@
     <string name="setting_hide_on_qs">Hide on Quick Settings</string>
     <string name="setting_hide_on_qs_desc">Hide the media notification when Quick Settings or Notification Shade are opened. Accessibility permission is required.</string>
     
+    <string name="setting_hide_on_app_close">Clear notification when app is closed</string>
+    <string name="setting_hide_on_app_close_desc">Remove the Live Media notification when the media app is swiped away or killed.</string>
+    
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Song Title</string>
     <string name="pill_option_title_desc">Show the track title in the status bar pill</string>
