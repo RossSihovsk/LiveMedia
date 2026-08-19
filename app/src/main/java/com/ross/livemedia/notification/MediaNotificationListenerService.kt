@@ -54,6 +54,8 @@ class MediaNotificationListenerService : NotificationListenerService() {
             if (reason == REASON_CANCEL || reason == REASON_CANCEL_ALL) {
                 viewModel.onNotificationDismissed()
             }
+        } else {
+            viewModel.onNotificationRemoved(sbn)
         }
     }
 

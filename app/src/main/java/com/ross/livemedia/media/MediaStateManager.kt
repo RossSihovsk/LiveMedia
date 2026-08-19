@@ -7,6 +7,7 @@ import android.media.session.MediaController
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
 import com.ross.livemedia.notification.MediaNotificationListenerService
+import com.ross.livemedia.qs.MediaAppRecentsProvider
 import com.ross.livemedia.utils.Logger
 
 class MediaStateManager(
@@ -17,6 +18,9 @@ class MediaStateManager(
     private val logger = Logger("MediaManager")
     private var activeMediaController: MediaController? = null
     private var currentState: MusicState? = null
+
+    val activePackageName: String?
+        get() = activeMediaController?.packageName
 
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
@@ -86,6 +90,7 @@ class MediaStateManager(
             activeMediaController?.unregisterCallback(mediaControllerCallback)
             activeMediaController = null
             currentState = null
+            MediaAppRecentsProvider.trackedPackage = null
             noActiveMedia()
             return
         }
@@ -98,6 +103,7 @@ class MediaStateManager(
             activeMediaController?.unregisterCallback(mediaControllerCallback)
             activeMediaController = newController?.also {
                 it.registerCallback(mediaControllerCallback)
+                MediaAppRecentsProvider.trackedPackage = it.packageName
                 logger.info("Found and registered new media controller: ${it.packageName}")
                 pushCurrentState()
             }
@@ -109,6 +115,7 @@ class MediaStateManager(
             activeMediaController?.unregisterCallback(mediaControllerCallback)
             activeMediaController = null
             currentState = null
+            MediaAppRecentsProvider.trackedPackage = null
             noActiveMedia()
         }
     }

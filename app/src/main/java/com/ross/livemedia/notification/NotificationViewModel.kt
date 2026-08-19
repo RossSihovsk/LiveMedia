@@ -5,6 +5,8 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Handler
+import android.os.Looper
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
 import com.bumptech.glide.Glide
@@ -12,6 +14,7 @@ import com.ross.livemedia.lockscreen.LockScreenManager
 import com.ross.livemedia.media.MediaStateManager
 import com.ross.livemedia.media.MusicProvider
 import com.ross.livemedia.media.MusicState
+import com.ross.livemedia.qs.MediaAppRecentsProvider
 import com.ross.livemedia.qs.QSStateProvider
 import com.ross.livemedia.storage.StorageHelper
 import com.ross.livemedia.utils.Logger
@@ -33,6 +36,7 @@ import androidx.lifecycle.AndroidViewModel
 private const val SCROLL_UPDATE_DELAY_MS = 500L
 private const val STATIC_UPDATE_DELAY_MS = 1000L
 private const val PAUSED_POLL_DELAY_MS = 2000L
+private const val MEDIA_NOTIFICATION_REMOVED_GRACE_MS = 1000L
 private const val CHANNEL_ID = "MediaLiveUpdateChannel"
 
 
@@ -51,9 +55,13 @@ class NotificationViewModel(
 
     private var isQsOpen = false
     private var isNotificationDismissed = false
+    private var mediaAppClosed = false
     private var lastTitle: String? = null
     private var titleStartTime: Long = 0L
     private var lastIsPlaying: Boolean = false
+
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private var pendingMediaAppCloseClear: Runnable? = null
 
     fun init() {
         logger.info("init")
@@ -81,6 +89,7 @@ class NotificationViewModel(
             },
             noActiveMedia = {
                 logger.info("No audio. Disable notification")
+                MediaAppRecentsProvider.trackedPackage = null
                 if (storageHelper.hideNotificationOnAppClose) {
                     onCancelNotification()
                 }
@@ -140,9 +149,39 @@ class NotificationViewModel(
                 }
             }
         }
+
+        scope.launch {
+            // Some vendors (Samsung) keep the media app's process and session
+            // alive after the user closes it from recents, so the session never
+            // dies. The accessibility service reports when the media app's card
+            // disappeared from the recents screen.
+            MediaAppRecentsProvider.mediaAppClosedFromRecents.collect { packageName ->
+                val tracked = mediaStateManager.activePackageName ?: return@collect
+                if (packageName == tracked && storageHelper.hideNotificationOnAppClose) {
+                    logger.info("Media app was closed from recents. Clear notification")
+                    mediaAppClosed = true
+                    onCancelNotification()
+                }
+            }
+        }
+
+        scope.launch {
+            // The media app was brought back to the foreground. Re-show the
+            // notification that was hidden when it was closed from recents.
+            MediaAppRecentsProvider.mediaAppReopened.collect { packageName ->
+                val tracked = mediaStateManager.activePackageName ?: return@collect
+                if (packageName == tracked && mediaAppClosed) {
+                    logger.info("Media app was reopened. Show notification")
+                    mediaAppClosed = false
+                    mediaStateManager.getUpdatedMusicState()?.let { updateNotification(it) }
+                }
+            }
+        }
     }
 
     fun cleanup() {
+        pendingMediaAppCloseClear?.let { mainHandler.removeCallbacks(it) }
+        pendingMediaAppCloseClear = null
         scope.cancel()
     }
 
@@ -150,6 +189,52 @@ class NotificationViewModel(
         if (sbn?.notification?.category == Notification.CATEGORY_TRANSPORT) {
             logger.info("Media notification detected from: ${sbn.packageName}")
             mediaStateManager.maybeUpdateMediaController()
+            MediaAppRecentsProvider.trackedPackage = mediaStateManager.activePackageName
+            onMediaAppNotificationPosted(sbn.packageName)
+        }
+    }
+
+    fun onNotificationRemoved(sbn: StatusBarNotification?) {
+        if (sbn?.notification?.category == Notification.CATEGORY_TRANSPORT) {
+            logger.info("Media notification removed from: ${sbn.packageName}")
+            onMediaAppNotificationRemoved(sbn.packageName)
+        }
+    }
+
+    fun onMediaAppNotificationPosted(packageName: String) {
+        val tracked = mediaStateManager.activePackageName ?: return
+        if (packageName != tracked) return
+
+        // The app re-posted its notification (track change, state update):
+        // cancel any pending clear and re-show if it was previously closed.
+        pendingMediaAppCloseClear?.let {
+            mainHandler.removeCallbacks(it)
+            pendingMediaAppCloseClear = null
+        }
+
+        if (mediaAppClosed) {
+            logger.info("Media app posted a notification again. Show notification")
+            mediaAppClosed = false
+            mediaStateManager.getUpdatedMusicState()?.let { updateNotification(it) }
+        }
+    }
+
+    fun onMediaAppNotificationRemoved(packageName: String) {
+        if (!storageHelper.hideNotificationOnAppClose) return
+
+        val tracked = mediaStateManager.activePackageName ?: return
+        if (packageName != tracked) return
+
+        // The media app's notification was removed (app closed/killed). Give the
+        // app a short window to re-post it (track changes) before clearing.
+        pendingMediaAppCloseClear?.let { mainHandler.removeCallbacks(it) }
+        pendingMediaAppCloseClear = Runnable {
+            logger.info("Media app was closed. Clear notification")
+            pendingMediaAppCloseClear = null
+            mediaAppClosed = true
+            onCancelNotification()
+        }.also {
+            mainHandler.postDelayed(it, MEDIA_NOTIFICATION_REMOVED_GRACE_MS)
         }
     }
 
@@ -165,10 +250,16 @@ class NotificationViewModel(
     private fun updateNotification(musicState: MusicState) {
         if (musicState.isPlaying) {
             isNotificationDismissed = false
+            mediaAppClosed = false
         }
 
         if (isNotificationDismissed) {
             logger.info("Notification is dismissed")
+            return
+        }
+
+        if (mediaAppClosed) {
+            logger.info("Media app is closed")
             return
         }
 
