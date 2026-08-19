@@ -23,9 +23,17 @@ class MediaNotificationListenerService : NotificationListenerService() {
         viewModel = NotificationViewModel(
             application = application,
             onShowNotification = { notification ->
-                notificationManager.notify(NOTIFICATION_ID, notification)
+                // Keep the process alive while the media notification is
+                // showing: Samsung kills "empty" processes regularly, which
+                // would stop the session poll and the recents detection.
+                try {
+                    startForeground(NOTIFICATION_ID, notification)
+                } catch (e: Exception) {
+                    logger.e("Cannot start foreground service", e)
+                }
             },
             onCancelNotification = {
+                stopForeground(STOP_FOREGROUND_REMOVE)
                 notificationManager.cancel(NOTIFICATION_ID)
             }
         )

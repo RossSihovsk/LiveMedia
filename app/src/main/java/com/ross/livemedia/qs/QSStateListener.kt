@@ -13,6 +13,7 @@ private const val TAG = "SystemUiStateService"
 
 private const val MIN_SCAN_INTERVAL_MS = 250L
 private const val CARD_GONE_DEBOUNCE_MS = 500L
+private const val RECENTS_SCAN_INTERVAL_MS = 500L
 
 class QSStateListener : AccessibilityService() {
 
@@ -22,8 +23,26 @@ class QSStateListener : AccessibilityService() {
     private var closeReported = false
     private var lastScanAt = 0L
     private var pendingCloseCheck: Runnable? = null
+    private var recentsGeneration = 0L
+    private var recentsCardWasPresent = false
 
     private val mainHandler = Handler(Looper.getMainLooper())
+
+    private val recentsScanRunnable = object : Runnable {
+        override fun run() {
+            val generation = recentsGeneration
+            if (!isRecentsOpen || generation != recentsGeneration) return
+            // The tree walk talks to the accessibility framework over Binder and
+            // can throw (e.g. while the event stream is stalled). Never let an
+            // exception kill the loop: the reschedule must always happen.
+            try {
+                scanForMediaAppCard()
+            } catch (e: Exception) {
+                Log.w(TAG, "Recents scan failed", e)
+            }
+            mainHandler.postDelayed(this, RECENTS_SCAN_INTERVAL_MS)
+        }
+    }
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -33,21 +52,28 @@ class QSStateListener : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
 
-        when (event.eventType) {
-            AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
-                updateQsState()
-                handleWindowStateChanged(event)
+        try {
+            when (event.eventType) {
+                AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
+                    updateQsState()
+                    handleWindowStateChanged(event)
+                }
+                AccessibilityEvent.TYPE_WINDOWS_CHANGED -> {
+                    updateQsState()
+                    handleWindowsChanged(event)
+                }
+                AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
+                    handleContentChanged(event)
+                }
+                AccessibilityEvent.TYPE_VIEW_CLICKED -> {
+                    handleViewClicked(event)
+                }
             }
-            AccessibilityEvent.TYPE_WINDOWS_CHANGED -> {
-                updateQsState()
-                handleWindowsChanged(event)
-            }
-            AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
-                handleContentChanged(event)
-            }
-            AccessibilityEvent.TYPE_VIEW_CLICKED -> {
-                handleViewClicked(event)
-            }
+        } catch (e: Exception) {
+            // The tree walks talk to the accessibility framework over Binder and
+            // can throw while the event stream is stalled; never crash the
+            // service because of it.
+            Log.w(TAG, "Event handling failed", e)
         }
     }
 
@@ -87,11 +113,33 @@ class QSStateListener : AccessibilityService() {
         val tracked = MediaAppRecentsProvider.trackedPackage
 
         if (className.contains("Recents", ignoreCase = true)) {
+            Log.i(TAG, "Recents opened pkg=$packageName")
             isRecentsOpen = true
             recentsPackage = packageName
-            cardVisible = false
             closeReported = false
-            scanForMediaAppCard()
+            recentsGeneration++
+            mainHandler.removeCallbacks(recentsScanRunnable)
+
+            // Baseline for the real-time swipe detection and the late fallback.
+            // The first scan also fires the fallback: if the tracked app's card
+            // was present in the previous recents session but is gone now, it
+            // was closed from recents (Samsung sometimes never delivers the
+            // card-removal events, so the card can only be missed on the next
+            // visit to the recents screen).
+            val wasPresent = recentsCardWasPresent
+            val appLabel = tracked?.let { resolveAppLabel(it) }
+            val isPresent = appLabel?.let { isMediaAppCardVisible(it) } ?: false
+            recentsCardWasPresent = isPresent
+            cardVisible = isPresent
+            if (wasPresent && !isPresent) {
+                val closedPackage = tracked
+                if (closedPackage != null) {
+                    Log.i(TAG, "Media app card no longer in recents: $closedPackage")
+                    MediaAppRecentsProvider.onMediaAppClosedFromRecents(closedPackage)
+                }
+            }
+
+            mainHandler.postDelayed(recentsScanRunnable, RECENTS_SCAN_INTERVAL_MS)
             return
         }
 
@@ -113,13 +161,12 @@ class QSStateListener : AccessibilityService() {
     private fun handleWindowsChanged(event: AccessibilityEvent) {
         if (!isRecentsOpen) return
 
-        // The recents window may disappear without a state change to a
-        // non-recents window (e.g. quick gesture dismiss).
-        val recentsWindowStillPresent = windows.any { window ->
-            window.root?.packageName?.toString() == recentsPackage
-        }
-        if (!recentsWindowStillPresent) {
-            resetRecentsState()
+        // Samsung does not always emit content-changed events when a card is
+        // swiped away, so scan on window changes too. Do NOT reset the recents
+        // state here: the a11y window list is incomplete during transitions and
+        // the recents window only truly closes on a state change away from it.
+        if (windows.any { window -> window.root?.packageName?.toString() == recentsPackage }) {
+            scanForMediaAppCard()
         }
     }
 
@@ -136,19 +183,34 @@ class QSStateListener : AccessibilityService() {
 
         val tracked = MediaAppRecentsProvider.trackedPackage ?: return
         val label = resolveAppLabel(tracked) ?: return
-
-        val visible = isMediaAppCardVisible(label)
+        // The recents window must be fully rendered to tell a real card removal
+        // (swipe / close-all) apart from a teardown: while the window closes,
+        // the a11y tree still exposes a root, but its content (task cards, the
+        // "N active apps" counter, the Close all button) is already detached.
+        val recentsWindowValid = windows.any { window ->
+            val root = window.root
+            root != null &&
+                root.packageName?.toString() == recentsPackage &&
+                recentsStructureIntact(root)
+        }
+        val visible = recentsWindowValid && isMediaAppCardVisible(label)
         if (visible) {
+            if (!cardVisible) Log.i(TAG, "Media app card visible: $tracked")
             cardVisible = true
             pendingCloseCheck?.let { mainHandler.removeCallbacks(it) }
             pendingCloseCheck = null
-        } else if (cardVisible && !closeReported) {
-            // The card disappeared while the recents window was still open
-            // (swiped away or "Close all"). Debounce to ignore scroll flicks.
+        } else if (cardVisible && !closeReported && recentsWindowValid) {
+            // The card left the tree while the recents window was still fully
+            // present (swiped away or "Close all"). Debounce to ignore scroll
+            // flicks. A disappearing window (root gone, recents closing) is NOT
+            // treated as a card removal: it fires the reset path instead.
+            Log.i(TAG, "Media app card disappeared: $tracked")
             pendingCloseCheck?.let { mainHandler.removeCallbacks(it) }
             val closeCheck = Runnable {
                 pendingCloseCheck = null
-                if (!isRecentsOpen) return@Runnable
+                // Note: do not require the recents window to still be open here.
+                // The recents may close right after the swipe, but the card is
+                // genuinely gone, so the disappearance still stands.
                 val stillGone = !isMediaAppCardVisible(label)
                 if (stillGone && !closeReported) {
                     closeReported = true
@@ -184,9 +246,31 @@ class QSStateListener : AccessibilityService() {
         return false
     }
 
+    private fun recentsStructureIntact(root: AccessibilityNodeInfo): Boolean {
+        if (findNodeWithText(root, "Close all")) return true
+        return findNodeMatchingText(root) { text -> TASK_COUNTER_REGEX.matches(text) }
+    }
+
+    private fun findNodeMatchingText(
+        node: AccessibilityNodeInfo?,
+        predicate: (String) -> Boolean
+    ): Boolean {
+        if (node == null) return false
+        val text = node.text?.toString()
+        if (text != null && predicate(text)) return true
+        for (i in 0 until node.childCount) {
+            if (findNodeMatchingText(node.getChild(i), predicate)) return true
+        }
+        return false
+    }
+
     private fun resetRecentsState() {
-        pendingCloseCheck?.let { mainHandler.removeCallbacks(it) }
-        pendingCloseCheck = null
+        // Do NOT cancel pendingCloseCheck here: a card swipe is often followed
+        // by the recents screen closing within the debounce window. The pending
+        // re-check only fires when the card is actually gone, so letting it run
+        // after the recents closed is safe (it just re-scans the window list).
+        mainHandler.removeCallbacks(recentsScanRunnable)
+        recentsGeneration++
         isRecentsOpen = false
         recentsPackage = null
         cardVisible = false
@@ -242,5 +326,6 @@ class QSStateListener : AccessibilityService() {
 
     companion object {
         private const val SYSTEM_UI_PACKAGE = "com.android.systemui"
+        private val TASK_COUNTER_REGEX = Regex("\\d+ active apps?")
     }
 }
