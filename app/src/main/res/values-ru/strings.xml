@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">Отслеживает события быстрых настроек</string>
+
+    <!-- Экран настроек -->
+    <string name="settings_title">Настройки</string>
+
+    <!-- Заголовки разделов -->
+    <string name="section_notification_body">Содержимое уведомления</string>
+    <string name="section_status_bar_pill">Капсула в строке состояния</string>
+
+    <!-- Настройки содержимого уведомления -->
+    <string name="setting_show_album_art">Показывать обложку альбома</string>
+    <string name="setting_show_album_art_desc">Отображать обложку альбома в уведомлении.</string>
+
+    <string name="setting_show_artist_name">Показывать имя исполнителя</string>
+    <string name="setting_show_artist_name_desc">Отображать имя исполнителя под названием трека.</string>
+
+    <string name="setting_show_album_name">Показывать название альбома</string>
+    <string name="setting_show_album_name_desc">Отображать название альбома в деталях уведомления.</string>
+
+    <string name="setting_show_action_buttons">Показывать кнопки действий</string>
+    <string name="setting_show_action_buttons_desc">Добавить элементы управления, такие как Воспроизведение/Пауза, Следующий и Предыдущий трек.</string>
+
+    <string name="setting_show_progress">Показывать прогресс</string>
+    <string name="setting_show_progress_desc">Показывать прогресс воспроизведения песни</string>
+
+    <string name="setting_show_music_provider">Показывать название музыкального приложения</string>
+    <string name="setting_show_music_provider_desc">Отображать используемое музыкальное приложение (Spotify/YT Music и т. д.)</string>
+
+    <string name="setting_show_timestamp">Показывать время</string>
+    <string name="setting_show_timestamp_desc">Показывать прошедшее время и общую продолжительность в плеере.</string>
+
+    <string name="setting_hide_on_qs">Скрывать в быстрых настройках</string>
+    <string name="setting_hide_on_qs_desc">Скрывать медиа-уведомление при открытии панели быстрых настроек или шторки уведомлений. Требуется разрешение на использование спец. возможностей.</string>
+
+    <!-- Настройки капсулы в строке состояния -->
+    <string name="pill_option_title">Название песни</string>
+    <string name="pill_option_title_desc">Показывать название трека в капсуле строки состояния</string>
+    <string name="setting_scroll_text">Прокрутка названия трека</string>
+    <string name="setting_scroll_text_desc">Анимировать название трека, если оно длиннее 7 символов</string>
+
+    <string name="pill_option_elapsed">Прошедшее время</string>
+    <string name="pill_option_elapsed_desc">Показывать текущую позицию воспроизведения. Название все равно будет отображаться, когда музыка на паузе</string>
+
+    <string name="pill_option_remaining">Оставшееся время</string>
+    <string name="pill_option_remaining_desc">Показывать время, оставшееся до конца песни. Название все равно будет отображаться, когда музыка на паузе</string>
+
+    <!-- Экран разрешений -->
+    <string name="permission_notification_listener_title">Требуется доступ к уведомлениям</string>
+    <string name="permission_notification_listener_desc">Этому приложению требуется доступ к уведомлениям для отслеживания воспроизведения медиа и создания динамического виджета. Пожалуйста, предоставьте разрешение в настройках системы.</string>
+    <string name="permission_notification_listener_button">Предоставить доступ к уведомлениям</string>
+
+    <string name="permission_post_notification_title">Требуется разрешение на отправку уведомлений</string>
+    <string name="permission_post_notification_desc">Этому приложению требуется разрешение на отправку уведомлений для отображения элементов управления медиа.</string>
+    <string name="permission_post_notification_button">Разрешить отправку уведомлений</string>
+
+    <string name="permission_accessibility_title">Требуется доступ к специальным возможностям</string>
+    <string name="permission_accessibility_desc">Этому приложению требуется доступ к специальным возможностям для отслеживания открытия быстрых настроек. Пожалуйста, предоставьте разрешение в настройках системы.</string>
+    <string name="permission_accessibility_button">Разрешить специальные возможности</string>
+    <string name="permission_skip_button">Пропустить</string>
+
+    <string name="permission_all_granted">Все разрешения предоставлены!</string>
+
+    <!-- Экран выбора приложений -->
+    <string name="section_app_selection">Управление приложениями</string>
+    <string name="setting_app_selection">Выбрать приложения</string>
+    <string name="setting_app_selection_desc">Выберите, с какими приложениями должно работать Live Media.</string>
+    <string name="app_selection_title">Выбрать приложения</string>
+    <string name="app_selection_enable_all">Включить все</string>
+    <string name="app_selection_disable_all">Отключить все</string>
+</resources>
