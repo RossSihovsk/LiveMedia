@@ -62,6 +62,7 @@ fun SettingsScreen(
         remember { mutableStateOf(storageHelper.hideNotificationOnQsOpen) }
     val pillContent = remember { mutableStateOf(storageHelper.pillContent) }
     val isScrollEnabled = remember { mutableStateOf(storageHelper.isScrollEnabled) }
+    val hideNotificationOnPause = remember { mutableStateOf(storageHelper.hideNotificationOnPause) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -154,6 +155,16 @@ fun SettingsScreen(
                         hideNotificationOnQsOpen.value = isChecked
                         storageHelper.hideNotificationOnQsOpen = isChecked
                     }
+                }
+            )
+
+            SettingToggle(
+                label = stringResource(R.string.setting_hide_on_pause),
+                description = stringResource(R.string.setting_hide_on_pause_desc),
+                checkedState = hideNotificationOnPause,
+                onCheckedChange = { isChecked ->
+                    hideNotificationOnPause.value = isChecked
+                    storageHelper.hideNotificationOnPause = isChecked
                 }
             )
 

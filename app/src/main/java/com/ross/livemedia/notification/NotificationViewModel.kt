@@ -155,7 +155,11 @@ class NotificationViewModel(
             return
         }
 
-        if (!lockScreenManager.isScreenUnlocked() || (isQsOpen && storageHelper.hideNotificationOnQsOpen) || !storageHelper.isAppEnabled(musicState.packageName)) {
+        val shouldHideOnPause = !musicState.isPlaying && storageHelper.hideNotificationOnPause
+
+
+        if (!lockScreenManager.isScreenUnlocked() || (isQsOpen && storageHelper.hideNotificationOnQsOpen) || !storageHelper.isAppEnabled(musicState.packageName) ||
+            shouldHideOnPause) {
             onCancelNotification()
             return
         }
