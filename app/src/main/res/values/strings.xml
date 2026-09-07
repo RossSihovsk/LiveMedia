@@ -69,4 +69,6 @@
     <string name="app_selection_title">Select Apps</string>
     <string name="app_selection_enable_all">Enable All</string>
     <string name="app_selection_disable_all">Disable All</string>
+    <string name="setting_hide_on_pause">Hide on pause</string>
+    <string name="setting_hide_on_pause_desc">Autohide notification if playback is stopped or on pause.</string>
 </resources>
