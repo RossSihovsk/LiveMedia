@@ -33,7 +33,14 @@
     
     <string name="setting_hide_on_qs">Masquer sur Paramètres rapides</string>
     <string name="setting_hide_on_qs_desc">Masquer la notification média lorsque les Paramètres rapides ou l\'ombre de notification sont ouverts. La permission d\'accessibilité est requise.</string>
-    
+
+    <string name="setting_hide_on_pause">Masquer lors de la pause</string>
+    <string name="setting_hide_on_pause_desc">Masquer automatiquement la notification lorsque la lecture est en pause.</string>
+    <string name="setting_hide_on_pause_immediately">Masquer immédiatement</string>
+    <string name="setting_hide_on_pause_immediately_desc">Masquer la notification dès que la lecture est mise en pause</string>
+    <string name="setting_hide_on_pause_1min">Masquer dans 1 min</string>
+    <string name="setting_hide_on_pause_1min_desc">Masquer la notification 1 minute après la mise en pause de la lecture</string>
+
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Titre de la chanson</string>
     <string name="pill_option_title_desc">Afficher les 7 premières lettres du titre de la piste</string>

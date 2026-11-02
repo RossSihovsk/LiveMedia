@@ -33,7 +33,14 @@
     
     <string name="setting_hide_on_qs">Ocultar en configuración rápida</string>
     <string name="setting_hide_on_qs_desc">Ocultar la notificación multimedia cuando se abran la Configuración rápida o el Panel de notificaciones. Se requiere permiso de accesibilidad.</string>
-    
+
+    <string name="setting_hide_on_pause">Ocultar en pausa</string>
+    <string name="setting_hide_on_pause_desc">Ocultar automáticamente la notificación cuando la reproducción esté en pausa.</string>
+    <string name="setting_hide_on_pause_immediately">Ocultar inmediatamente</string>
+    <string name="setting_hide_on_pause_immediately_desc">Ocultar la notificación tan pronto como se pause la reproducción</string>
+    <string name="setting_hide_on_pause_1min">Ocultar en 1 min</string>
+    <string name="setting_hide_on_pause_1min_desc">Ocultar la notificación 1 minuto después de pausar la reproducción</string>
+
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Título de la canción</string>
     <string name="pill_option_title_desc">Mostrar las primeras 7 letras del título de la pista</string>

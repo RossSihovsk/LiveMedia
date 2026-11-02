@@ -33,7 +33,14 @@
     
     <string name="setting_hide_on_qs">在快速设置时隐藏</string>
     <string name="setting_hide_on_qs_desc">打开快速设置或通知栏时隐藏媒体通知。需要辅助功能权限。</string>
-    
+
+    <string name="setting_hide_on_pause">暂停时隐藏</string>
+    <string name="setting_hide_on_pause_desc">暂停播放时自动隐藏通知。</string>
+    <string name="setting_hide_on_pause_immediately">立即隐藏</string>
+    <string name="setting_hide_on_pause_immediately_desc">暂停播放后立即消除通知</string>
+    <string name="setting_hide_on_pause_1min">1分钟后隐藏</string>
+    <string name="setting_hide_on_pause_1min_desc">暂停播放1分钟后消除通知</string>
+
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">歌曲标题</string>
     <string name="pill_option_title_desc">显示曲目标题的前7个字母</string>
