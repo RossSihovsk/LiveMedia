@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">LiveMedia</string>
+    <string name="accessibility_service_description">Mendeteksi aktivitas Setelan Cepat</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">Setelan</string>
+    
+    <!-- Section Headers -->
+    <string name="section_notification_body">Isi Notifikasi</string>
+    <string name="section_status_bar_pill">Pill Bilah Status</string>
+    
+    <!-- Notification Body Settings -->
+    <string name="setting_show_album_art">Tampilkan Sampul Album</string>
+    <string name="setting_show_album_art_desc">Menampilkan gambar sampul album di dalam notifikasi.</string>
+    
+    <string name="setting_show_artist_name">Tampilkan Nama Artis</string>
+    <string name="setting_show_artist_name_desc">Menyertakan nama artis di bawah judul lagu.</string>
+    
+    <string name="setting_show_album_name">Tampilkan Nama Album</string>
+    <string name="setting_show_album_name_desc">Menampilkan nama album pada detail notifikasi.</string>
+    
+    <string name="setting_show_action_buttons">Tampilkan Tombol Kontrol</string>
+    <string name="setting_show_action_buttons_desc">Menyertakan tombol kontrol seperti Putar/Jeda, Berikutnya, dan Sebelumnya.</string>
+    
+    <string name="setting_show_progress">Tampilkan Progres</string>
+    <string name="setting_show_progress_desc">Menampilkan progres lagu</string>
+    
+    <string name="setting_show_music_provider">Tampilkan nama aplikasi penyedia musik</string>
+    <string name="setting_show_music_provider_desc">Akan menampilkan aplikasi musik apa yang sedang Anda gunakan (Spotify/YT Music, dll…)</string>
+    
+    <string name="setting_show_timestamp">Tampilkan penanda waktu</string>
+    <string name="setting_show_timestamp_desc">Menampilkan waktu yang telah berlalu dan durasi total pada pemutar.</string>
+    
+    <string name="setting_hide_on_qs">Sembunyikan di Setelan Cepat</string>
+    <string name="setting_hide_on_qs_desc">Menyembunyikan notifikasi media saat Setelan Cepat atau Jendela Notifikasi dibuka. Diperlukan izin Aksesibilitas.</string>
+    
+    <!-- Status Bar Pill Options -->
+    <string name="pill_option_title">Judul Lagu</string>
+    <string name="pill_option_title_desc">Menampilkan judul lagu pada pill bilah status</string>
+    <string name="setting_scroll_text">Gulirkan judul lagu</string>
+    <string name="setting_scroll_text_desc">Menggulirkan teks judul lagu jika panjangnya melebihi 7 karakter</string>
+    
+    <string name="pill_option_elapsed">Waktu Berjalan</string>
+    <string name="pill_option_elapsed_desc">Menampilkan posisi pemutaran saat ini. Judul lagu akan tetap ditampilkan saat musik dijeda</string>
+    
+    <string name="pill_option_remaining">Sisa Waktu</string>
+    <string name="pill_option_remaining_desc">Menampilkan sisa waktu lagu. Judul lagu akan tetap ditampilkan saat musik dijeda</string>
+    
+    <!-- Permission Screen -->
+    <string name="permission_notification_listener_title">Diperlukan Izin Akses Notifikasi</string>
+    <string name="permission_notification_listener_desc">Aplikasi ini memerlukan Akses Notifikasi untuk mendeteksi pemutaran media dan membuat pembaruan langsung. Silakan berikan izin di setelan sistem.</string>
+    <string name="permission_notification_listener_button">Berikan Izin Akses Notifikasi</string>
+    
+    <string name="permission_post_notification_title">Diperlukan Izin Mengirim Notifikasi</string>
+    <string name="permission_post_notification_desc">Aplikasi ini memerlukan izin untuk mengirim notifikasi agar dapat menampilkan kontrol media.</string>
+    <string name="permission_post_notification_button">Berikan Izin Mengirim Notifikasi</string>
+    
+    <string name="permission_accessibility_title">Diperlukan Izin Aksesibilitas</string>
+    <string name="permission_accessibility_desc">Aplikasi ini memerlukan Akses Aksesibilitas untuk mendeteksi saat Setelan Cepat dibuka. Silakan berikan izin di setelan sistem.</string>
+    <string name="permission_accessibility_button">Berikan Izin Aksesibilitas</string>
+    <string name="permission_skip_button">Lewati</string>
+    
+    <string name="permission_all_granted">Semua Izin Telah Diberikan!</string>
+
+    <!-- App Selection Screen -->
+    <string name="section_app_selection">Kontrol Aplikasi</string>
+    <string name="setting_app_selection">Pilih Aplikasi</string>
+    <string name="setting_app_selection_desc">Pilih aplikasi mana saja yang dapat berjalan dengan Live Media.</string>
+    <string name="app_selection_title">Pilih Aplikasi</string>
+    <string name="app_selection_enable_all">Aktifkan Semua</string>
+    <string name="app_selection_disable_all">Nonaktifkan Semua</string>
+</resources>
