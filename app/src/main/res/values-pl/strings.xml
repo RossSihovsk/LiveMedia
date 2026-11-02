@@ -33,7 +33,14 @@
     
     <string name="setting_hide_on_qs">Ukryj w szybkich ustawieniach</string>
     <string name="setting_hide_on_qs_desc">Ukryj powiadomienie multimedialne, gdy otwarte są szybkie ustawienia lub panel powiadomień. Wymagane jest uprawnienie dostępności.</string>
-    
+
+    <string name="setting_hide_on_pause">Ukryj po wstrzymaniu</string>
+    <string name="setting_hide_on_pause_desc">Automatycznie ukrywaj powiadomienie, gdy odtwarzanie zostanie wstrzymane.</string>
+    <string name="setting_hide_on_pause_immediately">Ukryj natychmiast</string>
+    <string name="setting_hide_on_pause_immediately_desc">Usuń powiadomienie natychmiast po wstrzymaniu odtwarzania</string>
+    <string name="setting_hide_on_pause_1min">Ukryj po 1 minucie</string>
+    <string name="setting_hide_on_pause_1min_desc">Usuń powiadomienie po 1 minucie od wstrzymania odtwarzania</string>
+
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Tytuł utworu</string>
     <string name="pill_option_title_desc">Pokaż pierwsze 7 liter tytułu utworu</string>

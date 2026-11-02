@@ -68,5 +68,11 @@
     <string name="app_selection_title">Вибір додатків</string>
     <string name="app_selection_enable_all">Увімкнути всі</string>
     <string name="app_selection_disable_all">Вимкнути всі</string>
+    <string name="setting_hide_on_pause">Приховати на паузі</string>
+    <string name="setting_hide_on_pause_desc">Автоматично приховувати сповіщення, коли відтворення на паузі.</string>
+    <string name="setting_hide_on_pause_immediately">Приховати негайно</string>
+    <string name="setting_hide_on_pause_immediately_desc">Приховувати сповіщення одразу після зупинки відтворення</string>
+    <string name="setting_hide_on_pause_1min">Приховати через 1 хв</string>
+    <string name="setting_hide_on_pause_1min_desc">Приховувати сповіщення через 1 хвилину після паузи</string>
 </resources>
 
