@@ -69,4 +69,10 @@
     <string name="app_selection_title">Pilih Aplikasi</string>
     <string name="app_selection_enable_all">Aktifkan Semua</string>
     <string name="app_selection_disable_all">Nonaktifkan Semua</string>
+    <string name="setting_hide_on_pause">Sembunyikan saat dijeda</string>
+    <string name="setting_hide_on_pause_desc">Sembunyikan notifikasi secara otomatis saat pemutaran dijeda.</string>
+    <string name="setting_hide_on_pause_immediately">Sembunyikan segera</string>
+    <string name="setting_hide_on_pause_immediately_desc">Tutup notifikasi segera setelah pemutaran dijeda</string>
+    <string name="setting_hide_on_pause_1min">Sembunyikan dalam 1 menit</string>
+    <string name="setting_hide_on_pause_1min_desc">Tutup notifikasi 1 menit setelah pemutaran dijeda</string>
 </resources>
