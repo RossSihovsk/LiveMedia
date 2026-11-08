@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import com.ross.livemedia.R
+import com.ross.livemedia.storage.HideOnPauseOption
 import com.ross.livemedia.storage.PillContent
 import com.ross.livemedia.storage.StorageHelper
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -62,6 +63,8 @@ fun SettingsScreen(
         remember { mutableStateOf(storageHelper.hideNotificationOnQsOpen) }
     val pillContent = remember { mutableStateOf(storageHelper.pillContent) }
     val isScrollEnabled = remember { mutableStateOf(storageHelper.isScrollEnabled) }
+    val hideNotificationOnPause = remember { mutableStateOf(storageHelper.hideNotificationOnPause) }
+    val hideOnPauseOption = remember { mutableStateOf(storageHelper.hideOnPauseOption) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -156,6 +159,51 @@ fun SettingsScreen(
                     }
                 }
             )
+
+            SettingToggle(
+                label = stringResource(R.string.setting_hide_on_pause),
+                description = stringResource(R.string.setting_hide_on_pause_desc),
+                checkedState = hideNotificationOnPause,
+                onCheckedChange = { isChecked ->
+                    hideNotificationOnPause.value = isChecked
+                    storageHelper.hideNotificationOnPause = isChecked
+                },
+                showDivider = !hideNotificationOnPause.value
+            )
+
+            AnimatedVisibility(
+                visible = hideNotificationOnPause.value,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Column {
+                    SubOption(
+                        label = stringResource(R.string.setting_hide_on_pause_immediately),
+                        description = stringResource(R.string.setting_hide_on_pause_immediately_desc),
+                        selected = hideOnPauseOption.value == HideOnPauseOption.IMMEDIATELY,
+                        onClick = {
+                            hideOnPauseOption.value = HideOnPauseOption.IMMEDIATELY
+                            storageHelper.hideOnPauseOption = HideOnPauseOption.IMMEDIATELY
+                        }
+                    )
+
+                    SubOption(
+                        label = stringResource(R.string.setting_hide_on_pause_1min),
+                        description = stringResource(R.string.setting_hide_on_pause_1min_desc),
+                        selected = hideOnPauseOption.value == HideOnPauseOption.ONE_MINUTE,
+                        onClick = {
+                            hideOnPauseOption.value = HideOnPauseOption.ONE_MINUTE
+                            storageHelper.hideOnPauseOption = HideOnPauseOption.ONE_MINUTE
+                        }
+                    )
+
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = 0.dp),
+                        thickness = 1.dp,
+                        color = Color(0xFF333333)
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.padding(top = 24.dp))
             SectionHeader(stringResource(R.string.section_status_bar_pill))
@@ -253,7 +301,8 @@ fun SettingToggle(
     label: String,
     description: String,
     checkedState: MutableState<Boolean>,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    showDivider: Boolean = true
 ) {
     Row(
         modifier = Modifier
@@ -302,11 +351,64 @@ fun SettingToggle(
         )
     }
 
+    if (showDivider) {
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 0.dp),
+            thickness = 1.dp,
+            color = Color(0xFF333333)
+        )
+    }
+}
+
+@Composable
+fun SubOption(
+    label: String,
+    description: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
     HorizontalDivider(
         modifier = Modifier.padding(horizontal = 0.dp),
         thickness = 1.dp,
         color = Color(0xFF333333)
     )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(start = 16.dp, top = 12.dp, bottom = 12.dp, end = 0.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = label,
+                color = Color.White,
+                fontSize = 16.sp,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.padding(top = 2.dp))
+            Text(
+                text = description,
+                color = Color(0xFFCCCCCC),
+                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
+        RadioButton(
+            selected = selected,
+            onClick = onClick,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = Color.White,
+                unselectedColor = Color(0xFF666666)
+            )
+        )
+    }
 }
 
 @Composable

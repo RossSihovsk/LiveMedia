@@ -23,8 +23,10 @@ import com.ross.livemedia.utils.getAppName
 import com.ross.livemedia.utils.providePillText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import androidx.lifecycle.AndroidViewModel
@@ -32,6 +34,7 @@ import androidx.lifecycle.AndroidViewModel
 
 private const val SCROLL_UPDATE_DELAY_MS = 500L
 private const val STATIC_UPDATE_DELAY_MS = 1000L
+private const val PAUSE_HIDE_DELAY_MS = 60_000L
 private const val CHANNEL_ID = "MediaLiveUpdateChannel"
 
 
@@ -53,6 +56,8 @@ class NotificationViewModel(
     private var lastTitle: String? = null
     private var titleStartTime: Long = 0L
     private var lastIsPlaying: Boolean = false
+    private var pauseHideJob: Job? = null
+    private var isPausedHidden = false
 
     fun init() {
         logger.info("init")
@@ -80,6 +85,9 @@ class NotificationViewModel(
             },
             noActiveMedia = {
                 logger.info("No audio. Disable notification")
+                pauseHideJob?.cancel()
+                pauseHideJob = null
+                isPausedHidden = false
                 onCancelNotification()
             })
 
@@ -148,6 +156,42 @@ class NotificationViewModel(
     private fun updateNotification(musicState: MusicState) {
         if (musicState.isPlaying) {
             isNotificationDismissed = false
+            isPausedHidden = false
+            pauseHideJob?.cancel()
+            pauseHideJob = null
+        } else {
+            if (storageHelper.hideNotificationOnPause) {
+                when (storageHelper.hideOnPauseOption) {
+                    com.ross.livemedia.storage.HideOnPauseOption.IMMEDIATELY -> {
+                        pauseHideJob?.cancel()
+                        pauseHideJob = null
+                        isPausedHidden = false
+                        onCancelNotification()
+                        return
+                    }
+                    com.ross.livemedia.storage.HideOnPauseOption.ONE_MINUTE -> {
+                        if (isPausedHidden) {
+                            logger.info("Notification is hidden due to pause delay")
+                            onCancelNotification()
+                            return
+                        }
+
+                        if (pauseHideJob == null || pauseHideJob?.isActive != true) {
+                            logger.info("Scheduling notification hide on pause in 1 minute")
+                            pauseHideJob = scope.launch {
+                                delay(PAUSE_HIDE_DELAY_MS)
+                                logger.info("1 minute pause timeout reached. Hiding notification")
+                                isPausedHidden = true
+                                onCancelNotification()
+                            }
+                        }
+                    }
+                }
+            } else {
+                isPausedHidden = false
+                pauseHideJob?.cancel()
+                pauseHideJob = null
+            }
         }
 
         if (isNotificationDismissed) {
@@ -155,7 +199,10 @@ class NotificationViewModel(
             return
         }
 
-        if (!lockScreenManager.isScreenUnlocked() || (isQsOpen && storageHelper.hideNotificationOnQsOpen) || !storageHelper.isAppEnabled(musicState.packageName)) {
+        if (!lockScreenManager.isScreenUnlocked() ||
+            (isQsOpen && storageHelper.hideNotificationOnQsOpen) ||
+            !storageHelper.isAppEnabled(musicState.packageName)
+        ) {
             onCancelNotification()
             return
         }
@@ -163,11 +210,6 @@ class NotificationViewModel(
         // Launch on background thread (IO) to handle image loading
         scope.launch(Dispatchers.IO) {
             val notification = buildNotification(musicState)
-            // Dispatch to main thread done by scope (Main) but callback might be called from IO if not careful?
-            // Wait, scope is Main. launch(IO) runs block on IO.
-            // We need to switch back to Main for callback? 
-            // Usually notify is thread safe, but let's be safe if UI operations are involved on consumer side.
-            // But Service.notify IS thread safe.
             onShowNotification(notification)
         }
     }

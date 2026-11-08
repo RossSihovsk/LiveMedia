@@ -33,7 +33,14 @@
     
     <string name="setting_hide_on_qs">त्वरित सेटिंग्स पर छिपाएं</string>
     <string name="setting_hide_on_qs_desc">त्वरित सेटिंग्स या सूचना शेड खोले जाने पर मीडिया सूचना छिपाएं। पहुंच-योग्यता अनुमति आवश्यक है।</string>
-    
+
+    <string name="setting_hide_on_pause">पॉज़ करने पर छिपाएं</string>
+    <string name="setting_hide_on_pause_desc">प्लेबैक पॉज़ होने पर स्वचालित रूप से सूचना छिपाएं।</string>
+    <string name="setting_hide_on_pause_immediately">तुरंत छिपाएं</string>
+    <string name="setting_hide_on_pause_immediately_desc">प्लेबैक पॉज़ होते ही सूचना हटाएं</string>
+    <string name="setting_hide_on_pause_1min">1 मिनट में छिपाएं</string>
+    <string name="setting_hide_on_pause_1min_desc">प्लेबैक पॉज़ होने के 1 मिनट बाद सूचना हटाएं</string>
+
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">गाने का शीर्षक</string>
     <string name="pill_option_title_desc">ट्रैक शीर्षक के पहले 7 अक्षर दिखाएं</string>

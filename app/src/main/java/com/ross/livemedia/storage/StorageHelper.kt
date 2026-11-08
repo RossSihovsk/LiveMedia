@@ -8,6 +8,10 @@ enum class PillContent {
     TITLE, ELAPSED, REMAINING
 }
 
+enum class HideOnPauseOption {
+    IMMEDIATELY, ONE_MINUTE
+}
+
 class StorageHelper(context: Context) {
     private val preferences: SharedPreferences =
         context.getSharedPreferences("NotificationPrefs", Context.MODE_PRIVATE)
@@ -60,6 +64,17 @@ class StorageHelper(context: Context) {
         get() = preferences.getBoolean(KEY_SCROLL_ENABLED, false)
         set(value) = preferences.edit { putBoolean(KEY_SCROLL_ENABLED, value) }
 
+    var hideNotificationOnPause: Boolean
+        get() = preferences.getBoolean(KEY_HIDE_NOTIFICATION_ON_PAUSE, false)
+        set(value) = preferences.edit { putBoolean(KEY_HIDE_NOTIFICATION_ON_PAUSE, value) }
+
+    var hideOnPauseOption: HideOnPauseOption
+        get() = HideOnPauseOption.valueOf(
+            preferences.getString(KEY_HIDE_ON_PAUSE_OPTION, HideOnPauseOption.IMMEDIATELY.name)
+                ?: HideOnPauseOption.IMMEDIATELY.name
+        )
+        set(value) = preferences.edit { putString(KEY_HIDE_ON_PAUSE_OPTION, value.name) }
+
     var disabledPackages: Set<String>
         get() = preferences.getStringSet(KEY_DISABLED_PACKAGES, emptySet()) ?: emptySet()
         set(value) = preferences.edit { putStringSet(KEY_DISABLED_PACKAGES, value) }
@@ -99,6 +114,8 @@ class StorageHelper(context: Context) {
         private const val KEY_ACCESSIBILITY_PERMISSION_SKIPPED = "accessibility_permission_skipped"
         private const val KEY_PILL_CONTENT = "pill_content"
         private const val KEY_SCROLL_ENABLED = "is_scroll_enabled"
+        private const val KEY_HIDE_NOTIFICATION_ON_PAUSE = "hide_notification_on_pause"
+        private const val KEY_HIDE_ON_PAUSE_OPTION = "hide_on_pause_option"
         private const val KEY_DISABLED_PACKAGES = "disabled_packages"
         private const val DEFAULT_VALUE = true
     }

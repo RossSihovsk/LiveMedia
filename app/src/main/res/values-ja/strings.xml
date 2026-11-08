@@ -33,7 +33,14 @@
     
     <string name="setting_hide_on_qs">クイック設定で非表示</string>
     <string name="setting_hide_on_qs_desc">クイック設定または通知シェードが開いているときにメディア通知を非表示にします。アクセシビリティ権限が必要です。</string>
-    
+
+    <string name="setting_hide_on_pause">一時停止時に非表示</string>
+    <string name="setting_hide_on_pause_desc">再生が一時停止したときに自動的に通知を非表示にします。</string>
+    <string name="setting_hide_on_pause_immediately">すぐに非表示</string>
+    <string name="setting_hide_on_pause_immediately_desc">再生が一時停止されるとすぐに通知を消去します</string>
+    <string name="setting_hide_on_pause_1min">1分後に非表示</string>
+    <string name="setting_hide_on_pause_1min_desc">再生が一時停止されてから1分後に通知を消去します</string>
+
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">曲のタイトル</string>
     <string name="pill_option_title_desc">トラックタイトルの最初の7文字を表示します</string>

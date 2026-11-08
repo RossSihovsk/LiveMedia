@@ -33,7 +33,14 @@
     
     <string name="setting_hide_on_qs">Bei Schnelleinstellungen ausblenden</string>
     <string name="setting_hide_on_qs_desc">Die Medienbenachrichtigung ausblenden, wenn Schnelleinstellungen oder Benachrichtigungsleiste geöffnet sind. Bedienungshilfen-Berechtigung ist erforderlich.</string>
-    
+
+    <string name="setting_hide_on_pause">Bei Pause ausblenden</string>
+    <string name="setting_hide_on_pause_desc">Benachrichtigung automatisch ausblenden, wenn die Wiedergabe pausiert wird.</string>
+    <string name="setting_hide_on_pause_immediately">Sofort ausblenden</string>
+    <string name="setting_hide_on_pause_immediately_desc">Benachrichtigung sofort nach dem Pausieren der Wiedergabe ausblenden</string>
+    <string name="setting_hide_on_pause_1min">Nach 1 Min. ausblenden</string>
+    <string name="setting_hide_on_pause_1min_desc">Benachrichtigung 1 Minute nach dem Pausieren der Wiedergabe ausblenden</string>
+
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Songtitel</string>
     <string name="pill_option_title_desc">Die ersten 7 Buchstaben des Titels anzeigen</string>

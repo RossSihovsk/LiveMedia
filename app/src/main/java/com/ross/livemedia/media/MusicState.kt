@@ -47,6 +47,7 @@ data class MusicState(
         if (artist != other.artist) return false
         if (packageName != other.packageName) return false
         if (albumArt != other.albumArt) return false
+        if (isPlaying != other.isPlaying) return false
 
         return true
     }
@@ -55,6 +56,7 @@ data class MusicState(
         var result = title.hashCode()
         result = 31 * result + artist.hashCode()
         result = 31 * result + packageName.hashCode()
+        result = 31 * result + isPlaying.hashCode()
         return result
     }
 
