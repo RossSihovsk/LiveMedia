@@ -41,7 +41,8 @@ private const val CHANNEL_ID = "MediaLiveUpdateChannel"
 class NotificationViewModel(
     application: Application,
     private val onShowNotification: (Notification) -> Unit,
-    private val onCancelNotification: () -> Unit
+    private val onCancelNotification: () -> Unit,
+    private val hasOtherLiveUpdateNotification: () -> Boolean = { false }
 ) : AndroidViewModel(application) {
     private val logger = Logger("NotificationViewModel")
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -58,6 +59,12 @@ class NotificationViewModel(
     private var lastIsPlaying: Boolean = false
     private var pauseHideJob: Job? = null
     private var isPausedHidden = false
+    private var lastShownTitle: String? = null
+    private var lastShownArtist: String? = null
+    private var lastShownIsPlaying: Boolean? = null
+    private var lastShownPackage: String? = null
+    private var lastNotificationShowTime: Long = 0L
+    private var lastOtherLiveUpdateState: Boolean? = null
 
     fun init() {
         logger.info("init")
@@ -72,7 +79,7 @@ class NotificationViewModel(
             deviceUnlocked = {
                 logger.info("Device unlocked. Show notification")
                 mediaStateManager.getUpdatedMusicState()?.let {
-                    updateNotification(it)
+                    updateNotification(it, isEvent = true)
                 }
             })
 
@@ -80,7 +87,7 @@ class NotificationViewModel(
             context,
             onStateUpdated = { state ->
                 logger.info("StateUpdated")
-                updateNotification(state)
+                updateNotification(state, isEvent = true)
                 notificationUpdateScheduler.scheduleUpdate()
             },
             noActiveMedia = {
@@ -126,7 +133,7 @@ class NotificationViewModel(
                     }
                 } else if (wasOpen) {
                     mediaStateManager.getUpdatedMusicState()?.let {
-                        updateNotification(it)
+                        updateNotification(it, isEvent = true)
                     }
                 }
             }
@@ -146,6 +153,9 @@ class NotificationViewModel(
 
     fun onTransportControlAction(action: String?) {
         mediaStateManager.handleTransportControl(action)
+        mediaStateManager.getUpdatedMusicState()?.let {
+            updateNotification(it, isEvent = true)
+        }
     }
 
     fun onNotificationDismissed() {
@@ -153,7 +163,32 @@ class NotificationViewModel(
         logger.info("Notification dismissed by user")
     }
 
-    private fun updateNotification(musicState: MusicState) {
+    fun onAnyNotificationChanged() {
+        if (storageHelper.hideNotificationOnOtherLiveUpdate) {
+            val isOtherActive = hasOtherLiveUpdateNotification()
+            if (isOtherActive != lastOtherLiveUpdateState) {
+                lastOtherLiveUpdateState = isOtherActive
+                mediaStateManager.getUpdatedMusicState()?.let {
+                    updateNotification(it, isEvent = true)
+                }
+            }
+        }
+    }
+
+    private fun updateNotification(musicState: MusicState, isEvent: Boolean = false) {
+        val isNewEvent = isEvent ||
+                musicState.title != lastShownTitle ||
+                musicState.artist != lastShownArtist ||
+                musicState.isPlaying != lastShownIsPlaying ||
+                musicState.packageName != lastShownPackage
+
+        val now = System.currentTimeMillis()
+        val minInterval = if (storageHelper.isScrollEnabled) SCROLL_UPDATE_DELAY_MS else STATIC_UPDATE_DELAY_MS
+
+        if (!isNewEvent && (now - lastNotificationShowTime < minInterval)) {
+            return
+        }
+
         if (musicState.isPlaying) {
             isNotificationDismissed = false
             isPausedHidden = false
@@ -201,11 +236,18 @@ class NotificationViewModel(
 
         if (!lockScreenManager.isScreenUnlocked() ||
             (isQsOpen && storageHelper.hideNotificationOnQsOpen) ||
-            !storageHelper.isAppEnabled(musicState.packageName)
+            !storageHelper.isAppEnabled(musicState.packageName) ||
+            (storageHelper.hideNotificationOnOtherLiveUpdate && hasOtherLiveUpdateNotification())
         ) {
             onCancelNotification()
             return
         }
+
+        lastShownTitle = musicState.title
+        lastShownArtist = musicState.artist
+        lastShownIsPlaying = musicState.isPlaying
+        lastShownPackage = musicState.packageName
+        lastNotificationShowTime = now
 
         // Launch on background thread (IO) to handle image loading
         scope.launch(Dispatchers.IO) {

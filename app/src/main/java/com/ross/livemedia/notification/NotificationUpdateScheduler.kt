@@ -13,7 +13,7 @@ class NotificationUpdateScheduler(
     private val updateRunnable = object : Runnable {
         override fun run() {
             val delay = nextDelayProvider()
-            if (delay != null) {
+            if (delay != null && delay > 0) {
                 updateHandler.postDelayed(this, delay)
             } else {
                 logger.info("Runnable stopped.")
@@ -24,8 +24,11 @@ class NotificationUpdateScheduler(
     fun scheduleUpdate() {
         // Cancel any existing run to avoid duplicates
         updateHandler.removeCallbacks(updateRunnable)
-        // Run immediately to update and schedule next
-        updateHandler.post(updateRunnable)
+        // Schedule the next update after the specified delay instead of immediate post
+        val delay = nextDelayProvider()
+        if (delay != null && delay > 0) {
+            updateHandler.postDelayed(updateRunnable, delay)
+        }
     }
 
     fun stop() {

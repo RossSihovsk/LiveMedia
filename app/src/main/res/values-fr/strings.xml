@@ -40,6 +40,8 @@
     <string name="setting_hide_on_pause_immediately_desc">Masquer la notification dès que la lecture est mise en pause</string>
     <string name="setting_hide_on_pause_1min">Masquer dans 1 min</string>
     <string name="setting_hide_on_pause_1min_desc">Masquer la notification 1 minute après la mise en pause de la lecture</string>
+    <string name="setting_hide_on_other_live_update">Masquer si autre Live Update</string>
+    <string name="setting_hide_on_other_live_update_desc">Masquer la notification si une autre application a une notification Live Update active.</string>
 
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Titre de la chanson</string>

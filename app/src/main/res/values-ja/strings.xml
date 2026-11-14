@@ -40,6 +40,8 @@
     <string name="setting_hide_on_pause_immediately_desc">再生が一時停止されるとすぐに通知を消去します</string>
     <string name="setting_hide_on_pause_1min">1分後に非表示</string>
     <string name="setting_hide_on_pause_1min_desc">再生が一時停止されてから1分後に通知を消去します</string>
+    <string name="setting_hide_on_other_live_update">他のライブアップデート時に非表示</string>
+    <string name="setting_hide_on_other_live_update_desc">他のアプリがアクティブなライブアップデート通知を持っている場合、通知を非表示にします。</string>
 
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">曲のタイトル</string>

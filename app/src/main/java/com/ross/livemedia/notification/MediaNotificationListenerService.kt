@@ -1,5 +1,6 @@
 package com.ross.livemedia.notification
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
@@ -27,6 +28,9 @@ class MediaNotificationListenerService : NotificationListenerService() {
             },
             onCancelNotification = {
                 notificationManager.cancel(NOTIFICATION_ID)
+            },
+            hasOtherLiveUpdateNotification = {
+                checkOtherLiveUpdateNotification()
             }
         )
         
@@ -40,6 +44,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         viewModel.onNotificationPosted(sbn)
+        viewModel.onAnyNotificationChanged()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -55,6 +60,36 @@ class MediaNotificationListenerService : NotificationListenerService() {
                 viewModel.onNotificationDismissed()
             }
         }
+        viewModel.onAnyNotificationChanged()
+    }
+
+    private fun checkOtherLiveUpdateNotification(): Boolean {
+        val active = try {
+            activeNotifications
+        } catch (e: Exception) {
+            null
+        }
+        if (active.isNullOrEmpty()) return false
+        val ourPkg = packageName
+        for (sbn in active) {
+            if (sbn.packageName == ourPkg) continue
+            val notification = sbn.notification ?: continue
+            val extras = notification.extras ?: continue
+
+            val isPromotedOngoing = extras.getBoolean("android.requestPromotedOngoing", false) ||
+                    extras.getBoolean("android.promotedOngoing", false) ||
+                    !extras.getCharSequence("android.shortCriticalText").isNullOrEmpty()
+
+            val isOngoingCategory = (notification.flags and Notification.FLAG_ONGOING_EVENT != 0) &&
+                    (notification.category == Notification.CATEGORY_PROGRESS ||
+                     notification.category == Notification.CATEGORY_NAVIGATION ||
+                     notification.category == Notification.CATEGORY_WORKOUT)
+
+            if (isPromotedOngoing || isOngoingCategory) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun createNotificationChannel() {
