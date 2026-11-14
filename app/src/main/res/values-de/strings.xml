@@ -40,6 +40,8 @@
     <string name="setting_hide_on_pause_immediately_desc">Benachrichtigung sofort nach dem Pausieren der Wiedergabe ausblenden</string>
     <string name="setting_hide_on_pause_1min">Nach 1 Min. ausblenden</string>
     <string name="setting_hide_on_pause_1min_desc">Benachrichtigung 1 Minute nach dem Pausieren der Wiedergabe ausblenden</string>
+    <string name="setting_hide_on_other_live_update">Bei anderem Live Update ausblenden</string>
+    <string name="setting_hide_on_other_live_update_desc">Benachrichtigung ausblenden, wenn eine andere App eine aktive Live-Update-Benachrichtigung hat.</string>
 
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Songtitel</string>

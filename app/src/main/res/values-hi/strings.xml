@@ -40,6 +40,8 @@
     <string name="setting_hide_on_pause_immediately_desc">प्लेबैक पॉज़ होते ही सूचना हटाएं</string>
     <string name="setting_hide_on_pause_1min">1 मिनट में छिपाएं</string>
     <string name="setting_hide_on_pause_1min_desc">प्लेबैक पॉज़ होने के 1 मिनट बाद सूचना हटाएं</string>
+    <string name="setting_hide_on_other_live_update">अन्य लाइव अपडेट पर छिपाएं</string>
+    <string name="setting_hide_on_other_live_update_desc">यदि किसी अन्य ऐप में सक्रिय लाइव अपडेट सूचना है तो सूचना छिपाएं।</string>
 
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">गाने का शीर्षक</string>

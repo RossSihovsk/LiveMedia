@@ -74,5 +74,7 @@
     <string name="setting_hide_on_pause_immediately_desc">Приховувати сповіщення одразу після зупинки відтворення</string>
     <string name="setting_hide_on_pause_1min">Приховати через 1 хв</string>
     <string name="setting_hide_on_pause_1min_desc">Приховувати сповіщення через 1 хвилину після паузи</string>
+    <string name="setting_hide_on_other_live_update">Приховати при іншому Live Update</string>
+    <string name="setting_hide_on_other_live_update_desc">Приховувати сповіщення, якщо інший додаток має активне сповіщення Live Update.</string>
 </resources>
 

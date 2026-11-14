@@ -75,4 +75,6 @@
     <string name="setting_hide_on_pause_immediately_desc">Dismiss notification as soon as playback is paused</string>
     <string name="setting_hide_on_pause_1min">Hide in 1 min</string>
     <string name="setting_hide_on_pause_1min_desc">Dismiss notification 1 minute after playback is paused</string>
+    <string name="setting_hide_on_other_live_update">Hide on other Live Update</string>
+    <string name="setting_hide_on_other_live_update_desc">Hide notification if another app has an active Live Update notification.</string>
 </resources>

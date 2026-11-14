@@ -36,6 +36,13 @@ data class MusicState(
         albumName = metadata.getString(MediaMetadata.METADATA_KEY_ALBUM) ?: "Unknown Album",
     )
 
+    private fun isSameBitmap(b1: Bitmap?, b2: Bitmap?): Boolean {
+        if (b1 === b2) return true
+        if (b1 == null || b2 == null) return false
+        if (b1.width != b2.width || b1.height != b2.height || b1.config != b2.config) return false
+        return b1.sameAs(b2)
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
 
@@ -46,8 +53,10 @@ data class MusicState(
         if (title != other.title) return false
         if (artist != other.artist) return false
         if (packageName != other.packageName) return false
-        if (albumArt != other.albumArt) return false
         if (isPlaying != other.isPlaying) return false
+        if (albumArtUri != other.albumArtUri) return false
+        if (albumName != other.albumName) return false
+        if (!isSameBitmap(albumArt, other.albumArt)) return false
 
         return true
     }
@@ -57,6 +66,8 @@ data class MusicState(
         result = 31 * result + artist.hashCode()
         result = 31 * result + packageName.hashCode()
         result = 31 * result + isPlaying.hashCode()
+        result = 31 * result + (albumArtUri?.hashCode() ?: 0)
+        result = 31 * result + albumName.hashCode()
         return result
     }
 
