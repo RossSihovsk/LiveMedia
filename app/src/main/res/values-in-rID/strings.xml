@@ -75,4 +75,6 @@
     <string name="setting_hide_on_pause_immediately_desc">Tutup notifikasi segera setelah pemutaran dijeda</string>
     <string name="setting_hide_on_pause_1min">Sembunyikan dalam 1 menit</string>
     <string name="setting_hide_on_pause_1min_desc">Tutup notifikasi 1 menit setelah pemutaran dijeda</string>
+    <string name="setting_hide_on_other_live_update">Sembunyikan saat ada Pembaruan Langsung lainnya</string>
+    <string name="setting_hide_on_other_live_update_desc">Sembunyikan notifikasi jika aplikasi lain memiliki notifikasi Pembaruan Langsung yang aktif.</string>
 </resources>
