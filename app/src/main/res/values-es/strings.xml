@@ -40,6 +40,8 @@
     <string name="setting_hide_on_pause_immediately_desc">Ocultar la notificación tan pronto como se pause la reproducción</string>
     <string name="setting_hide_on_pause_1min">Ocultar en 1 min</string>
     <string name="setting_hide_on_pause_1min_desc">Ocultar la notificación 1 minuto después de pausar la reproducción</string>
+    <string name="setting_hide_on_other_live_update">Ocultar si hay otro Live Update</string>
+    <string name="setting_hide_on_other_live_update_desc">Ocultar la notificación si otra aplicación tiene una notificación de Live Update activa.</string>
 
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Título de la canción</string>

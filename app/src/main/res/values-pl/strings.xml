@@ -40,6 +40,8 @@
     <string name="setting_hide_on_pause_immediately_desc">Usuń powiadomienie natychmiast po wstrzymaniu odtwarzania</string>
     <string name="setting_hide_on_pause_1min">Ukryj po 1 minucie</string>
     <string name="setting_hide_on_pause_1min_desc">Usuń powiadomienie po 1 minucie od wstrzymania odtwarzania</string>
+    <string name="setting_hide_on_other_live_update">Ukryj przy innym Live Update</string>
+    <string name="setting_hide_on_other_live_update_desc">Ukryj powiadomienie, jeśli inna aplikacja ma aktywne powiadomienie Live Update.</string>
 
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">Tytuł utworu</string>

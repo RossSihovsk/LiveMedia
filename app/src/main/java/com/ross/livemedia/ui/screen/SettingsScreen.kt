@@ -65,6 +65,8 @@ fun SettingsScreen(
     val isScrollEnabled = remember { mutableStateOf(storageHelper.isScrollEnabled) }
     val hideNotificationOnPause = remember { mutableStateOf(storageHelper.hideNotificationOnPause) }
     val hideOnPauseOption = remember { mutableStateOf(storageHelper.hideOnPauseOption) }
+    val hideNotificationOnOtherLiveUpdate =
+        remember { mutableStateOf(storageHelper.hideNotificationOnOtherLiveUpdate) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -204,6 +206,16 @@ fun SettingsScreen(
                     )
                 }
             }
+
+            SettingToggle(
+                label = stringResource(R.string.setting_hide_on_other_live_update),
+                description = stringResource(R.string.setting_hide_on_other_live_update_desc),
+                checkedState = hideNotificationOnOtherLiveUpdate,
+                onCheckedChange = { isChecked ->
+                    hideNotificationOnOtherLiveUpdate.value = isChecked
+                    storageHelper.hideNotificationOnOtherLiveUpdate = isChecked
+                }
+            )
 
             Spacer(modifier = Modifier.padding(top = 24.dp))
             SectionHeader(stringResource(R.string.section_status_bar_pill))

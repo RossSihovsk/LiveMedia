@@ -40,6 +40,8 @@
     <string name="setting_hide_on_pause_immediately_desc">暂停播放后立即消除通知</string>
     <string name="setting_hide_on_pause_1min">1分钟后隐藏</string>
     <string name="setting_hide_on_pause_1min_desc">暂停播放1分钟后消除通知</string>
+    <string name="setting_hide_on_other_live_update">存在其他实时更新时隐藏</string>
+    <string name="setting_hide_on_other_live_update_desc">如果其他应用具有活跃的实时更新通知，则隐藏通知。</string>
 
     <!-- Status Bar Pill Options -->
     <string name="pill_option_title">歌曲标题</string>
