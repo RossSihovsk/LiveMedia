@@ -57,6 +57,16 @@ enum class MusicProvider(
         "org.telegram.messenger",
         R.drawable.telegram
     ),
+    EXTERAGRAM(
+        "exteraGram",
+        "com.exteragram.messenger",
+        R.drawable.exteragram
+    ),
+    AYUGRAM(
+        "AyuGram",
+        "com.radolyn.ayugram",
+        R.drawable.ayugram
+    ),
     NETFLIX(
         "Netflix",
         "com.netflix.mediaclient",
@@ -85,7 +95,9 @@ enum class MusicProvider(
 
     companion object {
         fun getByAppNameOrPackage(appName: String, appPackage: String): MusicProvider {
-            return entries.firstOrNull { it.appName == appName || it.packageName == appPackage } ?: UNKNOWN
+            return entries.firstOrNull {
+                it.appName.equals(appName, ignoreCase = true) || it.packageName == appPackage
+            } ?: UNKNOWN
         }
     }
 }
