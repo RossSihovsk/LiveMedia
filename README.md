@@ -62,21 +62,22 @@ Start playing music! The LiveMedia control should appear once media playback beg
 
 ## 🌍 Localization
 
-LiveMedia supports **9 languages** with complete translations for Settings and Permission screens. The app automatically displays in your device's system language.
+LiveMedia supports **10 languages** with complete translations for Settings and Permission screens. The app automatically displays in your device's system language.
 
 ### Supported Languages
 
 | Language | Locale Code | Native Name |
-| :--- | :---: | :--- |
-| **English** | `en` | English (Default) |
-| **Ukrainian** | `uk` | Українська |
-| **German** | `de` | Deutsch |
-| **Spanish** | `es` | Español |
-| **Polish** | `pl` | Polski |
-| **Hindi** | `hi` | हिन्दी |
-| **Chinese** | `zh` | 简体中文 |
-| **Japanese** | `ja` | 日本語 |
-| **French** | `fr` | Français |
+| :--- |:-----------:| :--- |
+| **English** |    `en`     | English (Default) |
+| **Ukrainian** |    `uk`     | Українська |
+| **German** |    `de`     | Deutsch |
+| **Spanish** |    `es`     | Español |
+| **Polish** |    `pl`     | Polski |
+| **Hindi** |    `hi`     | हिन्दी |
+| **Chinese** |    `zh`     | 简体中文 |
+| **Japanese** |    `ja`     | 日本語 |
+| **French** |    `fr`     | Français |
+| Indonesian |    `id`     | Bahasa Indonesia |
 
 The app will automatically use your device's language setting. If your device language is not in the list above, the app will default to English.
 
